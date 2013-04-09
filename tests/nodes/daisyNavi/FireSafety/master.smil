@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+    <head>
+        <meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+        <meta name="dc:format" content="Daisy 2.02"/>
+        <meta name="dc:title" content="4980FSafe"/>
+        <meta name="dc:identifier" content="PID4980"/>
+        <meta name="ncc:timeInThisSmil" content="00:26:07.844"/>
+        <layout>
+            <region id="txtView"/>
+        </layout>
+    </head>
+    <body>
+        <ref title="Fire Safety, by Wendy Blaxland" src="dtb_0001.smil#rgn_txt_0001_0001" id="smil_0001"/>
+        <ref title="About this DAISY book" src="dtb_0002.smil#rgn_txt_0002_0001" id="smil_0002"/>
+        <ref title="Contents of this DAISY book" src="dtb_0003.smil#rgn_txt_0003_0001" id="smil_0003"/>
+        <ref title="Cover Notes" src="dtb_0004.smil#rgn_txt_0004_0001" id="smil_0004"/>
+        <ref title="Acknowledgements" src="dtb_0005.smil#rgn_txt_0005_0001" id="smil_0005"/>
+        <ref title="1. Fire!" src="dtb_0006.smil#rgn_txt_0006_0001" id="smil_0006"/>
+        <ref title="2. Fire safety at home" src="dtb_0007.smil#rgn_txt_0007_0001" id="smil_0007"/>
+        <ref title="Heating" src="dtb_0008.smil#rgn_txt_0008_0001" id="smil_0008"/>
+        <ref title="Cooking" src="dtb_0009.smil#rgn_txt_0009_0001" id="smil_0009"/>
+        <ref title="Helpful hints for safe cooking" src="dtb_0010.smil#rgn_txt_0010_0001" id="smil_0010"/>
+        <ref title="Candles" src="dtb_0011.smil#rgn_txt_0011_0001" id="smil_0011"/>
+        <ref title="Smoke alarms" src="dtb_0012.smil#rgn_txt_0012_0001" id="smil_0012"/>
+        <ref title="A fire escape plan" src="dtb_0013.smil#rgn_txt_0013_0001" id="smil_0013"/>
+        <ref title="Helpful hints for escaping a fire at home" src="dtb_0014.smil#rgn_txt_0014_0001" id="smil_0014"/>
+        <ref title="3. Fire safety at school" src="dtb_0015.smil#rgn_txt_0015_0001" id="smil_0015"/>
+        <ref title="Fire drills" src="dtb_0016.smil#rgn_txt_0016_0001" id="smil_0016"/>
+        <ref title="Helpful hints for escaping a fire at school" src="dtb_0017.smil#rgn_txt_0017_0001" id="smil_0017"/>
+        <ref title="4. Fire safety in the city" src="dtb_0018.smil#rgn_txt_0018_0001" id="smil_0018"/>
+        <ref title="5. Fire safety in the country" src="dtb_0019.smil#rgn_txt_0019_0001" id="smil_0019"/>
+        <ref title="Fire warnings" src="dtb_0020.smil#rgn_txt_0020_0001" id="smil_0020"/>
+        <ref title="Bushfires" src="dtb_0021.smil#rgn_txt_0021_0001" id="smil_0021"/>
+        <ref title="Bushfire danger season" src="dtb_0022.smil#rgn_txt_0022_0001" id="smil_0022"/>
+        <ref title="Controlled burning" src="dtb_0023.smil#rgn_txt_0023_0001" id="smil_0023"/>
+        <ref title="6. Fire safety signs and warnings" src="dtb_0024.smil#rgn_txt_0024_0001" id="smil_0024"/>
+        <ref title="7. How fire fighters keep us safe" src="dtb_0025.smil#rgn_txt_0025_0001" id="smil_0025"/>
+        <ref title="8. What happens when you call the fire brigade" src="dtb_0026.smil#rgn_txt_0026_0001" id="smil_0026"/>
+        <ref title="9. Some helpful hints" src="dtb_0027.smil#rgn_txt_0027_0001" id="smil_0027"/>
+        <ref title="Glossary" src="dtb_0028.smil#rgn_txt_0028_0001" id="smil_0028"/>
+        <ref title="Fire drill" src="dtb_0029.smil#rgn_txt_0029_0001" id="smil_0029"/>
+        <ref title="Fire extinguishers" src="dtb_0030.smil#rgn_txt_0030_0001" id="smil_0030"/>
+        <ref title="Fire hydrant" src="dtb_0031.smil#rgn_txt_0031_0001" id="smil_0031"/>
+        <ref title="Flammable" src="dtb_0032.smil#rgn_txt_0032_0001" id="smil_0032"/>
+        <ref title="Fuel" src="dtb_0033.smil#rgn_txt_0033_0001" id="smil_0033"/>
+        <ref title="Leaf litter" src="dtb_0034.smil#rgn_txt_0034_0001" id="smil_0034"/>
+        <ref title="Rural areas" src="dtb_0035.smil#rgn_txt_0035_0001" id="smil_0035"/>
+        <ref title="Tankers" src="dtb_0036.smil#rgn_txt_0036_0001" id="smil_0036"/>
+        <ref title="Urban" src="dtb_0037.smil#rgn_txt_0037_0001" id="smil_0037"/>
+        <ref title="Volunteers" src="dtb_0038.smil#rgn_txt_0038_0001" id="smil_0038"/>
+        <ref title="Index" src="dtb_0039.smil#rgn_txt_0039_0001" id="smil_0039"/>
+        <ref title="B" src="dtb_0040.smil#rgn_txt_0040_0001" id="smil_0040"/>
+        <ref title="C" src="dtb_0041.smil#rgn_txt_0041_0001" id="smil_0041"/>
+        <ref title="D" src="dtb_0042.smil#rgn_txt_0042_0001" id="smil_0042"/>
+        <ref title="F" src="dtb_0043.smil#rgn_txt_0043_0001" id="smil_0043"/>
+        <ref title="H" src="dtb_0044.smil#rgn_txt_0044_0001" id="smil_0044"/>
+        <ref title="L" src="dtb_0045.smil#rgn_txt_0045_0001" id="smil_0045"/>
+        <ref title="M" src="dtb_0046.smil#rgn_txt_0046_0001" id="smil_0046"/>
+        <ref title="O" src="dtb_0047.smil#rgn_txt_0047_0001" id="smil_0047"/>
+        <ref title="S" src="dtb_0048.smil#rgn_txt_0048_0001" id="smil_0048"/>
+        <ref title="T" src="dtb_0049.smil#rgn_txt_0049_0001" id="smil_0049"/>
+        <ref title="Publishing and Copyright Details" src="dtb_0050.smil#rgn_txt_0050_0001" id="smil_0050"/>
+        <ref title="Closing Announcement" src="dtb_0051.smil#rgn_txt_0051_0001" id="smil_0051"/>
+    </body>
+</smil>

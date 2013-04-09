@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:00:56.013"/>
+		<meta name="ncc:totalElapsedTime" content="00:08:06.827"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="A fire escape plan"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="56.013s">
+			<par endsync="last" id="rgn_par_0013_0001">
+				<text src="fire_safety.html#dol_1_13_rgn_cnt_0087" id="rgn_txt_0013_0001"/>
+				<seq>
+					<audio src="13_A_fire_escape_plan.mp3" clip-begin="npt=0.000s" clip-end="npt=2.466s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0013_0002">
+				<text src="fire_safety.html#dol_1_13_rgn_cnt_0088" id="rgn_txt_0013_0002"/>
+				<seq>
+					<audio src="13_A_fire_escape_plan.mp3" clip-begin="npt=2.466s" clip-end="npt=14.374s" id="audio_0002"/>
+					<audio src="13_A_fire_escape_plan.mp3" clip-begin="npt=14.374s" clip-end="npt=26.666s" id="audio_0003"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0013_0003">
+				<text src="fire_safety.html#dol_1_13_rgn_cnt_0089" id="rgn_txt_0013_0003"/>
+				<seq>
+					<audio src="13_A_fire_escape_plan.mp3" clip-begin="npt=26.666s" clip-end="npt=41.666s" id="audio_0004"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0013_0004">
+				<text src="fire_safety.html#dol_1_13_rgn_cnt_0090" id="rgn_txt_0013_0004"/>
+				<seq>
+					<audio src="13_A_fire_escape_plan.mp3" clip-begin="npt=41.666s" clip-end="npt=54.927s" id="audio_0005"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0013_0005" system-required="pagenumber-on">
+				<text src="fire_safety.html#dol_1_13_rgn_cnt_0091" id="rgn_txt_0013_0005"/>
+				<seq>
+					<audio src="13_A_fire_escape_plan.mp3" clip-begin="npt=54.927s" clip-end="npt=56.013s" id="audio_0006"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>

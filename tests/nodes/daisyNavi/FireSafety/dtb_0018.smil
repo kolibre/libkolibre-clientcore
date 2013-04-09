@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:01:12.346"/>
+		<meta name="ncc:totalElapsedTime" content="00:11:56.603"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="4. Fire safety in the city"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="72.346s">
+			<par endsync="last" id="rgn_par_0018_0001">
+				<text src="fire_safety.html#dol_1_18_rgn_cnt_0113" id="rgn_txt_0018_0001"/>
+				<seq>
+					<audio src="18_4__Fire_safety_in_the_city.mp3" clip-begin="npt=0.000s" clip-end="npt=3.799s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0018_0002">
+				<text src="fire_safety.html#dol_1_18_rgn_cnt_0114" id="rgn_txt_0018_0002"/>
+				<seq>
+					<audio src="18_4__Fire_safety_in_the_city.mp3" clip-begin="npt=3.799s" clip-end="npt=28.399s" id="audio_0002"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0018_0003">
+				<text src="fire_safety.html#dol_1_18_rgn_cnt_0115" id="rgn_txt_0018_0003"/>
+				<seq>
+					<audio src="18_4__Fire_safety_in_the_city.mp3" clip-begin="npt=28.399s" clip-end="npt=40.399s" id="audio_0003"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0018_0004" system-required="pagenumber-on">
+				<text src="fire_safety.html#dol_1_18_rgn_cnt_0116" id="rgn_txt_0018_0004"/>
+				<seq>
+					<audio src="18_4__Fire_safety_in_the_city.mp3" clip-begin="npt=40.399s" clip-end="npt=40.799s" id="audio_0004"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0018_0005">
+				<text src="fire_safety.html#dol_1_18_rgn_cnt_0117" id="rgn_txt_0018_0005"/>
+				<seq>
+					<audio src="18_4__Fire_safety_in_the_city.mp3" clip-begin="npt=40.799s" clip-end="npt=57.599s" id="audio_0005"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0018_0006">
+				<text src="fire_safety.html#dol_1_18_rgn_cnt_0118" id="rgn_txt_0018_0006"/>
+				<seq>
+					<audio src="18_4__Fire_safety_in_the_city.mp3" clip-begin="npt=57.599s" clip-end="npt=71.599s" id="audio_0006"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0018_0007" system-required="pagenumber-on">
+				<text src="fire_safety.html#dol_1_18_rgn_cnt_0119" id="rgn_txt_0018_0007"/>
+				<seq>
+					<audio src="18_4__Fire_safety_in_the_city.mp3" clip-begin="npt=71.599s" clip-end="npt=72.346s" id="audio_0007"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>

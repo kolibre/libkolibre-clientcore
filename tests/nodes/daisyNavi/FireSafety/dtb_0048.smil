@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:00:20.389"/>
+		<meta name="ncc:totalElapsedTime" content="00:24:52.664"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="S"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="20.389s">
+			<par endsync="last" id="rgn_par_0048_0001">
+				<text src="fire_safety.html#dol_1_48_rgn_cnt_0234" id="rgn_txt_0048_0001"/>
+				<seq>
+					<audio src="48_S.mp3" clip-begin="npt=0.000s" clip-end="npt=1.199s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0048_0002">
+				<text src="fire_safety.html#dol_1_48_rgn_cnt_0235" id="rgn_txt_0048_0002"/>
+				<seq>
+					<audio src="48_S.mp3" clip-begin="npt=1.199s" clip-end="npt=4.599s" id="audio_0002"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0048_0003">
+				<text src="fire_safety.html#dol_1_48_rgn_cnt_0236" id="rgn_txt_0048_0003"/>
+				<seq>
+					<audio src="48_S.mp3" clip-begin="npt=4.599s" clip-end="npt=8.799s" id="audio_0003"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0048_0004">
+				<text src="fire_safety.html#dol_1_48_rgn_cnt_0237" id="rgn_txt_0048_0004"/>
+				<seq>
+					<audio src="48_S.mp3" clip-begin="npt=8.799s" clip-end="npt=12.199s" id="audio_0004"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0048_0005">
+				<text src="fire_safety.html#dol_1_48_rgn_cnt_0238" id="rgn_txt_0048_0005"/>
+				<seq>
+					<audio src="48_S.mp3" clip-begin="npt=12.199s" clip-end="npt=14.199s" id="audio_0005"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0048_0006">
+				<text src="fire_safety.html#dol_1_48_rgn_cnt_0239" id="rgn_txt_0048_0006"/>
+				<seq>
+					<audio src="48_S.mp3" clip-begin="npt=14.199s" clip-end="npt=17.599s" id="audio_0006"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0048_0007">
+				<text src="fire_safety.html#dol_1_48_rgn_cnt_0240" id="rgn_txt_0048_0007"/>
+				<seq>
+					<audio src="48_S.mp3" clip-begin="npt=17.599s" clip-end="npt=20.389s" id="audio_0007"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>

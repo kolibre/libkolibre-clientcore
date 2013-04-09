@@ -1,0 +1,189 @@
+## Copyright (C) 2012 Kolibre
+#
+# This file is part of kolibre-clientcore.
+#
+# Kolibre-clientcore is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 2.1 of the License, or
+# (at your option) any later version.
+#
+# Kolibre-clientcore is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with kolibre-clientcore. If not, see <http://www.gnu.org/licenses/>.
+#
+
+# Common translations in Swedish. These translations may be overridden
+# by translations found in a voice specific file
+#
+# "identifier";"translation"[;"basename"]*
+
+#
+# MAIN PROMPTS
+#
+
+"welcome";"Välkommen"
+"shutting down";"Tack för att du lyssnade, vi hörs"
+"model name";"Kolibre"
+"Sleep timer is running out. Application will close soon.";"Insomningstimern håller på att gå ut. Programmet stängs av automatiskt om en liten stund."
+"Turn off automatic shutdown by pressing an application button.";"Stäng av automatisk avstängning genom att trycka på en knapp."
+
+#
+# MENU PROMPTS
+#
+
+"menu";"snabbmenyn"
+"opening main menu";"öppnar snabbmenyn"
+"choose option using left and right arrows, open using down arrow";"välj alternativ med vänster- eller högerpil, tryck pil ner för att öppna"
+"option";"alternativ"
+"contains {1} option";"innehåller ett alternativ"
+"contains {2} options";"innehåller {2:number} alternativ"
+"contains no options";"innehåller inga alternativ"
+
+# playback speed
+"playback speed";"uppspelningshastighet"
+"opening playback speed menu";"öppnar uppspelningshastighet"
+"normal speed";"Normal uppspelningshastighet."
+"current speed";"aktuell uppspelningshastighet"
+"set speed to";"ändra uppspelningshastigheten till"
+"increasing speed to";"Ökar uppspelningshastigheten till.."
+"decreasing speed to";"Sänker uppspelningshastigheten till.."
+
+# sleep timer
+"sleep timer";"insomningstimer"
+"opening sleep timer";"öppnar insomningstimer"
+"enable sleep timer";"Ställ in insomningstimern på"
+"disable sleep timer";"Avaktivera automatisk avstängning"
+"sleep timer enabled";"Insomningstimern är inställd på"
+"sleep timer disabled";"Automatisk avstängning är avaktiverad"
+
+# jump to
+"jump to";"hoppa till"
+"jump to percent";"procent"
+"jump to page";"sida"
+"jump to time";"tidpunkt"
+"jumping to";"hoppar till"
+"opening jump to";"öppnar hoppa till"
+"opening jump to percent";"öppnar hoppa till procent"
+"opening jump to page";"öppnar hoppa till sida"
+"opening jump to time";"öppnar hoppa till tidpunkt"
+"choose percent using left and right arrows, jump to selected percent using down arrow";"välj procent med vänster- och högerpil, hoppa till vald procent genom att trycka pil ner"
+"choose page using left and right arrows, jump to selected page using down arrow";"välj sida med vänster- och högerpil, hoppa till vald sida genom att trycka pil ner"
+"choose time using left and right arrows, jump to selected time using down arrow";"välj tid med vänster- och högerpil, hoppa till vald tid genom att trycka pil ner"
+"pages";"sidor"
+"special page";"specialsida"
+"percent";"procent"
+"time";"tid"
+"please enter";"var god ange"
+"content total duration is";"materialets totala längd är"
+"jump to position failed";"hoppet misslyckades"
+
+# book info
+"content info";"information om materialet"
+"loading content info";"laddar information om materialet"
+
+"content title";"titel"
+"source material was created";"källmaterialet skapades"
+"content was recorded";"Inspelningsdatum"
+"content has revision number";"Materialet har revisionsnummer:"
+"and was last changed on";"..och reviderades.."
+
+"content type";"Källmaterialet är av typen"
+"daisy type";"Daisy-typ"
+"set info";"delar"
+"navigation info";"navigation"
+"page info";"Sidinformation"
+"time info";"tid"
+
+"daisy2.00";"Daisy 2"
+"daisy2.02";"Daisy 2.02"
+"daisyNISO2002";"Daisy N,I,S,O 2002"
+"daisyNISO2005";"Daisy N,I,S,O 2005"
+"daisytype1";"Daisymaterialet innehåller endast ljudelement"
+"daisytype2";"Daisymaterialet innehåller både ljud- och navigeringselement"
+"daisytype3";"Daisymaterialet innehåller ljud-, navigering- och textelement"
+"daisytype4";"Daisymaterialet innehåller fullständiga ljud-, navigerings- och textelement"
+"daisytype5";"Daisymaterialet innehåller text-, navigerings- och ljudelement"
+"daisytype6";"Daisymaterialet innehåller text- och navigeringselement"
+"daisytype7";"Daisymaterialet innehåller endast textelement"
+"playback may be lacking since book does not have complete audio";"Uppspelning kan upplevas som bristande då publikationen inte innehåller ljudelement för alla delar"
+
+"publication has";"publikationen har"
+"{2} navigation points";"{2:number} navigationspunkter"
+"{1} navigation point";"en navigationspunkt"
+"{2} navigation levels";"{2:number} navigationsnivåer"
+"{1} navigation level";"en navigationsnivå"
+
+"current page";"aktuell sida"
+"highest page number in this book";"Sista sidan är"
+
+"{1} percent read";"en procent läst"
+"{2} percent read";"{2:number} procent läst"
+"current position";"Aktuell position"
+"total time";"Total längd"
+
+#
+# DAISYNAVI PROMPTS
+#
+
+"pausing";"Pausar"
+"continuing";"Fortsätter"
+"continuing from last known position";"Fortsätter läsa från sparad position"
+"next";"Nästa"
+"previous";"Föregående"
+"previous navi history element";"Hoppar bakåt"
+"start of navi history";"Början på navigeringshistoria"
+"end of navi history";"Slutet på navigeringshistoria"
+"start of content";"Början på materialet"
+"end of content";"Slutet på materialet"
+
+# navi levels
+"navilevel";"navigationsnivå"
+"publication list";"Publikationslista"
+"begend";"Början eller slutet på materialet"
+"bookmark";"Bokmärke"
+"navi history";"Navigeringshistoria"
+"level";"nivå"
+"page";"sida"
+"phrase";"fras"
+
+# bookmarks
+"content has {1} bookmark";"Materialet har ett bokmärke"
+"content has {2} bookmarks";"Materialet har {2:number} bokmärken"
+"content has no bookmarks";"Materialet har inga bokmärken"
+"add new bookmark";"Lägg till nytt bokmärke"
+"adding bookmark no. {1}";"Lade till nytt bokmärke nummer {1:number}"
+"delete bookmark no. {1}";"Radera bokmärke nummer {1:number}"
+"deleting bookmark no. {1}";"Bokmarke nummer {1:number} raderat"
+"delete all bookmarks";"Radera alla bokmärken"
+"deleting all bookmarks";"Alla bokmärken raderade"
+"loading bookmark no. {1}";"Laddar bokmärke nummer {1:number}"
+"current bookmark is no. {1}";"Aktuellt bokmärke är nummer {1:number}"
+"confirm using down arrow";"bekräfta genom att trycka pil ner"
+
+# errors
+"content error";"Det är något fel på materialet"
+"content contains too many navigation points, gui synchronization disabled";"materialet innehåller för många navigationspunkter, markering av nuvarande navigationspunkt avstängd"
+
+#
+# DAISYONLINE PROMPTS
+#
+
+"library";"bibliotek"
+"updating library";"uppdaterar biblioteket"
+"found {1} publication";"biblioteket innehåller en publikation"
+"found {2} publications";"biblioteket innehåller {2:number} publikationer"
+"no content found";"biblioteket innehåller inga publikationer"
+"found {1} new publication";"Hittade en ny publikation"
+"found {2} new publications";"Hittade {2:number} nya publikationer"
+"publication no. {1}";"titel {1:number}"
+"opening publication";"öppnar publikationen"
+
+# errors
+"error loading data";"Data kunde inte hämtas från nätverket"
+"service error";"felaktigt svar från servern"
+"username password error";"inloggningen misslyckades, användaruppgifterna är felaktiga"
+"retrying shortly";"försöker igen om en liten stund"

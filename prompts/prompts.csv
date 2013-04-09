@@ -1,0 +1,209 @@
+## Copyright (C) 2012 Kolibre
+#
+# This file is part of kolibre-clientcore.
+#
+# Kolibre-clientcore is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 2.1 of the License, or
+# (at your option) any later version.
+#
+# Kolibre-clientcore is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with kolibre-clientcore. If not, see <http://www.gnu.org/licenses/>.
+#
+
+#
+# main
+#
+
+"welcome"
+"shutting down"
+"model name"
+"Sleep timer is running out. Application will close soon."
+"Turn off automatic shutdown by pressing an application button."
+
+#
+# Context menu
+#
+
+"menu"
+"opening main menu"
+"choose option using left and right arrows, open using down arrow"
+"option"
+"contains {1} option"
+"contains {2} options"
+"contains no options"
+
+# playback speed menu
+"playback speed"
+"opening playback speed menu"
+"normal speed"
+"current speed"
+"set speed to"
+"increasing speed to"
+"decreasing speed to"
+
+# sleep timer menu
+"sleep timer"
+"opening sleep timer"
+"enable sleep timer"
+"disable sleep timer"
+"sleep timer enabled"
+"sleep timer disabled"
+
+# jump to menu
+"jump to"
+"jump to percent"
+"jump to page"
+"jump to time"
+"jumping to"
+"opening jump to"
+"opening jump to percent"
+"opening jump to page"
+"opening jump to time"
+"choose percent using left and right arrows, jump to selected percent using down arrow"
+"choose page using left and right arrows, jump to selected page using down arrow"
+"choose time using left and right arrows, jump to selected time using down arrow"
+"pages"
+"special page"
+"percent"
+"time"
+"please enter"
+"content total duration is"
+"jump to position failed"
+
+# book info menu
+"content info"
+"loading content info"
+
+"content title"
+"source material was created"
+"content was recorded"
+"content has revision number"
+"and was last changed on"
+
+"content type"
+"daisy type"
+"set info"
+"navigation info"
+"page info"
+"time info"
+
+"daisy2.00"
+"daisy2.02"
+"daisyNISO2002"
+"daisyNISO2005"
+"daisytype1"
+"daisytype2"
+"daisytype3"
+"daisytype4"
+"daisytype5"
+"daisytype6"
+"daisytype7"
+"playback may be lacking since book does not have complete audio"
+
+"publication has"
+"{1} navigation level"
+"{2} navigation levels"
+"{1} navigation point"
+"{2} navigation points"
+
+#@TODO
+#"publication is part {1} in a series with {2} parts"
+
+"current page"
+"highest page number in this book"
+
+"{1} percent read"
+"{2} percent read"
+"current position"
+"total time"
+
+#
+# Daisy Navi
+#
+
+"pausing"
+"continuing"
+"continuing from last known position"
+"next"
+"previous"
+"previous navi history element"
+"start of navi history"
+"end of navi history"
+"start of content"
+"end of content"
+
+# navi levels
+"navilevel"
+"publication list"
+"begend"
+"bookmark"
+"navi history"
+"level"
+"page"
+"phrase"
+
+# bookmarks
+"content has {1} bookmark"
+"content has {2} bookmarks"
+"content has no bookmarks"
+"add new bookmark"
+"adding bookmark no. {1}"
+"delete bookmark no. {1}"
+"deleting bookmark no. {1}"
+"delete all bookmarks"
+"deleting all bookmarks"
+"loading bookmark no. {1}"
+"current bookmark is no. {1}"
+"confirm using down arrow"
+
+# errors
+"content error"
+"content contains too many navigation points, gui synchronization disabled"
+
+#
+# Daisy Online
+#
+
+"library"
+"updating library"
+"found {1} publication"
+"found {2} publications"
+"no content found"
+"found {1} new publication"
+"found {2} new publications"
+"publication no. {1}"
+"opening publication"
+
+# errors
+"error loading data"
+"service error"
+"username password error"
+"retrying shortly"
+
+#@TODO
+# remove these prompts from source and use Narrator API instead
+
+#"plus"
+#"longpause"
+#"shortpause"
+#"and"
+#"year"
+#"minutes"
+#"hours"
+#"seconds"
+#"{number}"
+#"{hour} {hour12} {minute} {second} {ampm}"
+#"one hour"
+#"{2} hours"
+#"one minute"
+#"{2} minutes"
+#"one second"
+#"{2} seconds"
+#"{year}"
+#"{dayname} {date} of {month} {year} {yearnum}"

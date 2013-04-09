@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:00:23.900"/>
+		<meta name="ncc:totalElapsedTime" content="00:07:25.007"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="Candles"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="23.900s">
+			<par endsync="last" id="rgn_par_0011_0001">
+				<text src="fire_safety.html#dol_1_11_rgn_cnt_0081" id="rgn_txt_0011_0001"/>
+				<seq>
+					<audio src="11_Candles.mp3" clip-begin="npt=0.000s" clip-end="npt=1.605s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0011_0002">
+				<text src="fire_safety.html#dol_1_11_rgn_cnt_0082" id="rgn_txt_0011_0002"/>
+				<seq>
+					<audio src="11_Candles.mp3" clip-begin="npt=1.605s" clip-end="npt=9.331s" id="audio_0002"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0011_0003">
+				<text src="fire_safety.html#dol_1_11_rgn_cnt_0083" id="rgn_txt_0011_0003"/>
+				<seq>
+					<audio src="11_Candles.mp3" clip-begin="npt=9.331s" clip-end="npt=23.305s" id="audio_0003"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0011_0004" system-required="pagenumber-on">
+				<text src="fire_safety.html#dol_1_11_rgn_cnt_0084" id="rgn_txt_0011_0004"/>
+				<seq>
+					<audio src="11_Candles.mp3" clip-begin="npt=23.305s" clip-end="npt=23.900s" id="audio_0004"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>

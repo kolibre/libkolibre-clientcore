@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:00:51.396"/>
+		<meta name="ncc:totalElapsedTime" content="00:11:05.207"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="Helpful hints for escaping a fire at school"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="51.396s">
+			<par endsync="last" id="rgn_par_0017_0001">
+				<text src="fire_safety.html#dol_1_17_rgn_cnt_0106" id="rgn_txt_0017_0001"/>
+				<seq>
+					<audio src="17_Helpful_hints_for_escaping_a_fire_at_school.mp3" clip-begin="npt=0.000s" clip-end="npt=3.799s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0017_0002">
+				<text src="fire_safety.html#dol_1_17_rgn_cnt_0107" id="rgn_txt_0017_0002"/>
+				<seq>
+					<audio src="17_Helpful_hints_for_escaping_a_fire_at_school.mp3" clip-begin="npt=3.799s" clip-end="npt=16.399s" id="audio_0002"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0017_0003">
+				<text src="fire_safety.html#dol_1_17_rgn_cnt_0108" id="rgn_txt_0017_0003"/>
+				<seq>
+					<audio src="17_Helpful_hints_for_escaping_a_fire_at_school.mp3" clip-begin="npt=16.399s" clip-end="npt=33.799s" id="audio_0003"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0017_0004" system-required="pagenumber-on">
+				<text src="fire_safety.html#dol_1_17_rgn_cnt_0109" id="rgn_txt_0017_0004"/>
+				<seq>
+					<audio src="17_Helpful_hints_for_escaping_a_fire_at_school.mp3" clip-begin="npt=33.799s" clip-end="npt=34.199s" id="audio_0004"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0017_0005">
+				<text src="fire_safety.html#dol_1_17_rgn_cnt_0110" id="rgn_txt_0017_0005"/>
+				<seq>
+					<audio src="17_Helpful_hints_for_escaping_a_fire_at_school.mp3" clip-begin="npt=34.199s" clip-end="npt=45.199s" id="audio_0005"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0017_0006">
+				<text src="fire_safety.html#dol_1_17_rgn_cnt_0111" id="rgn_txt_0017_0006"/>
+				<seq>
+					<audio src="17_Helpful_hints_for_escaping_a_fire_at_school.mp3" clip-begin="npt=45.199s" clip-end="npt=50.599s" id="audio_0006"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0017_0007" system-required="pagenumber-on">
+				<text src="fire_safety.html#dol_1_17_rgn_cnt_0112" id="rgn_txt_0017_0007"/>
+				<seq>
+					<audio src="17_Helpful_hints_for_escaping_a_fire_at_school.mp3" clip-begin="npt=50.599s" clip-end="npt=51.396s" id="audio_0007"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>

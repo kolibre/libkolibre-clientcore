@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:01:39.997"/>
+		<meta name="ncc:totalElapsedTime" content="00:14:27.499"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="Bushfires"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="99.997s">
+			<par endsync="last" id="rgn_par_0021_0001">
+				<text src="fire_safety.html#dol_1_21_rgn_cnt_0128" id="rgn_txt_0021_0001"/>
+				<seq>
+					<audio src="21_Bushfires.mp3" clip-begin="npt=0.000s" clip-end="npt=1.999s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0021_0002">
+				<text src="fire_safety.html#dol_1_21_rgn_cnt_0129" id="rgn_txt_0021_0002"/>
+				<seq>
+					<audio src="21_Bushfires.mp3" clip-begin="npt=1.999s" clip-end="npt=20.399s" id="audio_0002"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0021_0003">
+				<text src="fire_safety.html#dol_1_21_rgn_cnt_0130" id="rgn_txt_0021_0003"/>
+				<seq>
+					<audio src="21_Bushfires.mp3" clip-begin="npt=20.399s" clip-end="npt=44.399s" id="audio_0003"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0021_0004">
+				<text src="fire_safety.html#dol_1_21_rgn_cnt_0131" id="rgn_txt_0021_0004"/>
+				<seq>
+					<audio src="21_Bushfires.mp3" clip-begin="npt=44.399s" clip-end="npt=55.599s" id="audio_0004"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0021_0005" system-required="pagenumber-on">
+				<text src="fire_safety.html#dol_1_21_rgn_cnt_0132" id="rgn_txt_0021_0005"/>
+				<seq>
+					<audio src="21_Bushfires.mp3" clip-begin="npt=55.599s" clip-end="npt=55.999s" id="audio_0005"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0021_0006">
+				<text src="fire_safety.html#dol_1_21_rgn_cnt_0133" id="rgn_txt_0021_0006"/>
+				<seq>
+					<audio src="21_Bushfires.mp3" clip-begin="npt=55.999s" clip-end="npt=66.573s" id="audio_0006"/>
+					<audio src="21_Bushfires.mp3" clip-begin="npt=66.573s" clip-end="npt=72.124s" id="audio_0007"/>
+					<audio src="21_Bushfires.mp3" clip-begin="npt=72.124s" clip-end="npt=77.767s" id="audio_0008"/>
+					<audio src="21_Bushfires.mp3" clip-begin="npt=77.767s" clip-end="npt=87.399s" id="audio_0009"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0021_0007">
+				<text src="fire_safety.html#dol_1_21_rgn_cnt_0134" id="rgn_txt_0021_0007"/>
+				<seq>
+					<audio src="21_Bushfires.mp3" clip-begin="npt=87.399s" clip-end="npt=99.599s" id="audio_0010"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0021_0008" system-required="pagenumber-on">
+				<text src="fire_safety.html#dol_1_21_rgn_cnt_0135" id="rgn_txt_0021_0008"/>
+				<seq>
+					<audio src="21_Bushfires.mp3" clip-begin="npt=99.599s" clip-end="npt=99.997s" id="audio_0011"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>

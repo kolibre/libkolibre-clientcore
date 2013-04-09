@@ -1,0 +1,22 @@
+
+POST /daisyonline/service.php HTTP/1.1
+Host: localhost:8888
+User-Agent: Axis2C/1.6.0
+SOAPAction: "/getContentMetadata"
+Content-Length: 249
+Content-Type: text/xml;charset=UTF-8
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><n:getContentMetadata xmlns:n="http://www.daisy.org/ns/daisy-online/"><n:contentID>pub_2</n:contentID></n:getContentMetadata></soapenv:Body></soapenv:Envelope>
+
+HTTP/1.1 200 OK
+Date: Mon, 18 Jul 2011 14:05:44 GMT
+Server: Apache/2.2.9 (Debian) PHP/5.2.6-1+lenny9 with Suhosin-Patch mod_ssl/2.2.9 OpenSSL/0.9.8g mod_perl/2.0.4 Perl/v5.10.0
+X-Powered-By: PHP/5.2.6-1+lenny9
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Content-Length: 551
+Connection: close
+Content-Type: text/xml; charset=utf-8
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://purl.org/dc/elements/1.1/" xmlns:ns2="http://www.daisy.org/ns/daisy-online/"><SOAP-ENV:Body><ns2:getContentMetadataResponse><ns2:contentMetadata requiresReturn="true"><ns2:metadata><ns1:title>Title2</ns1:title><ns1:identifier>pub_2</ns1:identifier><ns1:format>Daisy 2.02</ns1:format><ns2:size>12345</ns2:size></ns2:metadata></ns2:contentMetadata></ns2:getContentMetadataResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>

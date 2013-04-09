@@ -1,0 +1,21 @@
+POST /daisyonline/service.php HTTP/1.1
+Host: localhost:8888
+User-Agent: Axis2C/1.6.0
+SOAPAction: "/setReadingSystemAttributes"
+Content-Length: 1289
+Content-Type: text/xml;charset=UTF-8
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><n:setReadingSystemAttributes xsi:type="supportedInputTypes_type0" xmlns:xsi="http://www.daisy.org/ns/daisy-online/" xmlns:n="http://www.daisy.org/ns/daisy-online/"><n:readingSystemAttributes xsi:type="readingSystemAttributes_type0"><n:manufacturer>Acme Corp</n:manufacturer><n:model>Pocket phantome</n:model><n:serialNumber>123456</n:serialNumber><n:version>123</n:version><n:config xsi:type="config_type0"><n:supportsMultipleSelections>false</n:supportsMultipleSelections><n:preferredUILanguage>en</n:preferredUILanguage><n:bandwidth>800000</n:bandwidth><n:supportedContentFormats xsi:type="supportedContentFormats_type0"><n:contentFormat>ANSI/NISO Z39.86-2005</n:contentFormat><n:contentFormat>Daisy 2.02</n:contentFormat></n:supportedContentFormats><n:supportedContentProtectionFormats xsi:type="supportedContentProtectionFormats_type0"></n:supportedContentProtectionFormats><n:supportedMimeTypes xsi:type="supportedMimeTypes_type0"></n:supportedMimeTypes><n:supportedInputTypes xsi:type="supportedInputTypes_type0"></n:supportedInputTypes><n:requiresAudioLabels>true</n:requiresAudioLabels></n:config></n:readingSystemAttributes></n:setReadingSystemAttributes></soapenv:Body></soapenv:Envelope>
+
+HTTP/1.1 200 OK
+Date: Mon, 18 Jul 2011 13:17:13 GMT
+Server: Apache/2.2.9 (Debian) PHP/5.2.6-1+lenny9 with Suhosin-Patch mod_ssl/2.2.9 OpenSSL/0.9.8g mod_perl/2.0.4 Perl/v5.10.0
+X-Powered-By: PHP/5.2.6-1+lenny9
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Content-Length: 381
+Connection: close
+Content-Type: text/xml; charset=utf-8
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://www.daisy.org/ns/daisy-online/"><SOAP-ENV:Body><ns1:setReadingSystemAttributesResponse><ns1:setReadingSystemAttributesResult>true</ns1:setReadingSystemAttributesResult></ns1:setReadingSystemAttributesResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>

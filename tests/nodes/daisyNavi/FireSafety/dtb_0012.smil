@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:00:17.920"/>
+		<meta name="ncc:totalElapsedTime" content="00:07:48.907"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="Smoke alarms"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="17.920s">
+			<par endsync="last" id="rgn_par_0012_0001">
+				<text src="fire_safety.html#dol_1_12_rgn_cnt_0085" id="rgn_txt_0012_0001"/>
+				<seq>
+					<audio src="12_Smoke_alarms.mp3" clip-begin="npt=0.000s" clip-end="npt=2.199s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0012_0002">
+				<text src="fire_safety.html#dol_1_12_rgn_cnt_0086" id="rgn_txt_0012_0002"/>
+				<seq>
+					<audio src="12_Smoke_alarms.mp3" clip-begin="npt=2.199s" clip-end="npt=17.920s" id="audio_0002"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>

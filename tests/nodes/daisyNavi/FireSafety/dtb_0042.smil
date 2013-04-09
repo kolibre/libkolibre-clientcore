@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:00:09.391"/>
+		<meta name="ncc:totalElapsedTime" content="00:23:47.135"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="D"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="9.391s">
+			<par endsync="last" id="rgn_par_0042_0001">
+				<text src="fire_safety.html#dol_1_42_rgn_cnt_0211" id="rgn_txt_0042_0001"/>
+				<seq>
+					<audio src="42_D.mp3" clip-begin="npt=0.000s" clip-end="npt=1.599s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0042_0002">
+				<text src="fire_safety.html#dol_1_42_rgn_cnt_0212" id="rgn_txt_0042_0002"/>
+				<seq>
+					<audio src="42_D.mp3" clip-begin="npt=1.599s" clip-end="npt=6.399s" id="audio_0002"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0042_0003">
+				<text src="fire_safety.html#dol_1_42_rgn_cnt_0213" id="rgn_txt_0042_0003"/>
+				<seq>
+					<audio src="42_D.mp3" clip-begin="npt=6.399s" clip-end="npt=9.391s" id="audio_0003"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>

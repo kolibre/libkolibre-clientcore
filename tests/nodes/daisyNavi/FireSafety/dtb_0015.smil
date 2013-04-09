@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:00:25.550"/>
+		<meta name="ncc:totalElapsedTime" content="00:10:05.429"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="3. Fire safety at school"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="25.550s">
+			<par endsync="last" id="rgn_par_0015_0001">
+				<text src="fire_safety.html#dol_1_15_rgn_cnt_0097" id="rgn_txt_0015_0001"/>
+				<seq>
+					<audio src="15_3__Fire_safety_at_school.mp3" clip-begin="npt=0.000s" clip-end="npt=3.935s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0015_0002">
+				<text src="fire_safety.html#dol_1_15_rgn_cnt_0098" id="rgn_txt_0015_0002"/>
+				<seq>
+					<audio src="15_3__Fire_safety_at_school.mp3" clip-begin="npt=3.935s" clip-end="npt=15.335s" id="audio_0002"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0015_0003">
+				<text src="fire_safety.html#dol_1_15_rgn_cnt_0099" id="rgn_txt_0015_0003"/>
+				<seq>
+					<audio src="15_3__Fire_safety_at_school.mp3" clip-begin="npt=15.335s" clip-end="npt=24.935s" id="audio_0003"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0015_0004" system-required="pagenumber-on">
+				<text src="fire_safety.html#dol_1_15_rgn_cnt_0100" id="rgn_txt_0015_0004"/>
+				<seq>
+					<audio src="15_3__Fire_safety_at_school.mp3" clip-begin="npt=24.935s" clip-end="npt=25.550s" id="audio_0004"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:00:29.714"/>
+		<meta name="ncc:totalElapsedTime" content="00:16:07.496"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="Bushfire danger season"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="29.714s">
+			<par endsync="last" id="rgn_par_0022_0001">
+				<text src="fire_safety.html#dol_1_22_rgn_cnt_0136" id="rgn_txt_0022_0001"/>
+				<seq>
+					<audio src="22_Bushfire_danger_season.mp3" clip-begin="npt=0.000s" clip-end="npt=2.599s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0022_0002">
+				<text src="fire_safety.html#dol_1_22_rgn_cnt_0137" id="rgn_txt_0022_0002"/>
+				<seq>
+					<audio src="22_Bushfire_danger_season.mp3" clip-begin="npt=2.599s" clip-end="npt=10.279s" id="audio_0002"/>
+					<audio src="22_Bushfire_danger_season.mp3" clip-begin="npt=10.279s" clip-end="npt=14.799s" id="audio_0003"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0022_0003">
+				<text src="fire_safety.html#dol_1_22_rgn_cnt_0138" id="rgn_txt_0022_0003"/>
+				<seq>
+					<audio src="22_Bushfire_danger_season.mp3" clip-begin="npt=14.799s" clip-end="npt=29.199s" id="audio_0004"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0022_0004" system-required="pagenumber-on">
+				<text src="fire_safety.html#dol_1_22_rgn_cnt_0139" id="rgn_txt_0022_0004"/>
+				<seq>
+					<audio src="22_Bushfire_danger_season.mp3" clip-begin="npt=29.199s" clip-end="npt=29.714s" id="audio_0005"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>

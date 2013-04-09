@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:01:00.950"/>
+		<meta name="ncc:totalElapsedTime" content="00:00:47.571"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="Contents of this DAISY book"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="60.950s">
+			<par endsync="last" id="rgn_par_0003_0001">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0010" id="rgn_txt_0003_0001"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=0.000s" clip-end="npt=2.384s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0002">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0011" id="rgn_txt_0003_0002"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=2.384s" clip-end="npt=5.160s" id="audio_0002"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0003">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0012" id="rgn_txt_0003_0003"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=5.160s" clip-end="npt=7.960s" id="audio_0003"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0004">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0013" id="rgn_txt_0003_0004"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=7.960s" clip-end="npt=11.360s" id="audio_0004"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0005">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0014" id="rgn_txt_0003_0005"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=11.360s" clip-end="npt=15.360s" id="audio_0005"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0006">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0015" id="rgn_txt_0003_0006"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=15.360s" clip-end="npt=19.960s" id="audio_0006"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0007">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0016" id="rgn_txt_0003_0007"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=19.960s" clip-end="npt=24.360s" id="audio_0007"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0008">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0017" id="rgn_txt_0003_0008"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=24.360s" clip-end="npt=28.760s" id="audio_0008"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0009">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0018" id="rgn_txt_0003_0009"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=28.760s" clip-end="npt=33.160s" id="audio_0009"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0010">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0019" id="rgn_txt_0003_0010"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=33.160s" clip-end="npt=38.360s" id="audio_0010"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0011">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0020" id="rgn_txt_0003_0011"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=38.360s" clip-end="npt=44.160s" id="audio_0011"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0012">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0021" id="rgn_txt_0003_0012"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=44.160s" clip-end="npt=48.560s" id="audio_0012"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0013">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0022" id="rgn_txt_0003_0013"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=48.560s" clip-end="npt=51.360s" id="audio_0013"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0014">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0023" id="rgn_txt_0003_0014"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=51.360s" clip-end="npt=53.760s" id="audio_0014"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0015">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0024" id="rgn_txt_0003_0015"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=53.760s" clip-end="npt=57.160s" id="audio_0015"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0016">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0025" id="rgn_txt_0003_0016"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=57.160s" clip-end="npt=60.160s" id="audio_0016"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0003_0017" system-required="pagenumber-on">
+				<text src="fire_safety.html#dol_1_3_rgn_cnt_0026" id="rgn_txt_0003_0017"/>
+				<seq>
+					<audio src="03_Contents_of_this_DAISY_book.mp3" clip-begin="npt=60.160s" clip-end="npt=60.950s" id="audio_0017"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>

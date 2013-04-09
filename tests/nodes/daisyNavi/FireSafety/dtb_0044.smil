@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:00:04.793"/>
+		<meta name="ncc:totalElapsedTime" content="00:24:32.275"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="H"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="4.793s">
+			<par endsync="last" id="rgn_par_0044_0001">
+				<text src="fire_safety.html#dol_1_44_rgn_cnt_0225" id="rgn_txt_0044_0001"/>
+				<seq>
+					<audio src="44_H.mp3" clip-begin="npt=0.000s" clip-end="npt=1.599s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0044_0002">
+				<text src="fire_safety.html#dol_1_44_rgn_cnt_0226" id="rgn_txt_0044_0002"/>
+				<seq>
+					<audio src="44_H.mp3" clip-begin="npt=1.599s" clip-end="npt=4.793s" id="audio_0002"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:00:19.396"/>
+		<meta name="ncc:totalElapsedTime" content="00:07:05.611"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="Helpful hints for safe cooking"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="19.396s">
+			<par endsync="last" id="rgn_par_0010_0001">
+				<text src="fire_safety.html#dol_1_10_rgn_cnt_0076" id="rgn_txt_0010_0001"/>
+				<seq>
+					<audio src="10_Helpful_hints_for_safe_cooking.mp3" clip-begin="npt=0.000s" clip-end="npt=3.399s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0010_0002">
+				<text src="fire_safety.html#dol_1_10_rgn_cnt_0077" id="rgn_txt_0010_0002"/>
+				<seq>
+					<audio src="10_Helpful_hints_for_safe_cooking.mp3" clip-begin="npt=3.399s" clip-end="npt=6.799s" id="audio_0002"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0010_0003">
+				<text src="fire_safety.html#dol_1_10_rgn_cnt_0078" id="rgn_txt_0010_0003"/>
+				<seq>
+					<audio src="10_Helpful_hints_for_safe_cooking.mp3" clip-begin="npt=6.799s" clip-end="npt=11.599s" id="audio_0003"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0010_0004">
+				<text src="fire_safety.html#dol_1_10_rgn_cnt_0079" id="rgn_txt_0010_0004"/>
+				<seq>
+					<audio src="10_Helpful_hints_for_safe_cooking.mp3" clip-begin="npt=11.599s" clip-end="npt=16.199s" id="audio_0004"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0010_0005">
+				<text src="fire_safety.html#dol_1_10_rgn_cnt_0080" id="rgn_txt_0010_0005"/>
+				<seq>
+					<audio src="10_Helpful_hints_for_safe_cooking.mp3" clip-begin="npt=16.199s" clip-end="npt=19.396s" id="audio_0005"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>

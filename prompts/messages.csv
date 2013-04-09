@@ -1,0 +1,188 @@
+## Copyright (C) 2012 Kolibre
+#
+# This file is part of kolibre-clientcore.
+#
+# Kolibre-clientcore is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 2.1 of the License, or
+# (at your option) any later version.
+#
+# Kolibre-clientcore is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with kolibre-clientcore. If not, see <http://www.gnu.org/licenses/>.
+#
+
+# Messages archive
+#
+# type;"identifier"
+
+#
+# MAIN PROMPTS
+#
+
+prompt;"welcome"
+prompt;"shutting down"
+prompt;"model name"
+prompt;"Sleep timer is running out. Application will close soon."
+prompt;"Turn off automatic shutdown by pressing an application button."
+
+#
+# MENU PROMPTS
+#
+
+prompt;"menu"
+prompt;"opening main menu"
+prompt;"choose option using left and right arrows, open using down arrow"
+prompt;"option"
+prompt;"contains {1} option"
+prompt;"contains {2} options"
+prompt;"contains no options"
+
+# playback speed
+prompt;"playback speed"
+prompt;"opening playback speed menu"
+prompt;"normal speed"
+prompt;"current speed"
+prompt;"set speed to"
+prompt;"increasing speed to"
+prompt;"decreasing speed to"
+
+# sleep timer
+prompt;"sleep timer"
+prompt;"opening sleep timer"
+prompt;"enable sleep timer"
+prompt;"disable sleep timer"
+prompt;"sleep timer enabled"
+prompt;"sleep timer disabled"
+
+# jump to
+prompt;"jump to"
+prompt;"jump to percent"
+prompt;"jump to page"
+prompt;"jump to time"
+prompt;"jumping to"
+prompt;"opening jump to"
+prompt;"opening jump to percent"
+prompt;"opening jump to page"
+prompt;"opening jump to time"
+prompt;"choose percent using left and right arrows, jump to selected percent using down arrow"
+prompt;"choose page using left and right arrows, jump to selected page using down arrow"
+prompt;"choose time using left and right arrows, jump to selected time using down arrow"
+prompt;"pages"
+prompt;"special page"
+prompt;"percent"
+prompt;"time"
+prompt;"please enter"
+prompt;"content total duration is"
+prompt;"jump to position failed"
+
+# book info
+prompt;"content info"
+prompt;"loading content info"
+
+prompt;"content title"
+prompt;"source material was created"
+prompt;"content was recorded"
+prompt;"content has revision number"
+prompt;"and was last changed on"
+
+prompt;"content type"
+prompt;"daisy type"
+prompt;"set info"
+prompt;"navigation info"
+prompt;"page info"
+prompt;"time info"
+
+prompt;"daisy2.00"
+prompt;"daisy2.02"
+prompt;"daisyNISO2002"
+prompt;"daisyNISO2005"
+prompt;"daisytype1"
+prompt;"daisytype2"
+prompt;"daisytype3"
+prompt;"daisytype4"
+prompt;"daisytype5"
+prompt;"daisytype6"
+prompt;"daisytype7"
+prompt;"playback may be lacking since book does not have complete audio"
+
+prompt;"publication has"
+prompt;"{2} navigation points"
+prompt;"{1} navigation point"
+prompt;"{2} navigation levels"
+prompt;"{1} navigation level"
+
+prompt;"current page"
+prompt;"highest page number in this book"
+
+prompt;"{1} percent read"
+prompt;"{2} percent read"
+prompt;"current position"
+prompt;"total time"
+
+#
+# DAISYNAVI PROMPTS
+#
+
+prompt;"pausing"
+prompt;"continuing"
+prompt;"continuing from last known position"
+prompt;"next"
+prompt;"previous"
+prompt;"previous navi history element"
+prompt;"start of navi history"
+prompt;"end of navi history"
+prompt;"start of content"
+prompt;"end of content"
+
+# navi levels
+prompt;"navilevel"
+prompt;"publication list"
+prompt;"begend"
+prompt;"bookmark"
+prompt;"navi history"
+prompt;"level"
+prompt;"page"
+prompt;"phrase"
+
+# bookmarks
+prompt;"content has {1} bookmark"
+prompt;"content has {2} bookmarks"
+prompt;"content has no bookmarks"
+prompt;"add new bookmark"
+prompt;"adding bookmark no. {1}"
+prompt;"delete bookmark no. {1}"
+prompt;"deleting bookmark no. {1}"
+prompt;"delete all bookmarks"
+prompt;"deleting all bookmarks"
+prompt;"loading bookmark no. {1}"
+prompt;"current bookmark is no. {1}"
+prompt;"confirm using down arrow"
+
+# errors
+prompt;"content error"
+prompt;"content contains too many navigation points, gui synchronization disabled"
+
+#
+# DAISYONLINE PROMPTS
+#
+
+prompt;"library"
+prompt;"updating library"
+prompt;"found {1} publication"
+prompt;"found {2} publications"
+prompt;"no content found"
+prompt;"found {1} new publication"
+prompt;"found {2} new publications"
+prompt;"publication no. {1}"
+prompt;"opening publication"
+
+# errors
+prompt;"error loading data"
+prompt;"service error"
+prompt;"username password error"
+prompt;"retrying shortly"

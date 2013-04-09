@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:00:34.228"/>
+		<meta name="ncc:totalElapsedTime" content="00:10:30.979"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="Fire drills"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="34.228s">
+			<par endsync="last" id="rgn_par_0016_0001">
+				<text src="fire_safety.html#dol_1_16_rgn_cnt_0101" id="rgn_txt_0016_0001"/>
+				<seq>
+					<audio src="16_Fire_drills.mp3" clip-begin="npt=0.000s" clip-end="npt=1.837s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0016_0002">
+				<text src="fire_safety.html#dol_1_16_rgn_cnt_0102" id="rgn_txt_0016_0002"/>
+				<seq>
+					<audio src="16_Fire_drills.mp3" clip-begin="npt=1.837s" clip-end="npt=11.637s" id="audio_0002"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0016_0003">
+				<text src="fire_safety.html#dol_1_16_rgn_cnt_0103" id="rgn_txt_0016_0003"/>
+				<seq>
+					<audio src="16_Fire_drills.mp3" clip-begin="npt=11.637s" clip-end="npt=19.637s" id="audio_0003"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0016_0004">
+				<text src="fire_safety.html#dol_1_16_rgn_cnt_0104" id="rgn_txt_0016_0004"/>
+				<seq>
+					<audio src="16_Fire_drills.mp3" clip-begin="npt=19.637s" clip-end="npt=33.637s" id="audio_0004"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0016_0005" system-required="pagenumber-on">
+				<text src="fire_safety.html#dol_1_16_rgn_cnt_0105" id="rgn_txt_0016_0005"/>
+				<seq>
+					<audio src="16_Fire_drills.mp3" clip-begin="npt=33.637s" clip-end="npt=34.228s" id="audio_0005"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>

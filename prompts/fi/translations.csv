@@ -1,0 +1,189 @@
+## Copyright (C) 2012 Kolibre
+#
+# This file is part of kolibre-clientcore.
+#
+# Kolibre-clientcore is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 2.1 of the License, or
+# (at your option) any later version.
+#
+# Kolibre-clientcore is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with kolibre-clientcore. If not, see <http://www.gnu.org/licenses/>.
+#
+
+# Common translations in Finnish. These translations may be overridden
+# by translations found in a voice specific file
+#
+# "identifier";"translation"[;"basename"]*
+
+#
+# MAIN PROMPTS
+#
+
+"welcome";"Tervetuloa"
+"shutting down";"Kiitos että kuuntelit, kuulemiin"
+"model name";"Kolibre"
+"Sleep timer is running out. Application will close soon.";"Automaattinen sammutus on kytkettynä. Ohjelma sulkeutuu automaattisesti hetken kuluttua."
+"Turn off automatic shutdown by pressing an application button.";"Lopeta automaattinen sammutus painamalla mitä tahansa näppäintä"
+
+#
+# MENU PROMPTS
+#
+
+"menu";"pikavalikko"
+"opening main menu";"avataan pikavalikkoa"
+"choose option using left and right arrows, open using down arrow";"valitse vaihtoehto vasemmalla tai oikealla nuolella, avaa painamalla alaspäin suuntautuvaa nuolta"
+"option";"vaihtoehto"
+"contains {1} option";"sisältää yksi vaihtoehto"
+"contains {2} options";"sisältää {2:number} vaihtoehtoa"
+"contains no options";"ei sisällä vaihtoehtoa"
+
+# playback speed
+"playback speed";"lukunopeus"
+"opening playback speed menu";"avataan lukunopeus"
+"normal speed";"Normaali lukunopeus"
+"current speed";"nykyinen lukunopeus"
+"set speed to";"aseta lukunopeus tasolle"
+"increasing speed to";"Lisätään lukunopeutta tasolle.."
+"decreasing speed to";"Vähennetään lukunopeutta tasolle.."
+
+# sleep timer
+"sleep timer";"automaattinen sammutus"
+"opening sleep timer";"avataan automaattinen sammutus"
+"enable sleep timer";"Aseta automaattinen sammutus"
+"disable sleep timer";"Kytke automaattinen sammutus pois päältä"
+"sleep timer enabled";"Automaattinen sammutus on asettu"
+"sleep timer disabled";"Automaattinen sammutus kytketty pois päältä"
+
+# jump to
+"jump to";"siirry kohteeseen"
+"jump to percent";"siirry prosenttiin"
+"jump to page";"siirry sivulle"
+"jump to time";"aikasiirtymä"
+"jumping to";"siirrytään kohteeseen"
+"opening jump to";"avataan siirry kohteeseen"
+"opening jump to percent";"avataan siirry prosenttiin"
+"opening jump to page";"avataan siirry sivulle"
+"opening jump to time";"avataan aikasiirtymä"
+"choose percent using left and right arrows, jump to selected percent using down arrow";"valitse prosentti vasemmalla tai oikealla nuolella, siirry valittuun prosenttimäärään painamalla alaspäin suuntautuvaa nuolta"
+"choose page using left and right arrows, jump to selected page using down arrow";"valitse sivu vasemmalla tai oikealla nuolella, siirry valitulle sivulle painamalla alaspäin suuntautuvaa nuolta"
+"choose time using left and right arrows, jump to selected time using down arrow";"valitse aika vasemmalla tai oikealla nuolella, aikasiirtymä vahvistetaan painamalla alaspäin suuntautuvaa nuolta"
+"pages";"sivua"
+"special page";"erikoissivu"
+"percent";"prosenttia"
+"time";"aika"
+"please enter";"ole hyvä valitse"
+"content total duration is";"aineiston kokonaiskesto on"
+"jump to position failed";"siirtyminen epäonnistui"
+
+# book info
+"content info";"tietoa aineistosta"
+"loading content info";"ladataan tietoa aineistosta"
+
+"content title";"otsikko"
+"source material was created";"aineiston tietolähde tehtiin"
+"content was recorded";"Aineisto äänitettiin.."
+"content has revision number";"Aineistolla on tarkistusnumero.."
+"and was last changed on";"..ja tarkistettiin.."
+
+"content type";"lähdemateriaalin tyyppi"
+"daisy type";"daisy-tyyppi"
+"set info";"osatiedot"
+"navigation info";"selaustiedot"
+"page info";"sivutiedot"
+"time info";"aikatiedot"
+
+"daisy2.00";"Daisy 2"
+"daisy2.02";"Daisy 2.02"
+"daisyNISO2002";"Daisy N,I,S,O 2002"
+"daisyNISO2005";"Daisy N,I,S,O 2005"
+"daisytype1";"Daisy-julkaisu sisältää ainoastaan äänielementtejä"
+"daisytype2";"Daisy-julkaisu sisältää sekä ääni- että navigointielementtejä"
+"daisytype3";"Daisy-julkaisu sisältää ääni-, navigointi- ja tekstielementtejä"
+"daisytype4";"Daisy-julkaisu sisältää täydellisiä ääni-, navigointi- ja tekstielementtejä"
+"daisytype5";"Daisy-julkaisu sisältää ääni-, navigointi- ja tekstielementtejä"
+"daisytype6";"Daisy-julkaisu sisältää sekä teksti- että navigointielementtejä"
+"daisytype7";"Daisy-julkaisu sisältää ainoastaan tekstielementtejä"
+"playback may be lacking since book does not have complete audio";"toisto voi kuulostaa vajaalta, koska julkaisu ei sisällä äänielementtejä jokaiselle osalle"
+
+"publication has";"julkaisussa on"
+"{2} navigation points";"{2:number} navigointipistettä."
+"{1} navigation point";"yksi navigointipiste"
+"{2} navigation levels";"{2:number} navigointitasoa"
+"{1} navigation level";"yksi navigointitaso"
+
+"current page";"nykyinen sivu"
+"highest page number in this book";"viimeinen sivu on"
+
+"{1} percent read";"yksi prosentti luettu"
+"{2} percent read";"{2:number} prosenttia luettu"
+"current position";"Nykyinen sijainti"
+"total time";"Pituus kokonaan"
+
+#
+# DAISYNAVI PROMPTS
+#
+
+"pausing";"tauko"
+"continuing";"Jatketaan"
+"continuing from last known position";"toisto jatkuu tallennetusta paikasta"
+"next";"Seuraava"
+"previous";"Edellinen"
+"previous navi history element";"Siirrytään taaksepäin"
+"start of navi history";"Selaushistorian alku"
+"end of navi history";"Selaushistorian loppu"
+"start of content";"Aineiston alussa"
+"end of content";"Aineiston lopussa"
+
+# navi levels
+"navilevel";"selaustaso"
+"publication list";"Julkaisuluettelo"
+"begend";"Aineiston alkuun tai loppuun"
+"bookmark";"Kirjanmerkit"
+"navi history";"Selaushistoria"
+"level";"taso"
+"page";"sivu"
+"phrase";"lause"
+
+# bookmarks
+"content has {1} bookmark";"Aineistossa on yksi kirjanmerkki"
+"content has {2} bookmarks";"Aineistossa on {2:number} kirjanmerkkiä"
+"content has no bookmarks";"Aineistossa ei ole kirjanmerkkejä"
+"add new bookmark";"Lisää uusi kirjanmerkki"
+"adding bookmark no. {1}";"Lisätään uusi kirjanmerkki, numero {1:number}"
+"delete bookmark no. {1}";"Poista kirjamnerkki numero {1:number}"
+"deleting bookmark no. {1}";"Poistetaan kirjanmerkki numero {1:number}"
+"delete all bookmarks";"Poista kaikki kirjanmerkit"
+"deleting all bookmarks";"Poistetaan kaikki kirjanmerkit"
+"loading bookmark no. {1}";"Kirjanmerkki numero {1:number} lataa"
+"current bookmark is no. {1}";"nykyinen kirjanmerkki on numero {1:number}"
+"confirm using down arrow";"hyväksy painamalla alaspäin suuntautuvaa nuolta"
+
+# errors
+"content error";"Aineisto on viallinen"
+"content contains too many navigation points, gui synchronization disabled";"aineistossa on liian monta navigointipistettä, nykyisen navigaatiopisteen seuraaminen kytketty pois päältä"
+
+#
+# DAISYONLINE PROMPTS
+#
+
+"library";"kirjasto"
+"updating library";"päivitetään kirjastoa"
+"found {1} publication";"kirjastosta löytyy yksi julkaisu"
+"found {2} publications";"kirjastosta löytyy {2:number} julkaisua"
+"no content found";"kirjastosta ei löytynyt julkaisua"
+"found {1} new publication";"uusi julkaisu löytyi"
+"found {2} new publications";"{2:number} uutta julkaisua löytyi"
+"publication no. {1}";"Julkaisu {1:number}"
+"opening publication";"avataan julkaisua"
+
+# errors
+"error loading data";"Tiedonsiirto epäonnistui"
+"service error";"virheellinen vastaus palvelusta"
+"username password error";"sisäänkirjautuminen epäonnistui, käyttäjätiedot ovat viallisia"
+"retrying shortly";"yritetään uudelleen hetken kuluttua"

@@ -1,0 +1,21 @@
+POST /daisyonline/service.php HTTP/1.1
+Host: localhost:8888
+User-Agent: Axis2C/1.6.0
+SOAPAction: "/logOn"
+Content-Length: 249
+Content-Type: text/xml;charset=UTF-8
+
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><n:logOn xmlns:n="http://www.daisy.org/ns/daisy-online/"><n:username>test</n:username><n:password>test</n:password></n:logOn></soapenv:Body></soapenv:Envelope>
+
+HTTP/1.1 200 OK
+Date: Mon, 18 Jul 2011 14:05:44 GMT
+Server: Apache/2.2.9 (Debian) PHP/5.2.6-1+lenny9 with Suhosin-Patch mod_ssl/2.2.9 OpenSSL/0.9.8g mod_perl/2.0.4 Perl/v5.10.0
+X-Powered-By: PHP/5.2.6-1+lenny9
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Content-Length: 297
+Connection: close
+Content-Type: text/xml; charset=utf-8
+
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://www.daisy.org/ns/daisy-online/"><SOAP-ENV:Body><ns1:logOnResponse><ns1:logOnResult>true</ns1:logOnResult></ns1:logOnResponse></SOAP-ENV:Body></SOAP-ENV:Envelope>

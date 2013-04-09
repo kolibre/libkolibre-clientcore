@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 1.0//EN" "SMIL10.dtd">
+<smil>
+	<head>
+		<meta name="dc:format" content="Daisy 2.02"/>
+		<meta name="ncc:timeInThisSmil" content="00:00:35.749"/>
+		<meta name="ncc:totalElapsedTime" content="00:23:56.526"/>
+		<layout>
+			<region id="txt-view"/>
+		</layout>
+		<meta name="ncc:generator" content="EasePublisher 2.13 Build 163 # 044FSI210083735"/>
+    <meta name="title" content="F"/>
+    <meta name="dc:title" content="4980FSafe"/>
+    <meta name="dc:identifier" content="PID4980"/>
+  </head>
+	<body>
+		<seq dur="35.749s">
+			<par endsync="last" id="rgn_par_0043_0001">
+				<text src="fire_safety.html#dol_1_43_rgn_cnt_0214" id="rgn_txt_0043_0001"/>
+				<seq>
+					<audio src="43_F.mp3" clip-begin="npt=0.000s" clip-end="npt=1.199s" id="audio_0001"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0043_0002">
+				<text src="fire_safety.html#dol_1_43_rgn_cnt_0215" id="rgn_txt_0043_0002"/>
+				<seq>
+					<audio src="43_F.mp3" clip-begin="npt=1.199s" clip-end="npt=6.399s" id="audio_0002"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0043_0003">
+				<text src="fire_safety.html#dol_1_43_rgn_cnt_0216" id="rgn_txt_0043_0003"/>
+				<seq>
+					<audio src="43_F.mp3" clip-begin="npt=6.399s" clip-end="npt=9.399s" id="audio_0003"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0043_0004">
+				<text src="fire_safety.html#dol_1_43_rgn_cnt_0217" id="rgn_txt_0043_0004"/>
+				<seq>
+					<audio src="43_F.mp3" clip-begin="npt=9.399s" clip-end="npt=11.830s" id="audio_0004"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0043_0005">
+				<text src="fire_safety.html#dol_1_43_rgn_cnt_0218" id="rgn_txt_0043_0005"/>
+				<seq>
+					<audio src="43_F.mp3" clip-begin="npt=11.830s" clip-end="npt=14.399s" id="audio_0005"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0043_0006">
+				<text src="fire_safety.html#dol_1_43_rgn_cnt_0219" id="rgn_txt_0043_0006"/>
+				<seq>
+					<audio src="43_F.mp3" clip-begin="npt=14.399s" clip-end="npt=17.999s" id="audio_0006"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0043_0007">
+				<text src="fire_safety.html#dol_1_43_rgn_cnt_0220" id="rgn_txt_0043_0007"/>
+				<seq>
+					<audio src="43_F.mp3" clip-begin="npt=17.999s" clip-end="npt=22.199s" id="audio_0007"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0043_0008">
+				<text src="fire_safety.html#dol_1_43_rgn_cnt_0221" id="rgn_txt_0043_0008"/>
+				<seq>
+					<audio src="43_F.mp3" clip-begin="npt=22.199s" clip-end="npt=27.399s" id="audio_0008"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0043_0009">
+				<text src="fire_safety.html#dol_1_43_rgn_cnt_0222" id="rgn_txt_0043_0009"/>
+				<seq>
+					<audio src="43_F.mp3" clip-begin="npt=27.399s" clip-end="npt=30.399s" id="audio_0009"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0043_0010">
+				<text src="fire_safety.html#dol_1_43_rgn_cnt_0223" id="rgn_txt_0043_0010"/>
+				<seq>
+					<audio src="43_F.mp3" clip-begin="npt=30.399s" clip-end="npt=33.199s" id="audio_0010"/>
+				</seq>
+			</par>
+			<par endsync="last" id="rgn_par_0043_0011">
+				<text src="fire_safety.html#dol_1_43_rgn_cnt_0224" id="rgn_txt_0043_0011"/>
+				<seq>
+					<audio src="43_F.mp3" clip-begin="npt=33.199s" clip-end="npt=35.749s" id="audio_0011"/>
+				</seq>
+			</par>
+		</seq>
+	</body>
+</smil>
