@@ -166,7 +166,8 @@ void handleSignal(int sig)
     {
         exitSignal = true;
         LOG4CXX_INFO(sampleClientMainLog, "Caught signal (" << sig << "), exiting");
-        LOG4CXX_INFO(sampleClientMainLog, "Caught signal (" << sig << "), exiting");
+        Input *input = Input::Instance();
+        input->keyPressed_signal(ClientCore::EXIT);
         sleep(1);
     }
 }
