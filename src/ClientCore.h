@@ -151,33 +151,33 @@ public:
 
     enum COMMAND
     {
-        DOWN,
-        EXIT,
-        BOOKMARK,
-        CONTEXTMENU,
-        HELP,
-        HELP_CLOSE,
-        ABOUT,
-        ABOUT_CLOSE,
-        LEFT,
-        PAUSE,
-        BACK,
-        RETRY_LOGIN,
-        RIGHT,
-        SPEEDDOWN,
-        SPEEDUP,
-        UP,
-        HOME,
-        SLEEP_OFF,
-        SLEEP_15,
-        SLEEP_30,
-        SLEEP_60,
-        NARRATOR_CONTROL_STOP,
-        NARRATOR_CONTROL_CONTINUE,
-        BOOKINFO,
-        GOTO_TIME,
-        GOTO_PERCENT,
-        GOTO_PAGE,
+        HOME,                           /**< Go to the root node */
+        UP,                             /**< Go to parent node */
+        DOWN,                           /**< Open selected child node */
+        LEFT,                           /**< Go to previous child node */
+        RIGHT,                          /**< Go to next child node */
+        BACK,                           /**< Go to perent node or back in history during playback */
+        EXIT,                           /**< Exit the application */
+        PAUSE,                          /**< Open selected child node or pause the playback */
+        BOOKMARK,                       /**< Enter bookmark management */
+        CONTEXTMENU,                    /**< Open context menu */
+        HELP,                           /**< Start playing the help audio */
+        HELP_CLOSE,                     /**< Stop playing the help audio */
+        ABOUT,                          /**< Start playing the about audio */
+        ABOUT_CLOSE,                    /**< Stop playing the about audio */
+        RETRY_LOGIN,                    /**< Retry the login procedure for a Daisy Online service */
+        SPEEDDOWN,                      /**< Decrement reading speed one step */
+        SPEEDUP,                        /**< Increment reading speed one step */
+        SLEEP_OFF,                      /**< Deactivate the sleep timer */
+        SLEEP_15,                       /**< Activate the sleep timer with 15 minutes */
+        SLEEP_30,                       /**< Activate the sleep timer with 30 minutes */
+        SLEEP_60,                       /**< Activate the sleep timer with 60 minutes */
+        NARRATOR_CONTROL_STOP,          /**< Take control of narrator */
+        NARRATOR_CONTROL_CONTINUE,      /**< Give back control of narrator */
+        BOOKINFO,                       /**< Open book info menu in the context menu*/
+        GOTO_TIME,                      /**< Open go-to time menu in the context menu */
+        GOTO_PERCENT,                   /**< Open go-to percent menu in the context menu */
+        GOTO_PAGE,                      /**< Open go-to page menu in the context menu */
     };
 
     // player/narrator control functions
