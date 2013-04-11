@@ -176,7 +176,6 @@ AC_ARG_WITH([samples], AS_HELP_STRING([--with-samples], [build applications in s
 AM_CONDITIONAL(SAMPLES, test "x$with_samples" = "xyes")
 
 AC_CONFIG_FILES([libkolibre-clientcore.pc
-                 doxygen.cfg
                  src/version.h
                  Makefile
                  src/Makefile
