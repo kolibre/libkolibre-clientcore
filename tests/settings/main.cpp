@@ -28,8 +28,8 @@ using namespace std;
 int main(void)
 {
 
-    char* data_path_variable = "KOLIBRE_DATA_PATH";
-    char* data_path_value = ".";
+    char data_path_variable[] = "KOLIBRE_DATA_PATH";
+    char data_path_value[] = ".";
     setenv(data_path_variable, data_path_value, true);
 
     //Setup logging
