@@ -22,6 +22,7 @@
 
 using namespace std;
 
+#include "../setup_logging.h"
 #include "Settings.h"
 
 int main(void)
@@ -31,6 +32,8 @@ int main(void)
     char* data_path_value = ".";
     setenv(data_path_variable, data_path_value, true);
 
+    //Setup logging
+    setup_logging();
     Settings *settings = Settings::Instance();
 
     /*

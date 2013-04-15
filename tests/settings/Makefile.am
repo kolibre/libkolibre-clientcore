@@ -23,8 +23,9 @@ check_PROGRAMS = settings
 TESTS = settings
 
 settings_SOURCES = main.cpp
-settings_LDADD = -L$(top_builddir)/src/Settings -lsettings -lsqlite3
-settings_CPPFLAGS = @LIBKOLIBREXMLREADER_CFLAGS@
+settings_LDADD = @LOG4CXX_LIBS@ -L$(top_builddir)/src/Settings -lsettings -lsqlite3
+settings_CPPFLAGS = @LOG4CXX_CFLAGS@
+
 
 INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/Settings
 
