@@ -80,7 +80,7 @@ Settings::Settings():
 
     string settingsfile = Utils::getDatapath() + "settings.db";
 
-    LOG4CXX_DEBUG(settingsLog, "Opening settings.db in '"<< settingsfile << "'");
+    LOG4CXX_INFO(settingsLog, "Opening settings.db in '"<< settingsfile << "'");
 
     bool settingsFileExists = fstream(settingsfile.c_str(), fstream::in).is_open();
 
@@ -97,12 +97,11 @@ Settings::Settings():
 
     if (settingsFileExists)
     {
-
         const int fileVersion = getVersion();
 
         if (fileVersion != DB_VERSION)
         {
-
+            LOG4CXX_DEBUG(settingsLog, "DB_VERSION missmatch, migrating db");
             stringstream backupName;
             backupName << settingsfile << fileVersion;
 
@@ -147,7 +146,9 @@ Settings::Settings():
     }
 
     if (not settingsFileExists)
+    //Verify database structure
     {
+        LOG4CXX_DEBUG(settingsLog, "Verifying database structure");
 
         if (!pDBHandle->prepare("create table if not exists setting (setting TEXT, value TEXT, type INT, domain TEXT, UNIQUE(setting, domain))"))
         {
@@ -157,7 +158,7 @@ Settings::Settings():
 
         if (!pDBHandle->perform())
         {
-            LOG4CXX_ERROR(settingsLog, "Create table setting failed '" << pDBHandle->getLasterror().c_str() << "'");
+            LOG4CXX_ERROR(settingsLog, "Create table setting failed '" << pDBHandle->getLasterror() << "'");
             return;
         }
 
