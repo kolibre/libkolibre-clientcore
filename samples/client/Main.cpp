@@ -59,7 +59,7 @@ int main(int argc, char **argv)
     signal(SIGTERM, handleSignal);
 
     // store required arguments before parsing optional
-    char *service_url, *username, *password;
+    std::string service_url, username, password;
     service_url = argv[1];
     username = argv[2];
     password = argv[3];
