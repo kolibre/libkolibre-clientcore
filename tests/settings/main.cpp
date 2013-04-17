@@ -27,7 +27,7 @@ using namespace std;
 #include "../setup_logging.h"
 #include "Settings.h"
 
-void remove_file(char* file)
+void remove_file(const char* file)
 {
     //Remove old settings databases
     if( remove( file ) != 0 )
@@ -38,19 +38,20 @@ void remove_file(char* file)
 int main(void)
 {
 
-    char data_path_variable[] = "KOLIBRE_DATA_PATH";
-    char data_path_value[] = ".";
-    setenv(data_path_variable, data_path_value, true);
+    string data_path_variable = "KOLIBRE_DATA_PATH";
+    string data_path_value = ".";
+    setenv(data_path_variable.c_str(), data_path_value.c_str(), true);
 
     //Setup logging
     setup_logging();
+    logger->setLevel(log4cxx::Level::getTrace());
     cout << "1..3" << endl;
     cout << "#" << endl
         << "# Try reading and writing to a database" << endl
         << "#" << endl;
 
     //Remove old settings databases
-    remove_file( strcat(data_path_value, "/settings.db") );
+    remove_file( (data_path_value + "/settings.db").c_str() );
 
     Settings *settings = Settings::Instance();
 
@@ -77,14 +78,14 @@ int main(void)
     settings->DeleteInstance();
     settings=NULL;
 
-    cout << "ok 1" << endl;
+    cout << "ok 1 - Read with defaults" << endl;
 
     /*
      * test write<T> and read<T> with different types
      */
 
     //Start from fresh db
-    remove_file( strcat(data_path_value, "/settings.db") );
+    remove_file( (data_path_value + "/settings.db").c_str() );
 
     settings = Settings::Instance();
 
@@ -108,7 +109,7 @@ int main(void)
     stringValue = settings->read<string>("stringValue");
     assert(stringValue == "bar");
 
-    cout << "ok 2" << endl;
+    cout << "ok 2 - Writing to database" << endl;
     /*
      * test readInto<T> with different types
      */
@@ -129,12 +130,13 @@ int main(void)
     settings->readInto<string>(stringValue, "stringValue");
     assert(stringValue == "bar");
 
+    cout << "ok 3 - Reading from previously written database" << endl;
+
     settings->DeleteInstance();
     settings=NULL;
 
-    cout << "ok 3" << endl;
     //Cleanup
-    remove_file( strcat(data_path_value, "/settings.db") );
+    remove_file( (data_path_value + "/settings.db").c_str() );
 
     return 0;
 }
