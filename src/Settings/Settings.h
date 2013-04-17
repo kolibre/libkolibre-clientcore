@@ -235,10 +235,11 @@ private:
     bool setVersion(int version);
     int getVersion();
     bool restoreClosestDbBackup(std::string settingsfile);
+    ~Settings();
 
 public:
     static Settings *Instance();
-    ~Settings();
+    void DeleteInstance();
 
     //template<class T> void setOption(std::string name, const T &value);
     //SettingsItem *getSettings(const std::string &key);

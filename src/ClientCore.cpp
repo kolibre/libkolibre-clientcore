@@ -1288,7 +1288,9 @@ void *ClientCore::clientcore_thread(void *ctx)
     LOG4CXX_DEBUG(clientcoreLog, "Deleting narrator");
     delete narrator;
     LOG4CXX_DEBUG(clientcoreLog, "Deleting settings");
-    delete settings;
+
+    settings->DeleteInstance();
+    settings=NULL;
 
     return NULL;
 }

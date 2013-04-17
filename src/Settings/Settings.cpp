@@ -60,12 +60,18 @@ Settings * Settings::Instance()
     return pinstance;
 }
 
-Settings::Settings()
+void Settings::DeleteInstance()
 {
-    LOG4CXX_DEBUG(settingsLog, "constructor");
+    Settings::pinstance=NULL;
+    delete this;
+}
+
+Settings::Settings():
+    mCurrentDomain("localhost")
+{
+    LOG4CXX_TRACE(settingsLog, "Constructor");
 
     string settingsfile = Utils::getDatapath() + "settings.db";
-    mCurrentDomain = "localhost";
 
     LOG4CXX_DEBUG(settingsLog, "Opening settings.db in '"<< settingsfile << "'");
 

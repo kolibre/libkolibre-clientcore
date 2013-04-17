@@ -100,7 +100,8 @@ int main(void)
     settings->readInto<string>(stringValue, "stringValue");
     assert(stringValue == "bar");
 
-    delete settings;
+    settings->DeleteInstance();
+    settings=NULL;
 
     return 0;
 }
