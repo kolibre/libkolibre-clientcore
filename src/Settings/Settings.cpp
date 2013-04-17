@@ -62,6 +62,10 @@ Settings * Settings::Instance()
 
 void Settings::DeleteInstance()
 {
+    pthread_mutex_lock(&settings_mutex);
+    //Nothing going on
+    pthread_mutex_unlock(&settings_mutex);
+    pthread_mutex_destroy(&settings_mutex);
     Settings::pinstance=NULL;
     delete this;
 }
@@ -70,6 +74,9 @@ Settings::Settings():
     mCurrentDomain("localhost")
 {
     LOG4CXX_TRACE(settingsLog, "Constructor");
+
+    pthread_mutex_init (&settings_mutex, NULL);
+    LOG4CXX_TRACE(settingsLog, "Settings mutex initialized");
 
     string settingsfile = Utils::getDatapath() + "settings.db";
 
@@ -170,84 +177,104 @@ Settings::Settings():
         {
             LOG4CXX_ERROR(settingsLog, "Setting db version failed");
         }
+        LOG4CXX_DEBUG(settingsLog, "Database structure verified");
     }
+
 }
 
 Settings::~Settings()
 {
-    LOG4CXX_DEBUG(settingsLog, "destructor");
-    if (pDBHandle)
-        delete pDBHandle;
+    LOG4CXX_INFO(settingsLog, "Deleting settings instance");
 }
 
 bool Settings::setVersion(int version)
 {
-    if (!pDBHandle->prepare("create table if not exists version (number INT)"))
-    {
-        LOG4CXX_ERROR(settingsLog, "Could not create version table: '" << pDBHandle->getLasterror().c_str() << "'");
-        return false;
-    }
-
-    if (!pDBHandle->perform())
-    {
-        LOG4CXX_ERROR(settingsLog, "Create table version failed '" << pDBHandle->getLasterror() << "'");
-        return false;
-    }
-
-    if (getVersion() == 0)
-    {
-        LOG4CXX_DEBUG(settingsLog, "insert into version " << version);
-        if (!pDBHandle->prepare("insert into version values(?)"))
+    try {
+        pthread_mutex_lock( &settings_mutex );
+        if (!pDBHandle->prepare("create table if not exists version (number INT)"))
         {
-            LOG4CXX_ERROR(settingsLog, "Could not prepare insert '" << pDBHandle->getLasterror() << "'");
-            return false;
+            LOG4CXX_ERROR(settingsLog, "Could not create version table: '" << pDBHandle->getLasterror().c_str() << "'");
+            throw 1;
         }
-    }
-    else
-    {
-        LOG4CXX_DEBUG(settingsLog, "update version " << version);
-        if (!pDBHandle->prepare("update version set number=?"))
+
+        if (!pDBHandle->perform())
         {
-            LOG4CXX_ERROR(settingsLog, "Could not prepare update '" << pDBHandle->getLasterror() << "'");
-            return false;
+            LOG4CXX_ERROR(settingsLog, "Create table version failed '" << pDBHandle->getLasterror() << "'");
+            throw 1;
         }
-    }
+        pthread_mutex_unlock(&settings_mutex);
+        int version = getVersion();
+        pthread_mutex_lock( &settings_mutex );
+        if (version == 0)
+        {
+            LOG4CXX_DEBUG(settingsLog, "insert into version " << version);
+            if (!pDBHandle->prepare("insert into version values(?)"))
+            {
+                LOG4CXX_ERROR(settingsLog, "Could not prepare insert '" << pDBHandle->getLasterror() << "'");
+                throw 1;
+            }
+        }
+        else
+        {
+            LOG4CXX_DEBUG(settingsLog, "update version " << version);
+            if (!pDBHandle->prepare("update version set number=?"))
+            {
+                LOG4CXX_ERROR(settingsLog, "Could not prepare update '" << pDBHandle->getLasterror() << "'");
+                throw 1;
+            }
+        }
 
-    if (!pDBHandle->bind(1, version))
-    {
-        LOG4CXX_ERROR(settingsLog, "Bind failed '" << pDBHandle->getLasterror() << "'");
+        if (!pDBHandle->bind(1, version))
+        {
+            LOG4CXX_ERROR(settingsLog, "Bind failed '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+
+        if (!pDBHandle->perform())
+        {
+            LOG4CXX_ERROR(settingsLog, "Could not perform insert version number '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+        pthread_mutex_unlock( &settings_mutex );
+    } catch(int e) {
+        LOG4CXX_TRACE(settingsLog, "Set version exception was thrown");
+        pthread_mutex_unlock(&settings_mutex);
         return false;
     }
 
-    if (!pDBHandle->perform())
-    {
-        LOG4CXX_ERROR(settingsLog, "Could not perform insert version number '" << pDBHandle->getLasterror() << "'");
-        return false;
-    }
 
     return true;
 }
 
 int Settings::getVersion()
 {
-    if (!pDBHandle->prepare("SELECT number FROM version"))
-    {
-        LOG4CXX_ERROR(settingsLog, "Could not read version: '" << pDBHandle->getLasterror() << "'");
-        return 0;
-    }
-
-    DBResult result;
-    if (!pDBHandle->perform(&result))
-    {
-        LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");
-        return 0;
-    }
-
     int version = 0;
-    while (result.loadRow())
-    {
-        version = result.getInt(0);
+    try {
+        pthread_mutex_lock( &settings_mutex );
+        if (!pDBHandle->prepare("SELECT number FROM version"))
+        {
+            LOG4CXX_ERROR(settingsLog, "Could not read version: '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+
+        DBResult result;
+        if (!pDBHandle->perform(&result))
+        {
+            LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+
+        while (result.loadRow())
+        {
+            version = result.getInt(0);
+        }
+        pthread_mutex_unlock( &settings_mutex );
+    } catch(int e) {
+        LOG4CXX_TRACE(settingsLog, "Get version exception was thrown");
+        pthread_mutex_unlock(&settings_mutex);
+        return 0;
     }
+
 
     return version;
 }
@@ -270,66 +297,77 @@ bool Settings::read(SettingsItem &item, const string &_setting)
     }
 
     // Try to read the setting values
-    if (!pDBHandle->prepare("SELECT rowid, value, type FROM setting WHERE setting=? ORDER BY domain=?"))
-    {
-        LOG4CXX_ERROR(settingsLog, "Could not read setting: '" << pDBHandle->getLasterror() << "'");
+    try {
+        pthread_mutex_lock( &settings_mutex );
+        if (!pDBHandle->prepare("SELECT rowid, value, type FROM setting WHERE setting=? ORDER BY domain=?"))
+        {
+            LOG4CXX_ERROR(settingsLog, "Could not read setting: '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+
+        LOG4CXX_TRACE(settingsLog, "Binding setting: '" << setting << "' in domain: " << mCurrentDomain);
+        if (!pDBHandle->bind(1, setting.c_str()) || !pDBHandle->bind(2, mCurrentDomain.c_str()))
+        {
+            LOG4CXX_ERROR(settingsLog, "Bind failed '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+
+        DBResult result;
+        if (!pDBHandle->perform(&result))
+        {
+            LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+
+        int count = 0;
+        while (result.loadRow())
+        {
+            item.mRowid = result.getInt(0);
+            item.mName = setting;
+            item.mDomain = mCurrentDomain;
+            item.mValue = result.getText(1);
+            item.mType = (SettingsItem::Type) result.getInt(2);
+            count++;
+        }
+        pthread_mutex_unlock( &settings_mutex );
+
+        // Check if we got any rows
+        if (count == 0)
+            return false;
+
+        pthread_mutex_lock( &settings_mutex );
+        // Try to read the setting parameter values
+        if (!pDBHandle->prepare("SELECT key, value, type FROM parameter WHERE setting_id=?"))
+        {
+            LOG4CXX_ERROR(settingsLog, "Could not read parameter: '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+
+        if (!pDBHandle->bind(1, item.mRowid))
+        {
+            LOG4CXX_ERROR(settingsLog, "Bind failed '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+
+        DBResult result2;
+        if (!pDBHandle->perform(&result2))
+        {
+            LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+
+        count = 0;
+        while (result.loadRow())
+        {
+            string key = result.getText(0);
+            string value = result.getText(0);
+            item.mParameters[key] = value;
+        }
+        pthread_mutex_unlock( &settings_mutex );
+    } catch(int e) {
+        LOG4CXX_TRACE(settingsLog, "Read exception was thrown");
+        pthread_mutex_unlock( &settings_mutex );
         return false;
-    }
-
-    if (!pDBHandle->bind(1, setting.c_str()) || !pDBHandle->bind(2, mCurrentDomain.c_str()))
-    {
-        LOG4CXX_ERROR(settingsLog, "Bind failed '" << pDBHandle->getLasterror() << "'");
-        return false;
-    }
-
-    DBResult result;
-    if (!pDBHandle->perform(&result))
-    {
-        LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");
-        return false;
-    }
-
-    int count = 0;
-    while (result.loadRow())
-    {
-        item.mRowid = result.getInt(0);
-        item.mName = setting;
-        item.mDomain = mCurrentDomain;
-        item.mValue = result.getText(1);
-        item.mType = (SettingsItem::Type) result.getInt(2);
-        count++;
-    }
-
-    // Check if we got any rows
-    if (count == 0)
-        return false;
-
-    // Try to read the setting parameter values
-    if (!pDBHandle->prepare("SELECT key, value, type FROM parameter WHERE setting_id=?"))
-    {
-        LOG4CXX_ERROR(settingsLog, "Could not read parameter: '" << pDBHandle->getLasterror() << "'");
-        return false;
-    }
-
-    if (!pDBHandle->bind(1, item.mRowid))
-    {
-        LOG4CXX_ERROR(settingsLog, "Bind failed '" << pDBHandle->getLasterror() << "'");
-        return false;
-    }
-
-    DBResult result2;
-    if (!pDBHandle->perform(&result2))
-    {
-        LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");
-        return false;
-    }
-
-    count = 0;
-    while (result.loadRow())
-    {
-        string key = result.getText(0);
-        string value = result.getText(0);
-        item.mParameters[key] = value;
     }
 
     return true;
@@ -345,25 +383,35 @@ bool Settings::write(SettingsItem &item)
     }
 
     // Try to insert the value
-    if (!pDBHandle->prepare("INSERT INTO setting (setting, value, type, domain) VALUES (?,?,?,?)"))
-    {
-        LOG4CXX_ERROR(settingsLog, "Could not create/open setting table: '" << pDBHandle->getLasterror() << "'");
+    try {
+        pthread_mutex_lock( &settings_mutex );
+        if (!pDBHandle->prepare("INSERT INTO setting (setting, value, type, domain) VALUES (?,?,?,?)"))
+        {
+            LOG4CXX_ERROR(settingsLog, "Could not create/open setting table: '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+        string name = item.getName();
+        string value = item.getValue();
+        if (!pDBHandle->bind(1, name.c_str()) || !pDBHandle->bind(2, value.c_str()) || !pDBHandle->bind(3, (int) item.getType()) || !pDBHandle->bind(4, mCurrentDomain.c_str()))
+        {
+            LOG4CXX_ERROR(settingsLog, "Bind failed '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+
+        if (!pDBHandle->perform())
+        {
+            LOG4CXX_ERROR(settingsLog, "Query failed while inserting '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+        pthread_mutex_unlock( &settings_mutex );
+    } catch(int e) {
+        LOG4CXX_TRACE(settingsLog, "Write exception was thrown");
+        pthread_mutex_unlock( &settings_mutex );
         return false;
     }
 
-    if (!pDBHandle->bind(1, item.getName().c_str()) || !pDBHandle->bind(2, item.getValue().c_str()) || !pDBHandle->bind(3, (int) item.getType()) || !pDBHandle->bind(4, mCurrentDomain.c_str()))
-    {
-        LOG4CXX_ERROR(settingsLog, "Bind failed '" << pDBHandle->getLasterror() << "'");
-        return false;
-    }
 
-    if (!pDBHandle->perform())
-    {
-        LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");
-        return false;
-    }
     return true;
-
 }
 
 // Overwrites values and parameters for a setting in database
@@ -376,23 +424,32 @@ bool Settings::update(SettingsItem &item)
     }
 
     // Try to insert the value
-    if (!pDBHandle->prepare("UPDATE setting SET value=? WHERE rowid=?"))
-    {
-        LOG4CXX_ERROR(settingsLog, "Could not create update setting query: '" << pDBHandle->getLasterror() << "'");
+    try {
+        pthread_mutex_lock( &settings_mutex );
+        if (!pDBHandle->prepare("UPDATE setting SET value=? WHERE rowid=?"))
+        {
+            LOG4CXX_ERROR(settingsLog, "Could not create update setting query: '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+
+        if (!pDBHandle->bind(1, item.getValue().c_str()) || !pDBHandle->bind(2, item.getRowid()))
+        {
+            LOG4CXX_ERROR(settingsLog, "Bind failed '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+
+        if (!pDBHandle->perform())
+        {
+            LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");
+            throw 1;
+        }
+        pthread_mutex_unlock( &settings_mutex );
+    } catch(int e) {
+        LOG4CXX_TRACE(settingsLog, "Write exception was thrown");
+        pthread_mutex_unlock( &settings_mutex );
         return false;
     }
 
-    if (!pDBHandle->bind(1, item.getValue().c_str()) || !pDBHandle->bind(2, item.getRowid()))
-    {
-        LOG4CXX_ERROR(settingsLog, "Bind failed '" << pDBHandle->getLasterror() << "'");
-        return false;
-    }
-
-    if (!pDBHandle->perform())
-    {
-        LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");
-        return false;
-    }
 
     return true;
 

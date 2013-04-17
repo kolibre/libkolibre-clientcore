@@ -27,6 +27,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <pthread.h>
 
 class Settings;
 class DB;
@@ -229,6 +230,7 @@ protected:
     template<class T> static T string_as_T(const std::string& s);
 
 private:
+    pthread_mutex_t settings_mutex;
     static Settings *pinstance;
     DB *pDBHandle;
     std::string mCurrentDomain;
