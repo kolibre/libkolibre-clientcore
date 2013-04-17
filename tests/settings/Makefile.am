@@ -18,13 +18,15 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-check_PROGRAMS = settings
+check_PROGRAMS = settings threads
 
-TESTS = settings
+TESTS = settings threads
 
 settings_SOURCES = main.cpp
+threads_SOURCES = threads.cpp
 settings_LDADD = @LOG4CXX_LIBS@ -L$(top_builddir)/src/Settings -lsettings -lsqlite3
-settings_CPPFLAGS = @LOG4CXX_CFLAGS@
+threads_LDADD = @LOG4CXX_LIBS@ -L$(top_builddir)/src/Settings -lsettings -lsqlite3
+AM_CPPFLAGS = @LOG4CXX_CFLAGS@
 
 
 INCLUDES = -I$(top_srcdir)/src -I$(top_srcdir)/src/Settings
