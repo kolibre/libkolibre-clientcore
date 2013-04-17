@@ -52,12 +52,9 @@ int busyHandler(void *pArg1, int iPriorCalls)
     return 0;
 }
 
-DB::DB(const string &database)
+DB::DB(const string &database):
+    mDatabase(database), pDBHandle(NULL), pStatement(NULL), mLasterror(""), mLastquery("")
 {
-    mDatabase = database;
-    pDBHandle = NULL;
-    pStatement = NULL;
-    mLasterror = "";
 
 }
 
