@@ -306,7 +306,7 @@ int DBResult::step()
         return 0;
 
     case SQLITE_CONSTRAINT:
-        //printf("Got constraint violation\n");
+        LOG4CXX_ERROR(dbLog, "Got constraint violation");
         bError = true;
         mLasterror.assign("DB: SQLITE_CONSTRAINT violation");
         return rc;
@@ -319,7 +319,7 @@ int DBResult::step()
         break;
 
     default:
-        //printf("DB: error code: %d\n", rc);
+        LOG4CXX_ERROR(dbLog, "DB: error code: " << rc);
         bError = true;
         mLasterror = sqlite3_errmsg(pDBHandle);
     }
