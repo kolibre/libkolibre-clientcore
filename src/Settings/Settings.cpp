@@ -386,7 +386,7 @@ bool Settings::write(SettingsItem &item)
     // Try to insert the value
     try {
         pthread_mutex_lock( &settings_mutex );
-        if (!pDBHandle->prepare("INSERT INTO setting (setting, value, type, domain) VALUES (?,?,?,?)"))
+        if (!pDBHandle->prepare("INSERT OR REPLACE INTO setting (setting, value, type, domain) VALUES (?,?,?,?)"))
         {
             LOG4CXX_ERROR(settingsLog, "Could not create/open setting table: '" << pDBHandle->getLasterror() << "'");
             throw 1;
