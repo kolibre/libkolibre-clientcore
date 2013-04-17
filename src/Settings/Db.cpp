@@ -74,7 +74,8 @@ bool DB::connect()
     if (pDBHandle != NULL)
         return true;
 
-    if (sqlite3_open(mDatabase.c_str(), &pDBHandle) != SQLITE_OK)
+    LOG4CXX_DEBUG(dbLog, "Opening settings database: " << mDatabase);
+    if (sqlite3_open_v2(mDatabase.c_str(), &pDBHandle, SQLITE_OPEN_NOMUTEX | SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE, NULL) != SQLITE_OK)
     {
         mLasterror.assign(sqlite3_errmsg(pDBHandle));
         sqlite3_close(pDBHandle);
