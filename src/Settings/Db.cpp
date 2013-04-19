@@ -34,6 +34,7 @@ log4cxx::LoggerPtr dbLog(log4cxx::Logger::getLogger("kolibre.clientcore.db"));
 
 using namespace std;
 
+
 int busyHandler(void *pArg1, int iPriorCalls)
 {
     LOG4CXX_WARN(dbLog, "busyHandler " << iPriorCalls << " !!");
@@ -51,6 +52,8 @@ int busyHandler(void *pArg1, int iPriorCalls)
     // have sqlite3_exec immediately return SQLITE_BUSY
     return 0;
 }
+
+namespace settings {
 
 DB::DB(const string &database):
     mDatabase(database), pDBHandle(NULL), pStatement(NULL), mLasterror(""), mLastquery("")
@@ -257,6 +260,7 @@ bool DB::perform(DBResult *result)
     pStatement = NULL;
     return ret;
 }
+}
 
 DBResult::DBResult()
 {
@@ -426,4 +430,3 @@ long DBResult::getDataSize(const long column)
 
     return 0;
 }
-

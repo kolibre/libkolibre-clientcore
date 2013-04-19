@@ -84,7 +84,7 @@ Settings::Settings():
 
     bool settingsFileExists = fstream(settingsfile.c_str(), fstream::in).is_open();
 
-    pDBHandle = new DB(settingsfile);
+    pDBHandle = new settings::DB(settingsfile);
 
     if (!pDBHandle->connect())
     {
@@ -124,7 +124,7 @@ Settings::Settings():
                 }
             }
 
-            pDBHandle = new DB(settingsfile);
+            pDBHandle = new settings::DB(settingsfile);
 
             if (!pDBHandle->connect())
             {

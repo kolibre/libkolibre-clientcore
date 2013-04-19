@@ -30,7 +30,9 @@
 #include <pthread.h>
 
 class Settings;
-class DB;
+namespace settings {
+    class DB;
+}
 
 class SettingsItem
 {
@@ -232,7 +234,7 @@ protected:
 private:
     pthread_mutex_t settings_mutex;
     static Settings *pinstance;
-    DB *pDBHandle;
+    settings::DB *pDBHandle;
     std::string mCurrentDomain;
     bool setVersion(int version);
     int getVersion();

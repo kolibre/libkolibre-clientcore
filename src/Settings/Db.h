@@ -17,8 +17,8 @@
  * along with kolibre-clientcore. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _DB_H
-#define _DB_H
+#ifndef _SETTINGS_DB_H
+#define _SETTINGS_DB_H
 
 #include <sqlite3.h>
 #include <string>
@@ -27,6 +27,7 @@ using namespace std;
 
 class DBResult;
 
+namespace settings {
 class DB
 {
 public:
@@ -95,6 +96,7 @@ private:
     bool bClosedb;
     int rc;
 };
+}
 
 class DBResult
 {
