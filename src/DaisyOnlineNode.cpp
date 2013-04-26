@@ -90,6 +90,7 @@ DaisyOnlineNode::DaisyOnlineNode(const std::string uri, const std::string userna
     password_ = password;
     previousUsername_ = "";
     previousPassword_ = "";
+    lastUpdate_ = -1;
     lastError_ = (DaisyOnlineNode::errorType)-1;
     lastLogOnAttempt_ = (DaisyOnlineNode::errorType)-1;
 
@@ -152,6 +153,14 @@ bool DaisyOnlineNode::up(NaviEngine& navi)
 
     if (ret == false)
     {
+        // Don't update library unless 5 seconds has passed since the last update
+        if (difftime(time(NULL), lastUpdate_) < 5)
+        {
+            LOG4CXX_WARN(onlineNodeLog, "Update aborted since 5 seconds hasn't passed since last update");
+            announceSelection();
+            return true;
+        }
+
         loggedIn_ = false;
 
         NaviList navilist;
@@ -615,13 +624,10 @@ bool DaisyOnlineNode::process(NaviEngine& navi, int command, void* data)
         }
 
         play_before_onOpen_ = _N("library");
+        lastUpdate_ = time(NULL);
         navi.setCurrentChoice(firstChild());
         currentChild_ = firstChild();
         announce();
-
-        // in case user har stresspressed update button, we flush the queue.
-        // TODO: flushing the queue does not seem to work, but tests shows that it works
-        //cq2::Dispatcher::instance().flushQueue();
     }
         break;
 

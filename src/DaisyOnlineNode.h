@@ -107,6 +107,7 @@ private:
     NaviList navilist;
     AnyNode* currentChild_;
 
+    time_t lastUpdate_;
     errorType lastError_;
     errorType lastLogOnAttempt_;
     std::string errorstring_;
