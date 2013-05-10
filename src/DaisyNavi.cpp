@@ -482,7 +482,7 @@ bool DaisyNavi::onOpen(NaviEngine&)
             player->resume();
     }
 
-    // If the Narrator is speaking DaisyNavi wants to know when it ends
+    // We are now ready to handle NARRATORFINISHED COMMANDS
     Narrator::Instance()->setPushCommandFinished(true);
 
     DaisyNaviLevel level(dh->getNaviLevelStr());
@@ -602,6 +602,9 @@ private:
 // DaisyNavi constructor
 DaisyNavi::DaisyNavi()
 {
+    // Disable NARRATORFINISHED COMMANDS while we are setting up the book
+    Narrator::Instance()->setPushCommandFinished(false);
+
     narrator = Narrator::Instance();
     player = Player::Instance();
     dh = DaisyHandler::Instance();
