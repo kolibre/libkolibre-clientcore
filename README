@@ -7,78 +7,27 @@ stakeholders at github.com/kolibre.
 
 Kolibre is committed to broad cooperation between organizations, businesses and
 individuals around the innovative development of custom information systems for
-people with different needs.
+people with different needs. More information about Kolibres activities, association 
+membership and contact information can be found at http://www.kolibre.org/
 
 
-History
+What is libkolibre-clientcore?
 ---------------------------------
-The software development started in 2002 by Norra Österbottens Svenska
-Synskadade rf (NÖSS), a Finnish non-profit contact, interest and service
-organization for visually impaired. NÖSS sought for a solution together with
-Jakobstads Tidning (today Österbottens Tidning)to modernize the daily talking
-newspaper which back then was distributed by tape.
-
-Since then several projects, mainly funded by the Finnish Slot Machine
-Association, have been carried out in conjunction with other partners (i.e.
-Pratsam Ab) to improve and further develop the software for different needs:
-
-  2003-2004:
-  Den Digitala Taltidningen, (Eng. The digital talking newspaper)
-
-  2005-2006:
-  Digital Service för Synskadade, (Eng. Digital Services For Visually Impaired)
-
-  2007-2008:
-  Ett tillgängligt informationssamhälle, (Eng. An Accessible Information Society)
-
-  2009-2012:
-  Hjälpmedel för jämställdhet, (Eng. Aids For Equality)
-
-
-What is Kolibre-clientcore?
----------------------------------
-Kolibre-clientcore is a core library for listing accessible media, i.e. digital
-talking books, from online and offline sources. The library also support
-playback, navigation and bookmark management for supported content formats. The
-library uses voice narration and can thus easily be utilized to make a client
-easy to use playback client for visually impaired.
-
-Licensing
----------------------------------
-Copyright (C) 2012 Kolibre
-
-This file is part of kolibre-clientcore.
-
-Kolibre-clientcore is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 2.1 of the License, or
-(at your option) any later version.
-
-Kolibre-clientcore is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Lesser General Public License for more details.
-
-You should have received a copy of the GNU Lesser General Public License
-along with kolibre-clientcore. If not, see <http://www.gnu.org/licenses/>.
+libkolibre-clientcore is a core library for listing accessible media, i.e. digital talking 
+books, from online and offline sources. The library also supports playback, 
+navigation and bookmark management for supported content formats. 
+The library uses voice narration and can thus easily be utilized to create 
+an easy-to-use playback client for visually impaired.
 
 
 Documentation
 ---------------------------------
+Kolibre client developer documentation is available at 
+https://github.com/kolibre/libkolibre-builder/wiki
+
 This library is documented using doxygen.
 
 Type ./configure && make doxygen-doc to generate documentation.
-
-
-Where to start?
----------------------------------
-Questions relating to Kolibre’s activities, association membership and/or other
-miscellaneous questions can be sent to info@kolibre.org.
-
-Questions and/or suggestions relating to technical development can be sent to
-dev@kolibre.org. This is a mailing list, through which all participants can
-discuss technical development; accordingly, only English should be used. The
-archive can be found at Google Groups.
 
 
 Platforms
@@ -101,6 +50,7 @@ Major dependencies for Kolibre-daisyonline:
 * libkolibre-player
 * libkolibre-narrator
 
+
 Building from source
 ---------------------------------
 If building from GIT sources, first do a:
@@ -113,3 +63,23 @@ $ make
 $ make install
 
 see INSTALL for detailed instructions.
+
+
+Licensing
+---------------------------------
+Copyright (C) 2012 Kolibre
+
+This file is part of kolibre-clientcore.
+
+Kolibre-clientcore is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2.1 of the License, or
+(at your option) any later version.
+
+Kolibre-clientcore is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with kolibre-clientcore. If not, see <http://www.gnu.org/licenses/>.
