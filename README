@@ -10,7 +10,6 @@ individuals around the innovative development of custom information systems for
 people with different needs. More information about Kolibres activities, association 
 membership and contact information can be found at http://www.kolibre.org/
 
-
 What is libkolibre-clientcore?
 ---------------------------------
 libkolibre-clientcore is a core library for listing accessible media, i.e. digital talking 
@@ -18,7 +17,6 @@ books, from online and offline sources. The library also supports playback,
 navigation and bookmark management for supported content formats. 
 The library uses voice narration and can thus easily be utilized to create 
 an easy-to-use playback client for visually impaired.
-
 
 Documentation
 ---------------------------------
@@ -29,12 +27,10 @@ This library is documented using doxygen.
 
 Type ./configure && make doxygen-doc to generate documentation.
 
-
 Platforms
 ---------------------------------
 Kolibre-clientcore has been tested with Linux Debian Squeeze and can be built
 using dev packages from apt repositories.
-
 
 Dependencies
 ---------------------------------
@@ -50,7 +46,6 @@ Major dependencies for Kolibre-daisyonline:
 * libkolibre-player
 * libkolibre-narrator
 
-
 Building from source
 ---------------------------------
 If building from GIT sources, first do a:
@@ -63,7 +58,6 @@ $ make
 $ make install
 
 see INSTALL for detailed instructions.
-
 
 Licensing
 ---------------------------------
