@@ -699,8 +699,7 @@ size_t DaisyOnlineNode::downloadData(string uri, char **destinationbuffer)
     LOG4CXX_DEBUG(onlineNodeLog, "Opening data stream for uri: " << uri);
 
     InputStream *is = NULL;
-    is = DataStreamHandler::Instance()->newStream(uri);
-    is->useCache(false);
+    is = DataStreamHandler::Instance()->newStream(uri, false, false);
 
     do
     {
