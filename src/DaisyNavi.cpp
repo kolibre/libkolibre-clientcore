@@ -126,7 +126,7 @@ bool DaisyNavi::menu(NaviEngine& navi)
     {
         MenuNode* jumpNode = new MenuNode();
         jumpNode->name_ = _N("jump to");
-        jumpNode->info_ = _N("choose option using left and right arrows, open using down arrow");
+        jumpNode->info_ = _N("choose option using left and right arrows, open using play button");
         jumpNode->play_before_onOpen_ = _N("opening jump to");
         contextMenu->addNode(jumpNode);
         {

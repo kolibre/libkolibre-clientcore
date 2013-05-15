@@ -54,7 +54,7 @@ GotoPercentNode::GotoPercentNode(int max, DaisyNavi* daisyNavi) :
     mapNarrations[NARRATE_GOINGTO] = _N("jumping to");
 
     name_ = _N("jump to percent");
-    info_ = _N("choose percent using left and right arrows, jump to selected percent using down arrow");
+    info_ = _N("choose percent using left and right arrows, jump to selected percent using play button");
     play_before_onOpen_ = _N("opening jump to percent");
 
     // create virtual childs

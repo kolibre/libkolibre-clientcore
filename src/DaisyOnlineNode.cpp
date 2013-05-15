@@ -51,7 +51,7 @@ bool DaisyOnlineNode::onNarrate()
     if (play_before_onOpen_ == _N("updating library"))
         return isSelfNarrated;
 
-    Narrator::Instance()->play(_N("choose option using left and right arrows, open using down arrow"));
+    Narrator::Instance()->play(_N("choose option using left and right arrows, open using play button"));
     Narrator::Instance()->playLongpause();
     announceSelection();
     return isSelfNarrated;
