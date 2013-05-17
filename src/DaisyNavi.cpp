@@ -740,7 +740,6 @@ bool DaisyNavi::playerMessageSlot(Player::playerMessage msg)
         LOG4CXX_INFO(daisyNaviLog, "ERROR callback");
         usleep(500000);
         narrator->play(_N("error loading data"));
-        narrator->play(_N("retrying shortly"));
         ErrorMessage error(NETWORK, "Error streaming data");
         cq2::Command<ErrorMessage> message(error);
         message();
