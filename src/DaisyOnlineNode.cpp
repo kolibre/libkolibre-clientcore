@@ -252,6 +252,8 @@ DaisyOnlineNode::errorType DaisyOnlineNode::sessionInit()
 {
     good_ = false;
     loggedIn_ = false;
+    // we must set lastUpdate_ here to block queued update requests
+    lastUpdate_ = time(NULL);
     LOG4CXX_INFO(onlineNodeLog, "Trying to establish a Daisy Online session");
 
     // logOn
@@ -266,6 +268,8 @@ DaisyOnlineNode::errorType DaisyOnlineNode::sessionInit()
         LOG4CXX_WARN(onlineNodeLog, "logOn failed, service return false, please check check username and password");
         errorstring_ = "wrong username or password";
         lastError_ = USERNAME_PASSWORD_ERROR;
+        // if logOn failed we allow new update requests
+        lastUpdate_ = -1;
         return lastError_;
     }
 
