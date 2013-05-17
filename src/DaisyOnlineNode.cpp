@@ -851,4 +851,10 @@ void DaisyOnlineNode::announceResult(DaisyOnlineNode::errorType error)
     default:
         break;
     }
+
+    //If error occurred during login then send notification
+    if(!loggedIn_){
+        cq2::Command<NOTIFY_COMMAND> notify(NOTIFY_LOGIN_FAIL);
+        notify();
+    }
 }
