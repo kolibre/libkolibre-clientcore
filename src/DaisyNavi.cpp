@@ -744,6 +744,7 @@ bool DaisyNavi::playerMessageSlot(Player::playerMessage msg)
         ErrorMessage error(NETWORK, "Error streaming data");
         cq2::Command<ErrorMessage> message(error);
         message();
+        closeBook();
     }
         return false;
         break;
