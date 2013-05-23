@@ -800,6 +800,7 @@ bool DaisyNavi::open(const string &uri)
             if (waitCounter++ == 30)
             {
                 Narrator::Instance()->playWait();
+                waitCounter = 0;
             }
         }
 
