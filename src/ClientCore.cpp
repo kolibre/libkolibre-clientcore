@@ -109,15 +109,9 @@ ClientCore::ClientCore(const std::string service_url, const std::string useragen
     // Initialize sleep timer
     setSleepTimerState(SLEEP_TIMER_OFF);
 
-    // Start commandhandler thread
-    LOG4CXX_INFO(clientcoreLog, "Setting up clientcoreThread");
-    if (pthread_create(&clientcoreThread, NULL, &ClientCore::clientcore_thread, this))
-    {
-        LOG4CXX_FATAL(clientcoreLog, "Failed to start clientcoreThread");
-        usleep(500000);
-        clientcoreRunning = false;
-    }
-    clientcoreRunning = true;
+    // Initialize thread variables
+    clientcoreRunning = false;
+    threadStarted = false;
 }
 
 /**
@@ -129,9 +123,12 @@ ClientCore::~ClientCore()
     clientcoreRunning = false;
     pthread_mutex_unlock(&clientcoreMutex);
 
-    // Wait until clientcore thread stops
-    LOG4CXX_INFO(clientcoreLog, "Waiting for clientcoreThread to join");
-    pthread_join(clientcoreThread, NULL);
+    if (threadStarted)
+    {
+        // Wait until clientcore thread stops
+        LOG4CXX_INFO(clientcoreLog, "Waiting for clientcoreThread to join");
+        pthread_join(clientcoreThread, NULL);
+    }
 }
 
 /**
@@ -610,6 +607,23 @@ bool ClientCore::isRunning()
     running = clientcoreRunning;
     pthread_mutex_unlock(&clientcoreMutex);
     return running;
+}
+
+/**
+ * Start the application
+ */
+void ClientCore::start()
+{
+    // Start main thread
+    LOG4CXX_INFO(clientcoreLog, "Setting up clientcoreThread");
+    if (pthread_create(&clientcoreThread, NULL, &ClientCore::clientcore_thread, this))
+    {
+        LOG4CXX_FATAL(clientcoreLog, "Failed to start clientcoreThread");
+        usleep(500000);
+        clientcoreRunning = false;
+    }
+    clientcoreRunning = true;
+    threadStarted = true;
 }
 
 /**

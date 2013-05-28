@@ -92,6 +92,7 @@ int main(int argc, char **argv)
     notifyHandler.listen();
 
     ClientCore clientcore;
+    clientcore.start();
 
     // sleep timer off by default
     printSleepTimerInfo(clientcore);

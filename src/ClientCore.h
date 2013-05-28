@@ -219,6 +219,7 @@ public:
     bool jumpToSecond(unsigned int second);
     bool jumpToUri(const std::string uri);
     bool isRunning();
+    void start();
     void shutdown();
 
     /**
@@ -351,6 +352,7 @@ private:
     pthread_mutex_t clientcoreMutex;
     pthread_t clientcoreThread;
     bool clientcoreRunning;
+    bool threadStarted;
     time_t sleepTimerStart;
     time_t sleepTimerEnd;
     int sleepTimerSetting;
