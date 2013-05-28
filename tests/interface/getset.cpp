@@ -32,6 +32,31 @@ int main(int argc, char **argv)
 
     ClientCore clientcore("some url", "useragent");
 
+    // add service
+    int index = 0;
+    index = clientcore.addDaisyOnlineService("", "", "username", "password");
+    assert(index == -1);
+    index = clientcore.addDaisyOnlineService("some url", "", "username", "password");
+    assert(index == -1);
+    index = clientcore.addDaisyOnlineService("some name", "some url", "username", "password");
+    assert(index == 0);
+    index = clientcore.addDaisyOnlineService("some name", "some other url", "username", "password");
+    assert(index == -1);
+    index = clientcore.addDaisyOnlineService("some other name", "some url", "username", "password");
+    assert(index == 1);
+
+    // add path
+    index = clientcore.addFileSystemPath("", "");
+    assert(index == -1);
+    index = clientcore.addFileSystemPath("some name", "");
+    assert(index == -1);
+    index = clientcore.addFileSystemPath("some name", "some path");
+    assert(index == 0);
+    index = clientcore.addFileSystemPath("some name", "some other path");
+    assert(index == -1);
+    index = clientcore.addFileSystemPath("some other name", "some path");
+    assert(index == 1);
+
     // getServiceUrl
     assert(clientcore.getServiceUrl() == "some url");
 

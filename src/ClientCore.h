@@ -185,6 +185,10 @@ public:
     void setSpeedPercent(int percent);
     void narratorFinished();
 
+    // handle online and offline sources
+    int addDaisyOnlineService(std::string name, std::string url, std::string username, std::string password, bool rememberPassword = false);
+    int addFileSystemPath(std::string name, std::string path);
+
     // getters and setters
     void setManualSound(const char *);
     std::string getManualSound();

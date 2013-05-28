@@ -144,6 +144,81 @@ void ClientCore::narratorFinished()
 }
 
 /**
+ * Add a DaisyOnline service
+ *
+ * @param name The name of the service to distinguish it from other services
+ * @param url The service URL
+ * @param username Username for the service
+ * @param password Password for the service
+ * @param rememberPassword Parameter indicating whether to store the password or not
+ * @return The index of the added service, or -1 if the service was not added
+ */
+int ClientCore::addDaisyOnlineService(std::string name, std::string url, std::string username, std::string password, bool rememberPassword)
+{
+    if (name.empty())
+    {
+        LOG4CXX_WARN(clientcoreLog, "cannot add DaisyOnline service without name");
+        return -1;
+    }
+    else if (url.empty())
+    {
+        LOG4CXX_WARN(clientcoreLog, "cannot add DaisyOnline service without url");
+        return -1;
+    }
+
+    std::vector<DaisyOnlineService>::iterator it;
+    for (it = DaisyOnlineServices.begin(); it != DaisyOnlineServices.end(); ++it)
+    {
+        if (name == it->name)
+        {
+            LOG4CXX_WARN(clientcoreLog, "DaisyOnline service with name " << name << " has already been added");
+            return -1;
+        }
+    }
+
+    DaisyOnlineService service(name, url, username, password, rememberPassword);
+    DaisyOnlineServices.push_back(service);
+
+    return DaisyOnlineServices.size()-1;
+}
+
+/**
+ * Add a file system path
+ *
+ * @param name The name of the path to distinguish it from other paths
+ * @param path The path on the file system
+ * @return The index of the added path, or -1 if the path was not added
+ */
+int ClientCore::addFileSystemPath(std::string name, std::string path)
+{
+    if (name.empty())
+    {
+        LOG4CXX_WARN(clientcoreLog, "cannot add file system path without name");
+        return -1;
+    }
+    else if (path.empty())
+    {
+        LOG4CXX_WARN(clientcoreLog, "cannot add file system path without path");
+        return -1;
+    }
+
+    std::vector<FileSystemPath>::iterator it;
+    for (it = FileSystemPaths.begin(); it != FileSystemPaths.end(); ++it)
+    {
+        if (name == it->name)
+        {
+            LOG4CXX_WARN(clientcoreLog, "File system path with name " << name << " has already been added");
+            return -1;
+        }
+    }
+
+    FileSystemPath filepath(name, path);
+    FileSystemPaths.push_back(filepath);
+
+    return FileSystemPaths.size()-1;
+}
+
+/**
  * Get the status the application
  *
  * @return A boolean indicating if the application is running or not
