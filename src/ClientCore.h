@@ -91,7 +91,7 @@ struct BookSectionInfo
 };
 
 /**
- * A enumerated list od errro types
+ * A enumerated list of error types
  */
 enum ErrorType
 {
@@ -156,7 +156,7 @@ public:
         DOWN,                           /**< Open selected child node */
         LEFT,                           /**< Go to previous child node */
         RIGHT,                          /**< Go to next child node */
-        BACK,                           /**< Go to perent node or back in history during playback */
+        BACK,                           /**< Go to parent node or back in history during playback */
         EXIT,                           /**< Exit the application */
         PAUSE,                          /**< Open selected child node or pause the playback */
         BOOKMARK,                       /**< Enter bookmark management */
