@@ -58,4 +58,4 @@ fi
 # Override default data path /cache with KOLIBRE_DATA_PATH
 #
 
-BOOKMARK_DIR=${DATA_PATH} KOLIBRE_DATA_PATH=${DATA_PATH} ${PREFIX} ./KolibreSampleClient $SERVICE_URL $USERNAME $PASSWORD -c log4cxx.conf
+BOOKMARK_DIR=${DATA_PATH} KOLIBRE_DATA_PATH=${DATA_PATH} ${PREFIX} ./KolibreSampleClient -s $SERVICE_URL -u $USERNAME -p $PASSWORD -c log4cxx.conf

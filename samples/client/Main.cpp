@@ -43,44 +43,82 @@ bool exitSignal = false;
 void handleSignal(int sig);
 void onSleepTimeout();
 
+char* applicationPath;
+void usage()
+{
+    printf("usage: %s [OPTIONS]\n", applicationPath);
+    printf("OPTIONS\n");
+    printf("  -s <url> \t\turl to Daisy Online service\n");
+    printf("  -u <username> \tusername for service, must be specified along with -s option\n");
+    printf("  -p <password> \tpassword for service, must be specified along with -s option\n");
+    printf("  -r \t\t\tremember password for specified service\n");
+    printf("  -m <path> \t\tpath to local media\n");
+    printf("  -l <lang> \t\tlanguage to use, options: sv, fi, en [default: sv]\n");
+    printf("  -i <path> \t\tpath to client configuration\n");
+    printf("  -c <path> \t\tpath to log configuration\n");
+    printf("  -h \t\t\tshow this message\n");
+    printf("\n");
+    printf("Note! You must specify either a Daisy Online service, a local media path\n");
+    printf("or client configuration path.\n");
+    printf("   e.g. %s -s http://daisyonline.com/service -u username -p password\n", applicationPath);
+    printf("        %s -m /home/user/Media\n", applicationPath);
+    printf("        %s -i /home/user/settings.ini\n", applicationPath);
+}
+
 int main(int argc, char **argv)
 {
-    if (argc < 3)
+    applicationPath = argv[0];
+    if (argc < 2)
     {
-        printf("usage: %s <service_url> <username> <password> [OPTIONS]\n", argv[0]);
-        printf(" OPTIONS\n");
-        printf("       -r Remember password\n");
-        printf("       -l language options: fi, se, en [default: sv]\n");
-        printf("       -c log configuration file\n");
+        usage();
         return 1;
     }
+
     signal(SIGINT, handleSignal);
     signal(SIGQUIT, handleSignal);
     signal(SIGTERM, handleSignal);
 
-    // store required arguments before parsing optional
-    std::string service_url, username, password;
-    service_url = argv[1];
-    username = argv[2];
-    password = argv[3];
-
+    // variables for storing user arguments
+    std::string serviceUrl, username, password = "";
     bool rememberPassword = false;
-
-    // Initiate logging
+    std::string mediaPath = "";
+    std::string language = "sv"; // default to Swedish
+    char *settingsPath = NULL;
     char *logConf = NULL;
 
-    // Initiate lanuage variable with default swedish
-    std::string language = "sv";
-
-    // Handle option flags
+    // parse user arguments
     int opt;
-    while ((opt = getopt(argc, argv, "rl:c:")) != -1)
+    while ((opt = getopt(argc, argv, "s:u:p:rm:l:i:c:h")) != -1)
     {
         switch (opt)
         {
+        case 's':
+        {
+            serviceUrl = optarg;
+            mediaPath = "";
+            settingsPath = NULL;
+            break;
+        }
+        case 'u':
+        {
+            username = optarg;
+            break;
+        }
+        case 'p':
+        {
+            password = optarg;
+            break;
+        }
         case 'r':
             rememberPassword = true;
             break;
+        case 'm':
+        {
+            serviceUrl = "";
+            mediaPath = optarg;
+            settingsPath = NULL;
+            break;
+        }
         case 'l':
         {
             if (strcmp(optarg, "en") == 0)
@@ -97,15 +135,52 @@ int main(int argc, char **argv)
             }
             break;
         }
+        case 'i':
+        {
+            serviceUrl = "";
+            mediaPath = "";
+            settingsPath = optarg;
+            break;
+        }
         case 'c':
         {
             logConf = optarg;
             break;
         }
+        case 'h':
+        {
+            usage();
+            return 0;
+        }
         default:
-            printf("Unknown option: %c", opt);
+            printf("Unknown option: %c\n", opt);
             break;
         }
+    }
+
+    // check user arguments
+    if (serviceUrl.empty() && mediaPath.empty() && settingsPath == NULL)
+    {
+        usage();
+        return 1;
+    }
+    else if (not serviceUrl.empty())
+    {
+        if (username.empty() || password.empty())
+        {
+            usage();
+            return 1;
+        }
+    }
+    else if (not mediaPath.empty())
+    {
+        printf("error: Support not yet implemented\n");
+        return 1;
+    }
+    else if (settingsPath != NULL)
+    {
+        printf("error: Support not yet implemented\n");
+        return 1;
     }
 
     // Setup logging
@@ -131,7 +206,7 @@ int main(int argc, char **argv)
     // Set language
     ClientCore::setLanguage(language);
 
-    ClientCore *clientcore = new ClientCore(service_url, "KolibreSampleClient/0.0.1");
+    ClientCore *clientcore = new ClientCore(serviceUrl, "KolibreSampleClient/0.0.1");
 
     clientcore->setUsername(username);
     clientcore->setPassword(password, rememberPassword);
