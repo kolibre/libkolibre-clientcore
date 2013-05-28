@@ -135,6 +135,28 @@ ClientCore::~ClientCore()
 }
 
 /**
+ * Set the reading speed by percent
+ * @param percent The desired reading speed
+ */
+void ClientCore::setSpeedPercent(int percent)
+{
+    // calculate minimum/maximum common tempo
+    double minTempo = std::min(NARRATOR_MIN_TEMPO, PLAYER_MIN_TEMPO);
+    double maxTempo = std::max(NARRATOR_MAX_TEMPO, PLAYER_MAX_TEMPO);
+
+    // calculate the tempo change
+    float zoneSize = 10 / (maxTempo - minTempo); // about 6.67 with max 2 and min 0.5
+    float zeroIndexTempo = floor(percent / zoneSize) / 10; // between 0 and 1.5 with above values
+    float tempo = zeroIndexTempo + minTempo;
+
+    LOG4CXX_DEBUG(clientcoreLog, "Setting tempo to " << percent << "% which corresponds to " << tempo);
+
+    Player::Instance()->setTempo(tempo);
+    Narrator::Instance()->setTempo(tempo);
+    Settings::Instance()->write<double>("playbackspeed", tempo);
+}
+
+/**
  * Function to be invoked on narrator finished signals, do not invoke manually.
  */
 void ClientCore::narratorFinished()
@@ -216,52 +238,6 @@ int ClientCore::addFileSystemPath(std::string name, std::string path)
     FileSystemPaths.push_back(filepath);
 
     return FileSystemPaths.size()-1;
-}
-
-/**
- * Get the status the application
- *
- * @return A boolean indicating if the application is running or not
- */
-bool ClientCore::isRunning()
-{
-    bool running = false;
-    pthread_mutex_lock(&clientcoreMutex);
-    running = clientcoreRunning;
-    pthread_mutex_unlock(&clientcoreMutex);
-    return running;
-}
-
-/**
- * Shut down and exit the application
- */
-void ClientCore::shutdown()
-{
-    pthread_mutex_lock(&clientcoreMutex);
-    clientcoreRunning = false;
-    pthread_mutex_unlock(&clientcoreMutex);
-}
-
-/**
- * Set the reading speed by percent
- * @param percent The desired reading speed
- */
-void ClientCore::setSpeedPercent(int percent)
-{
-    // calculate minimum/maximum common tempo
-    double minTempo = std::min(NARRATOR_MIN_TEMPO, PLAYER_MIN_TEMPO);
-    double maxTempo = std::max(NARRATOR_MAX_TEMPO, PLAYER_MAX_TEMPO);
-
-    // calculate the tempo change
-    float zoneSize = 10 / (maxTempo - minTempo); // about 6.67 with max 2 and min 0.5
-    float zeroIndexTempo = floor(percent / zoneSize) / 10; // between 0 and 1.5 with above values
-    float tempo = zeroIndexTempo + minTempo;
-
-    LOG4CXX_DEBUG(clientcoreLog, "Setting tempo to " << percent << "% which corresponds to " << tempo);
-
-    Player::Instance()->setTempo(tempo);
-    Narrator::Instance()->setTempo(tempo);
-    Settings::Instance()->write<double>("playbackspeed", tempo);
 }
 
 /**
@@ -620,6 +596,30 @@ bool ClientCore::jumpToUri(const std::string uri)
     cq2::Command<JumpCommand<std::string> > jump(uri);
     jump();
     return true;
+}
+
+/**
+ * Get the status the application
+ *
+ * @return A boolean indicating if the application is running or not
+ */
+bool ClientCore::isRunning()
+{
+    bool running = false;
+    pthread_mutex_lock(&clientcoreMutex);
+    running = clientcoreRunning;
+    pthread_mutex_unlock(&clientcoreMutex);
+    return running;
+}
+
+/**
+ * Shut down and exit the application
+ */
+void ClientCore::shutdown()
+{
+    pthread_mutex_lock(&clientcoreMutex);
+    clientcoreRunning = false;
+    pthread_mutex_unlock(&clientcoreMutex);
 }
 
 // struct ClientCoreState (read global variables)
