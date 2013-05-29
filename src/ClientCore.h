@@ -147,7 +147,7 @@ enum SleepTimerStates
 class KOLIBRE_API ClientCore
 {
 public:
-    ClientCore(const std::string service_url = "https://daisy.kolibre.com/daisyonline/service.php", const std::string useragent = "");
+    ClientCore(const std::string useragent = "");
     ~ClientCore();
 
     enum COMMAND
@@ -359,9 +359,6 @@ private:
     int sleepTimerState;
     std::string mManualOggfile;
     std::string mAboutOggfile;
-    std::string mServiceUrl;
-    std::string mUsername;
-    std::string mPassword;
     std::string mDownloadFolder;
     std::string mUserAgent;
     std::string mSerialNumber;

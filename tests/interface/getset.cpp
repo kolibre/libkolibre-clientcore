@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     // setup logging
     setup_logging();
 
-    ClientCore clientcore("some url", "useragent");
+    ClientCore clientcore("useragent");
 
     // add service
     int index = 0;
