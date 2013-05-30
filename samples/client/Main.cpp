@@ -25,6 +25,7 @@
 #include <signal.h>
 #include <syslog.h>
 #include <cstring>
+#include <glib.h>
 #include <log4cxx/logger.h>
 #include <log4cxx/basicconfigurator.h>
 #include <log4cxx/propertyconfigurator.h>
@@ -177,11 +178,6 @@ int main(int argc, char **argv)
         printf("error: Support not yet implemented\n");
         return 1;
     }
-    else if (settingsPath != NULL)
-    {
-        printf("error: Support not yet implemented\n");
-        return 1;
-    }
 
     // Setup logging
     try
@@ -207,7 +203,123 @@ int main(int argc, char **argv)
     ClientCore::setLanguage(language);
 
     ClientCore *clientcore = new ClientCore("KolibreSampleClient/0.0.1");
-    clientcore->addDaisyOnlineService("main", serviceUrl, username, password, rememberPassword);
+
+    // add service or path or parse settings file
+    if (not serviceUrl.empty())
+    {
+        clientcore->addDaisyOnlineService("main", serviceUrl, username, password, rememberPassword);
+    }
+    else if (not mediaPath.empty())
+    {
+        clientcore->addFileSystemPath("main", mediaPath);
+    }
+    else if (settingsPath != NULL)
+    {
+        GKeyFile *keyFile;
+        GKeyFileFlags keyFileFlags = G_KEY_FILE_NONE;
+        GError *error;
+
+        // create a new GKeyFile object
+        keyFile = g_key_file_new();
+
+        // load data from file
+        if (not g_key_file_load_from_file(keyFile, settingsPath, keyFileFlags, &error))
+        {
+            LOG4CXX_ERROR(sampleClientMainLog, "error while loading file '" << settingsPath << "':" << error->message);
+            g_key_file_free(keyFile);
+            delete clientcore;
+            return -1;
+        }
+
+        // get all groups in file
+        gchar **groups = NULL;
+        gsize length = NULL;
+        groups = g_key_file_get_groups(keyFile, &length);
+
+        // loop through each group and search for matches
+        for (unsigned long i = 0; i < length; i++)
+        {
+            // if group name contains 'DaisyOnlineService'
+            if (strstr(groups[i], "DaisyOnlineService") != NULL)
+            {
+                LOG4CXX_INFO(sampleClientMainLog, "Found DaisyOnline service group '" << groups[i] << "'");
+                bool missingKey = false;
+                gchar *name, *url, *username, *password = NULL;
+
+                // get key name
+                name = g_key_file_get_string(keyFile, groups[i], "NAME", NULL);
+                if (name == NULL)
+                {
+                    LOG4CXX_WARN(sampleClientMainLog, "Group '" << groups[i] << "' does not have key 'NAME'");
+                    missingKey = true;
+                }
+
+                // get key url
+                url = g_key_file_get_string(keyFile, groups[i], "URL", NULL);
+                if (url == NULL)
+                {
+                    LOG4CXX_WARN(sampleClientMainLog, "Group '" << groups[i] << "' does not have key 'URL'");
+                    missingKey = true;
+                }
+
+                // get key username
+                username = g_key_file_get_string(keyFile, groups[i], "USERNAME", NULL);
+                if (username == NULL)
+                {
+                    LOG4CXX_WARN(sampleClientMainLog, "Group '" << groups[i] << "' does not have key 'USERNAME'");
+                    missingKey = true;
+                }
+
+                // get key password
+                password = g_key_file_get_string(keyFile, groups[i], "PASSWORD", NULL);
+                if (password == NULL)
+                {
+                    LOG4CXX_WARN(sampleClientMainLog, "Group '" << groups[i] << "' does not have key 'PASSWORD'");
+                    missingKey = true;
+                }
+
+                if (not missingKey)
+                {
+                    LOG4CXX_INFO(sampleClientMainLog, "Adding '" << name << "' as a DaisyOnlineService");
+                    clientcore->addDaisyOnlineService(name, url, username, password);
+                }
+
+            }
+            // if group name contains 'FileSystemPath'
+            else if (strstr(groups[i], "FileSystemPath") != NULL)
+            {
+                LOG4CXX_INFO(sampleClientMainLog, "Found file system path group '" << groups[i] << "'");
+                bool missingKey = false;
+                gchar *name, *path = NULL;
+
+                // get key name
+                name = g_key_file_get_string(keyFile, groups[i], "NAME", NULL);
+                if (name == NULL)
+                {
+                    LOG4CXX_WARN(sampleClientMainLog, "Group '" << groups[i] << "' does not have key 'NAME'");
+                    missingKey = true;
+                }
+
+                // get key path
+                path = g_key_file_get_string(keyFile, groups[i], "PATH", NULL);
+                if (path == NULL)
+                {
+                    LOG4CXX_WARN(sampleClientMainLog, "Group '" << groups[i] << "' does not have key 'PATH'");
+                    missingKey = true;
+                }
+
+                if (not missingKey)
+                {
+                    LOG4CXX_INFO(sampleClientMainLog, "Adding '" << name << "' as a FileSystemPath");
+                    clientcore->addFileSystemPath(name, path);
+                }
+            }
+        }
+
+        // free allocated memory
+        g_strfreev(groups);
+        g_key_file_free(keyFile);
+    }
 
     // Connect slots to signals
     clientcore->sleepTimeout_signal.connect(&onSleepTimeout);
