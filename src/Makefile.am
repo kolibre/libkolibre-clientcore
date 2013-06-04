@@ -23,6 +23,7 @@ ClientCore.cpp \
 DaisyNavi.cpp \
 DaisyOnlineNode.cpp \
 DaisyOnlineBookNode.cpp \
+MediaSourceManager.cpp \
 Navi.cpp \
 NaviListImpl.cpp \
 Menu/BookInfoNode.cpp \
@@ -55,6 +56,7 @@ EXTRA_DIST = CommandQueue2/CommandQueue.h \
 			 DaisyOnlineBookNode.h \
 			 DaisyOnlineNode.h \
 			 Defines.h \
+			 MediaSourceManager.h \
 			 Navi.h \
 			 NaviListImpl.h \
 			 Utils.h \

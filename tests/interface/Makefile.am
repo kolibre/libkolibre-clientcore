@@ -18,10 +18,11 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-check_PROGRAMS = sleeptimer getset
+check_PROGRAMS = mediasourcemanager sleeptimer getset
 
-TESTS = sleeptimer getset
+TESTS = mediasourcemanager sleeptimer getset
 
+mediasourcemanager_SOURCES = mediasourcemanager.cpp
 sleeptimer_SOURCES = sleeptimer.cpp
 getset_SOURCES = getset.cpp
 
