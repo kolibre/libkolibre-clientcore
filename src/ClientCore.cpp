@@ -18,6 +18,7 @@
  */
 
 #include "ClientCore.h"
+#include "MediaSourceManager.h"
 #include "DaisyOnlineNode.h"
 #include "Defines.h"
 #include "Navi.h"
@@ -58,6 +59,10 @@ ClientCore::ClientCore(const std::string useragent)
     LOG4CXX_INFO(clientcoreLog, VERSION_PACKAGE_NAME << " " << VERSION_PACKAGE_VERSION << " built " << __DATE__ << " " << __TIME__);
 
     // Initialize support classes
+
+    LOG4CXX_INFO(clientcoreLog, "Setting up media source manager");
+    MediaSourceManager *manager = MediaSourceManager::Instance();
+
     LOG4CXX_INFO(clientcoreLog, "Setting up settings");
     Settings *settings = Settings::Instance();
 
@@ -121,6 +126,9 @@ ClientCore::~ClientCore()
 
     LOG4CXX_DEBUG(clientcoreLog, "Deleting settings");
     Settings::Instance()->DeleteInstance();
+
+    LOG4CXX_DEBUG(clientcoreLog, "Deleting media source manager")
+    MediaSourceManager::Instance()->DeleteInstance();
 }
 
 /**
@@ -166,31 +174,7 @@ void ClientCore::narratorFinished()
  */
 int ClientCore::addDaisyOnlineService(std::string name, std::string url, std::string username, std::string password, bool rememberPassword)
 {
-    if (name.empty())
-    {
-        LOG4CXX_WARN(clientcoreLog, "cannot add DaisyOnline service without name");
-        return -1;
-    }
-    else if (url.empty())
-    {
-        LOG4CXX_WARN(clientcoreLog, "cannot add DaisyOnline service without url");
-        return -1;
-    }
-
-    std::vector<DaisyOnlineService>::iterator it;
-    for (it = DaisyOnlineServices.begin(); it != DaisyOnlineServices.end(); ++it)
-    {
-        if (name == it->name)
-        {
-            LOG4CXX_WARN(clientcoreLog, "DaisyOnline service with name " << name << " has already been added");
-            return -1;
-        }
-    }
-
-    DaisyOnlineService service(name, url, username, password, rememberPassword);
-    DaisyOnlineServices.push_back(service);
-
-    return DaisyOnlineServices.size()-1;
+    return MediaSourceManager::Instance()->addDaisyOnlineService(name, url, username, password, rememberPassword);
 }
 
 /**
@@ -202,31 +186,7 @@ int ClientCore::addDaisyOnlineService(std::string name, std::string url, std::st
  */
 int ClientCore::addFileSystemPath(std::string name, std::string path)
 {
-    if (name.empty())
-    {
-        LOG4CXX_WARN(clientcoreLog, "cannot add file system path without name");
-        return -1;
-    }
-    else if (path.empty())
-    {
-        LOG4CXX_WARN(clientcoreLog, "cannot add file system path without path");
-        return -1;
-    }
-
-    std::vector<FileSystemPath>::iterator it;
-    for (it = FileSystemPaths.begin(); it != FileSystemPaths.end(); ++it)
-    {
-        if (name == it->name)
-        {
-            LOG4CXX_WARN(clientcoreLog, "File system path with name " << name << " has already been added");
-            return -1;
-        }
-    }
-
-    FileSystemPath filepath(name, path);
-    FileSystemPaths.push_back(filepath);
-
-    return FileSystemPaths.size()-1;
+    return MediaSourceManager::Instance()->addFileSystemPath(name, path);
 }
 
 /**
@@ -325,16 +285,8 @@ std::string ClientCore::getLanguage()
  */
 void ClientCore::setServiceUrl(const std::string url)
 {
-    pthread_mutex_lock(&clientcoreMutex);
-    if (DaisyOnlineServices.size() > 0)
-    {
-        DaisyOnlineServices[0].url = url;
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot set service url");
-    }
-    pthread_mutex_unlock(&clientcoreMutex);
+    // Note. This function will become deprecated when support for more services is implemented.
+    MediaSourceManager::Instance()->setDOSurl(0, url);
 }
 
 /**
@@ -344,18 +296,8 @@ void ClientCore::setServiceUrl(const std::string url)
  */
 std::string ClientCore::getServiceUrl()
 {
-    std::string url = "";
-    pthread_mutex_lock(&clientcoreMutex);
-    if (DaisyOnlineServices.size() > 0)
-    {
-        url = DaisyOnlineServices[0].url;
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot get service url");
-    }
-    pthread_mutex_unlock(&clientcoreMutex);
-    return url;
+    // Note. This function will become deprecated when support for more services is implemented.
+    return MediaSourceManager::Instance()->getDOSurl(0);
 }
 
 /**
@@ -378,18 +320,8 @@ std::string ClientCore::getUserAgent()
  */
 void ClientCore::setUsername(const std::string username)
 {
-    pthread_mutex_lock(&clientcoreMutex);
-    if (DaisyOnlineServices.size() > 0)
-    {
-        DaisyOnlineServices[0].username = username;
-        Settings::Instance()->setDomain(DaisyOnlineServices[0].url);
-        Settings::Instance()->write<std::string>("username", username);
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot set service url");
-    }
-    pthread_mutex_unlock(&clientcoreMutex);
+    // Note. This function will become deprecated when support for more services is implemented.
+    MediaSourceManager::Instance()->setDOSusername(0, username);
 }
 
 
@@ -401,28 +333,9 @@ void ClientCore::setUsername(const std::string username)
  */
 void ClientCore::setPassword(const std::string password, bool remember)
 {
-    pthread_mutex_lock(&clientcoreMutex);
-    if (DaisyOnlineServices.size() > 0)
-    {
-        DaisyOnlineServices[0].password = password;
-        DaisyOnlineServices[0].rememberPassword = remember;
-        Settings::Instance()->setDomain(DaisyOnlineServices[0].url);
-        Settings::Instance()->write<bool>("rememberpassword", remember);
-        if (remember)
-        {
-            Settings::Instance()->write<std::string>("password", password);
-        }
-        else
-        {
-            Settings::Instance()->write<std::string>("password", "");
-            Settings::Instance()->write<std::string>("username", "");
-        }
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot set service passwor");
-    }
-    pthread_mutex_unlock(&clientcoreMutex);
+    // Note. This function will become deprecated when support for more services is implemented.
+    MediaSourceManager::Instance()->setDOSpassword(0, password);
+    MediaSourceManager::Instance()->setDOSremember(0, remember);
 }
 
 /**
@@ -432,18 +345,8 @@ void ClientCore::setPassword(const std::string password, bool remember)
  */
 std::string ClientCore::getUsername()
 {
-    std::string username = "";
-    pthread_mutex_lock(&clientcoreMutex);
-    if (DaisyOnlineServices.size() > 0)
-    {
-        username = DaisyOnlineServices[0].username;
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot get service username");
-    }
-    pthread_mutex_unlock(&clientcoreMutex);
-    return username;
+    // Note. This function will become deprecated when support for more services is implemented.
+    return MediaSourceManager::Instance()->getDOSusername(0);
 }
 
 /**
@@ -453,18 +356,8 @@ std::string ClientCore::getUsername()
  */
 std::string ClientCore::getPassword()
 {
-    std::string password = "";
-    pthread_mutex_lock(&clientcoreMutex);
-    if (DaisyOnlineServices.size() > 0)
-    {
-        password = DaisyOnlineServices[0].password;
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot get service password");
-    }
-    pthread_mutex_unlock(&clientcoreMutex);
-    return password;
+    // Note. This function will become deprecated when support for more services is implemented.
+    return MediaSourceManager::Instance()->getDOSpassword(0);
 }
 
 /**
@@ -587,18 +480,8 @@ SleepTimerStates ClientCore::getSleepTimerState()
  */
 bool ClientCore::getRememberPassword()
 {
-    bool remember = false;
-    pthread_mutex_lock(&clientcoreMutex);
-    if (DaisyOnlineServices.size() > 0)
-    {
-        remember = DaisyOnlineServices[0].rememberPassword;
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot get service remember password");
-    }
-    pthread_mutex_unlock(&clientcoreMutex);
-    return remember;
+    // Note. This function will become deprecated when support for more services is implemented.
+    return MediaSourceManager::Instance()->getDOSremember(0);
 }
 
 /**
@@ -1204,7 +1087,7 @@ void *ClientCore::clientcore_thread(void *ctx)
 
     // Abort and exit application if no service has been added
     pthread_mutex_lock(&ctxptr->clientcoreMutex);
-    int services = ctxptr->DaisyOnlineServices.size();
+    int services = MediaSourceManager::Instance()->getDaisyOnlineServices();
     pthread_mutex_unlock(&ctxptr->clientcoreMutex);
     if (services == 0)
     {

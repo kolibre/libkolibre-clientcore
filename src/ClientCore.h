@@ -362,64 +362,6 @@ private:
     std::string mDownloadFolder;
     std::string mUserAgent;
     std::string mSerialNumber;
-
-    /**
-     * A data type to hold information about a DaisyOnline service
-     */
-    struct DaisyOnlineService
-    {
-        DaisyOnlineService(std::string name, std::string url, std::string username, std::string password, bool remember) :
-            name(name), url(url), username(username), password(password), rememberPassword(remember)
-        {
-        }
-        /**
-         *  The name of the DaisyOnline service to distinguish it from other services
-         */
-        std::string name;
-
-        /**
-         * URL for the service
-         */
-        std::string url;
-
-        /**
-         * Username to be used for authenticating a user on the service
-         */
-        std::string username;
-
-        /**
-         * Password to be used for authenticating a user on the service
-         */
-        std::string password;
-
-        /**
-         * Boolean the determine if we shall remember the password for the service
-         */
-        bool rememberPassword;
-    };
-
-    /**
-     * A data type to hold information about a file system path
-     */
-    struct FileSystemPath
-    {
-        FileSystemPath(std::string name, std::string path) :
-            name(name), path(path)
-        {
-        }
-        /**
-         * The name of the path to distinguish it from other paths
-         */
-        std::string name;
-
-        /**
-         * The path on the file system
-         */
-        std::string path;
-    };
-
-    std::vector<DaisyOnlineService> DaisyOnlineServices;
-    std::vector<FileSystemPath> FileSystemPaths;
 };
 
 #endif
