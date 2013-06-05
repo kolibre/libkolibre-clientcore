@@ -26,6 +26,7 @@ DaisyOnlineBookNode.cpp \
 MediaSourceManager.cpp \
 Navi.cpp \
 NaviListImpl.cpp \
+RootNode.cpp \
 Menu/BookInfoNode.cpp \
 Menu/TempoNode.cpp \
 Menu/SleepTimerNode.cpp \
@@ -60,6 +61,7 @@ EXTRA_DIST = CommandQueue2/CommandQueue.h \
 			 Navi.h \
 			 NaviListImpl.h \
 			 Utils.h \
+			 RootNode.h \
 			 Menu/BookInfoNode.h \
 			 Menu/NarratedNode.h \
 			 Menu/GotoPageNode.h \
