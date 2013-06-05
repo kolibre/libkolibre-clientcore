@@ -26,7 +26,7 @@
 #include "Commands/NotifyCommands.h"
 #include "Commands/InternalCommands.h"
 #include "CommandQueue2/CommandQueue.h"
-#include "Settings/Settings.h"
+#include "MediaSourceManager.h"
 
 #include <DataStreamHandler.h>
 #include <Narrator.h>
@@ -83,9 +83,11 @@ DaisyOnlineNode::~DaisyOnlineNode()
     delete pDOHandler;
 }
 
-DaisyOnlineNode::DaisyOnlineNode(const std::string uri, const std::string username, const std::string password, const std::string& client_home, string useragent) :
+DaisyOnlineNode::DaisyOnlineNode(const std::string name, const std::string uri, const std::string username, const std::string password, const std::string& client_home, string useragent) :
         good_(true), loggedIn_(false), currentChild_(0)
 {
+    serviceName_ = name;
+    serviceUri_ = uri;
     username_ = username;
     password_ = password;
     previousUsername_ = "";
@@ -182,14 +184,24 @@ void DaisyOnlineNode::onSessionInit()
     LOG4CXX_DEBUG(onlineNodeLog, "sessionInit signal triggered");
 
     // Don't try session initialization if username or password hasn't changed ...
-    username_ = Settings::Instance()->read<std::string>("username", "");
-    password_ = Settings::Instance()->read<std::string>("password", "");
+    int index = MediaSourceManager::Instance()->getDaisyOnlineServiceIndex(serviceName_);
+    if (index >= 0)
+    {
+        username_ = MediaSourceManager::Instance()->getDOSusername(0);
+        password_ = MediaSourceManager::Instance()->getDOSpassword(0);
+    }
+    else
+    {
+        username_ = "";
+        password_ = "";
+    }
+
     if (previousUsername_ == username_ && previousPassword_ == password_)
     {
         // ... and last logon attempt failed due to incorrect username or password
         if (lastLogOnAttempt_ == USERNAME_PASSWORD_ERROR)
         {
-            LOG4CXX_WARN(onlineNodeLog, "aborting session initialization since nothing has changed since last attampt");
+            LOG4CXX_WARN(onlineNodeLog, "aborting session initialization since nothing has changed since last attempt");
             return;
         }
     }

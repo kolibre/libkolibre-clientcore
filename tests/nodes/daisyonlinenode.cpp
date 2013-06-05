@@ -21,7 +21,7 @@
 #include "CommandQueue2/CommandQueue.h"
 #include "Commands/NotifyCommands.h"
 #include "Commands/InternalCommands.h"
-#include "Settings/Settings.h"
+#include "MediaSourceManager.h"
 #include "../setup_logging.h"
 
 #include <NaviEngine.h>
@@ -118,17 +118,15 @@ int main(int argc, char **argv)
     pthread_t tdispatch;
     pthread_create(&tdispatch, NULL, dispatchThread, NULL);
 
-    // set incorrect username and password
-    Settings::Instance()->setDomain(argv[1]);
-    Settings::Instance()->write<std::string>("username", "incorrect");
-    Settings::Instance()->write<std::string>("password", "incorrect");
+    // add DaisyOnliceService source with incorrect username and password
+    MediaSourceManager::Instance()->addDaisyOnlineService("localhost", argv[1], "incorrect", "incorrect");
 
     Navi navi;
     DaisyOnlineNode::errorType error = (DaisyOnlineNode::errorType)-1;
-    DaisyOnlineNode *node = new DaisyOnlineNode(argv[1], "", "", ".", "");
+    DaisyOnlineNode *node = new DaisyOnlineNode("localhost", argv[1], "", "", ".", "");
     navi.openMenu(node, false);
 
-    // open sould fail with incorrect username and password
+    // open should fail with incorrect username and password
     assert(node->onOpen(navi));
     error = node->getLastError();
     assert(error == DaisyOnlineNode::USERNAME_PASSWORD_ERROR);
@@ -153,7 +151,7 @@ int main(int argc, char **argv)
     assert(notifyLoginFailReceived == true);
 
     // changing password should also have the opposite effect
-    Settings::Instance()->write<std::string>("password", "correct");
+    MediaSourceManager::Instance()->setDOSpassword(0, "correct");
     notifyLoginFailReceived = false;
     node->process(navi, COMMAND_RETRY_LOGIN);
     error = node->getLastError();
@@ -163,7 +161,7 @@ int main(int argc, char **argv)
 
     // changing username should also have the opposite effect, but session init fails
     // when invoking getServiceAttributes due to soap fault
-    Settings::Instance()->write<std::string>("username", "correct");
+    MediaSourceManager::Instance()->setDOSusername(0, "correct");
     node->process(navi, COMMAND_RETRY_LOGIN);
     error = node->getLastError();
     assert(error == DaisyOnlineNode::SERVICE_ERROR);

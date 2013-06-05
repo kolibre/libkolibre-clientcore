@@ -35,7 +35,7 @@
 class DaisyOnlineNode: public naviengine::MenuNode
 {
 public:
-    DaisyOnlineNode(const std::string uri, const std::string username, const std::string password, const std::string& client_home, std::string useragent = "");
+    DaisyOnlineNode(const std::string name, const std::string uri, const std::string username, const std::string password, const std::string& client_home, std::string useragent = "");
     ~DaisyOnlineNode();
 
     bool good();
@@ -91,7 +91,8 @@ public:
 private:
     bool good_; // if false, call getErrorMessage, resets on every invoke
     DaisyOnlineHandler *pDOHandler;
-    const std::string serverUrl_;
+    std::string serviceName_;
+    std::string serviceUri_;
     std::string username_;
     std::string password_;
     std::string previousUsername_;

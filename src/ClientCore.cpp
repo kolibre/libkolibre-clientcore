@@ -1127,7 +1127,7 @@ void *ClientCore::clientcore_thread(void *ctx)
     bool running = true;
 
     // Initialize a DaisyOnlineNode to use a root node in NaviEngine
-    DaisyOnlineNode* doservice = new DaisyOnlineNode(service_url, username, password, ".", useragent);
+    DaisyOnlineNode* doservice = new DaisyOnlineNode("main", service_url, username, password, ".", useragent);
     if (doservice->good())
     {
         doservice->name_ = ""; // Empty name means it narrates it self.
