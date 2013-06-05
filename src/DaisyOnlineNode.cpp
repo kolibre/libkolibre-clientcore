@@ -43,46 +43,6 @@ log4cxx::LoggerPtr onlineNodeLog(log4cxx::Logger::getLogger("kolibre.clientcore.
 
 using namespace naviengine;
 
-bool DaisyOnlineNode::onNarrate()
-{
-    const bool isSelfNarrated = true;
-
-    // don't narrate anything if we are updating the library
-    if (play_before_onOpen_ == _N("updating library"))
-        return isSelfNarrated;
-
-    Narrator::Instance()->play(_N("choose option using left and right arrows, open using play button"));
-    Narrator::Instance()->playLongpause();
-    announceSelection();
-    return isSelfNarrated;
-}
-
-bool DaisyOnlineNode::onRender()
-{
-    const bool isSelfRendered = true;
-    return isSelfRendered;
-}
-
-DaisyOnlineNode::errorType DaisyOnlineNode::getLastError()
-{
-    return lastError_;
-}
-
-bool DaisyOnlineNode::good()
-{
-    return good_;
-}
-
-std::string DaisyOnlineNode::getErrorMessage()
-{
-    return pDOHandler->getStatusMessage();
-}
-
-DaisyOnlineNode::~DaisyOnlineNode()
-{
-    delete pDOHandler;
-}
-
 DaisyOnlineNode::DaisyOnlineNode(const std::string name, const std::string uri, const std::string username, const std::string password, const std::string& client_home, string useragent) :
         good_(true), loggedIn_(false), currentChild_(0)
 {
@@ -124,6 +84,36 @@ DaisyOnlineNode::DaisyOnlineNode(const std::string name, const std::string uri, 
     // connect slots to signals
     sessionInit_signal.connect(boost::bind(&DaisyOnlineNode::onSessionInit, this));
     issueContent_signal.connect(boost::bind(&DaisyOnlineNode::onIssueContent, this));
+}
+
+DaisyOnlineNode::~DaisyOnlineNode()
+{
+    delete pDOHandler;
+}
+
+void DaisyOnlineNode::setManufacturer(const std::string &manufacturer)
+{
+    manufacturer_ = manufacturer;
+}
+
+void DaisyOnlineNode::setModel(const std::string &model)
+{
+    model_ = model;
+}
+
+void DaisyOnlineNode::setSerialNumber(const std::string &serialNumber)
+{
+    serialNumber_ = serialNumber;
+}
+
+void DaisyOnlineNode::setVersion(const std::string &version)
+{
+    version_ = version;
+}
+
+void DaisyOnlineNode::setLanguage(const std::string &language)
+{
+    language_ = language;
 }
 
 // NaviEngine functions
@@ -177,6 +167,41 @@ bool DaisyOnlineNode::up(NaviEngine& navi)
     }
 
     return ret;
+}
+
+bool DaisyOnlineNode::onNarrate()
+{
+    const bool isSelfNarrated = true;
+
+    // don't narrate anything if we are updating the library
+    if (play_before_onOpen_ == _N("updating library"))
+        return isSelfNarrated;
+
+    Narrator::Instance()->play(_N("choose option using left and right arrows, open using play button"));
+    Narrator::Instance()->playLongpause();
+    announceSelection();
+    return isSelfNarrated;
+}
+
+bool DaisyOnlineNode::onRender()
+{
+    const bool isSelfRendered = true;
+    return isSelfRendered;
+}
+
+DaisyOnlineNode::errorType DaisyOnlineNode::getLastError()
+{
+    return lastError_;
+}
+
+std::string DaisyOnlineNode::getErrorMessage()
+{
+    return pDOHandler->getStatusMessage();
+}
+
+bool DaisyOnlineNode::good()
+{
+    return good_;
 }
 
 void DaisyOnlineNode::onSessionInit()

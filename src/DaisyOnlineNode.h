@@ -38,35 +38,12 @@ public:
     DaisyOnlineNode(const std::string name, const std::string uri, const std::string username, const std::string password, const std::string& client_home, std::string useragent = "");
     ~DaisyOnlineNode();
 
-    bool good();
-    std::string getErrorMessage();
-
     // ReadingSystemAttributes values
-    void setManufacturer(const std::string &manufacturer)
-    {
-        manufacturer_ = manufacturer;
-    }
-    ;
-    void setModel(const std::string &model)
-    {
-        model_ = model;
-    }
-    ;
-    void setSerialNumber(const std::string &serialNumber)
-    {
-        serialNumber_ = serialNumber;
-    }
-    ;
-    void setVersion(const std::string &version)
-    {
-        version_ = version;
-    }
-    ;
-    void setLanguage(const std::string &language)
-    {
-        language_ = language;
-    }
-    ;
+    void setManufacturer(const std::string &manufacturer);
+    void setModel(const std::string &model);
+    void setSerialNumber(const std::string &serialNumber);
+    void setVersion(const std::string &version);
+    void setLanguage(const std::string &language);
 
     // MenuNode start
     // virtual methods from naviengine::AnyNode
@@ -87,6 +64,8 @@ public:
         USERNAME_PASSWORD_ERROR,
     };
     errorType getLastError();
+    std::string getErrorMessage();
+    bool good();
 
 private:
     bool good_; // if false, call getErrorMessage, resets on every invoke
