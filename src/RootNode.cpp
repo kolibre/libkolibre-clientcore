@@ -22,6 +22,7 @@
 #include "Defines.h"
 #include "config.h"
 #include "CommandQueue2/CommandQueue.h"
+#include "Commands/InternalCommands.h"
 #include "MediaSourceManager.h"
 #include "Settings/Settings.h"
 
@@ -141,7 +142,12 @@ bool RootNode::onOpen(NaviEngine& navi)
     else
     {
         LOG4CXX_INFO(rootNodeLog, "Opening first child in root");
-        return navi.select();
+        //navi.select();
+        // If we execute navi.select() from here we will end up in an infinite loop
+        // thus we must select by sending a command to navi
+        // send command to select current child
+        cq2::Command<INTERNAL_COMMAND> c(COMMAND_DOWN);
+        c();
     }
 
     return true;
