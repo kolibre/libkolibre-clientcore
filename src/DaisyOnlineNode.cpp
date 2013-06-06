@@ -46,6 +46,7 @@ using namespace naviengine;
 DaisyOnlineNode::DaisyOnlineNode(const std::string name, const std::string uri, const std::string username, const std::string password, const std::string& client_home, string useragent) :
         good_(true), loggedIn_(false), currentChild_(0)
 {
+    LOG4CXX_TRACE(onlineNodeLog, "Constructor");
     serviceName_ = name;
     serviceUri_ = uri;
     username_ = username;
@@ -88,6 +89,7 @@ DaisyOnlineNode::DaisyOnlineNode(const std::string name, const std::string uri, 
 
 DaisyOnlineNode::~DaisyOnlineNode()
 {
+    LOG4CXX_TRACE(onlineNodeLog, "Destructor");
     delete pDOHandler;
 }
 

@@ -24,13 +24,15 @@
 
 #include <Nodes/MenuNode.h>
 
+#include <string>
+
 /**
  * RootNode implements the MenuNode, making available media sources function like a menu.
  */
 class RootNode: public naviengine::MenuNode
 {
 public:
-    RootNode();
+    RootNode(const std::string useragent = "");
     ~RootNode();
 
     // MenuNode start
@@ -47,6 +49,8 @@ public:
 private:
     NaviList navilist_;
     AnyNode* currentChild_;
+
+    std::string userAgent_;
 
     void announce();
     void announceSelection();

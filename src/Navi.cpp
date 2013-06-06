@@ -37,12 +37,12 @@ log4cxx::LoggerPtr naviLog(log4cxx::Logger::getLogger("kolibre.clientcore.navi")
 Navi::Navi(ClientCore* clientcore) :
         NaviEngine(), clientcore_(clientcore)
 {
-    LOG4CXX_DEBUG(naviLog, "constructor");
+    LOG4CXX_TRACE(naviLog, "Constructor");
 }
 
 Navi::~Navi()
 {
-    LOG4CXX_DEBUG(naviLog, "destructor");
+    LOG4CXX_TRACE(naviLog, "Destructor");
 }
 
 bool Navi::process(int command, void* data)

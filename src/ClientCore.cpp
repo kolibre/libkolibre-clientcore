@@ -19,7 +19,7 @@
 
 #include "ClientCore.h"
 #include "MediaSourceManager.h"
-#include "DaisyOnlineNode.h"
+#include "RootNode.h"
 #include "Defines.h"
 #include "Navi.h"
 #include "Utils.h"
@@ -58,40 +58,38 @@ ClientCore::ClientCore(const std::string useragent)
 {
     LOG4CXX_INFO(clientcoreLog, VERSION_PACKAGE_NAME << " " << VERSION_PACKAGE_VERSION << " built " << __DATE__ << " " << __TIME__);
 
-    // Initialize support classes
-
-    LOG4CXX_INFO(clientcoreLog, "Setting up media source manager");
-    MediaSourceManager *manager = MediaSourceManager::Instance();
-
-    LOG4CXX_INFO(clientcoreLog, "Setting up settings");
-    Settings *settings = Settings::Instance();
-
-    LOG4CXX_INFO(clientcoreLog, "Setting up player");
-    Player *player = Player::Instance();
-
-    LOG4CXX_INFO(clientcoreLog, "Setting up narrator");
-    Narrator *narrator = Narrator::Instance();
-
-    std::string messagedb = Utils::getDatapath() + "messages.db";
-    narrator->setDatabasePath(messagedb);
-    narrator->connectAudioFinished(boost::bind(&ClientCore::narratorFinished, this));
-
-    mManualOggfile = "";
-
-    // If no versioning info comes from above, use package name and version as useragent
-    // If useragent information info comes from above adhere to that
+    // If no versioning info comes from above, use package name and version as UserAgent
+    // If UserAgent information info comes from above adhere to that
     if (useragent == "")
         mUserAgent = std::string(VERSION_PACKAGE_NAME) + "/" + std::string(VERSION_PACKAGE_VERSION);
     else
         mUserAgent = useragent;
 
+    // Initialize support classes
+    LOG4CXX_INFO(clientcoreLog, "Setting up MediaSourceManager");
+    MediaSourceManager *manager = MediaSourceManager::Instance();
+
+    LOG4CXX_INFO(clientcoreLog, "Setting up DataStreamHandler")
+    DataStreamHandler::Instance()->setUseragent(useragent);
+
+    LOG4CXX_INFO(clientcoreLog, "Setting up Settings");
+    Settings *settings = Settings::Instance();
+
+    LOG4CXX_INFO(clientcoreLog, "Setting up Player");
+    Player *player = Player::Instance();
+    player->setUseragent(useragent);
     if (player->enable(NULL, NULL))
     { //&argc, &argv)) {
         LOG4CXX_ERROR(clientcoreLog, "Failed to enable player");
         return;
     }
-
     player->setTempo(settings->read<double>("playbackspeed", 1.0));
+
+    LOG4CXX_INFO(clientcoreLog, "Setting up Narrator");
+    Narrator *narrator = Narrator::Instance();
+    std::string messagedb = Utils::getDatapath() + "messages.db";
+    narrator->setDatabasePath(messagedb);
+    narrator->connectAudioFinished(boost::bind(&ClientCore::narratorFinished, this));
     narrator->setTempo(settings->read<double>("playbackspeed", 1.0));
     narrator->setLanguage(settings->read<std::string>("language", "sv"));
 
@@ -106,6 +104,11 @@ ClientCore::ClientCore(const std::string useragent)
     // Initialize thread variables
     clientcoreRunning = false;
     threadStarted = false;
+
+    // Initialize class member variables
+    mManualOggfile = "";
+    mAboutOggfile = "";
+    mDownloadFolder = "";
 }
 
 /**
@@ -119,15 +122,15 @@ ClientCore::~ClientCore()
 
     if (threadStarted)
     {
-        // Wait until clientcore thread stops
+        // Wait until ClientCore thread stops
         LOG4CXX_INFO(clientcoreLog, "Waiting for clientcoreThread to join");
         pthread_join(clientcoreThread, NULL);
     }
 
-    LOG4CXX_DEBUG(clientcoreLog, "Deleting settings");
+    LOG4CXX_DEBUG(clientcoreLog, "Deleting Settings");
     Settings::Instance()->DeleteInstance();
 
-    LOG4CXX_DEBUG(clientcoreLog, "Deleting media source manager")
+    LOG4CXX_DEBUG(clientcoreLog, "Deleting MediaSourceManager")
     MediaSourceManager::Instance()->DeleteInstance();
 }
 
@@ -301,7 +304,7 @@ std::string ClientCore::getServiceUrl()
 }
 
 /**
- * Get the user-agent value useb by this application
+ * Get the user-agent value used by this application
  *
  * @return The user-agent property
  */
@@ -1097,65 +1100,26 @@ void *ClientCore::clientcore_thread(void *ctx)
         return NULL;
     }
 
-    LOG4CXX_DEBUG(clientcoreLog, "Setting up narrator");
-    Narrator *narrator = Narrator::Instance();
-    usleep(100000);
-
-    LOG4CXX_DEBUG(clientcoreLog, "Setting up player");
-    Player *player = Player::Instance();
-    usleep(100000);
-
-    std::string useragent = ctxptr->getUserAgent();
-    std::string service_url = ctxptr->getServiceUrl();
-    std::string username = ctxptr->getUsername();
-    std::string password = ctxptr->getPassword();
-    ctxptr->setUsername(username);
-    ctxptr->setPassword(password, true); // will default to remember password
-
-    DataStreamHandler::Instance()->setUseragent(useragent);
-    player->setUseragent(useragent);
-
     // say welcome
     Narrator::Instance()->play(_N("welcome"));
     usleep(500000);
     while (Narrator::Instance()->isSpeaking())
     {
         usleep(20000);
-    };
+    }
 
     // Default to running
     bool running = true;
 
-    // Initialize a DaisyOnlineNode to use a root node in NaviEngine
-    DaisyOnlineNode* doservice = new DaisyOnlineNode("main", service_url, username, password, ".", useragent);
-    if (doservice->good())
-    {
-        doservice->name_ = ""; // Empty name means it narrates it self.
+    // Get Narrator and Player instances
+    Narrator *narrator = Narrator::Instance();
+    Player *player = Player::Instance();
 
-        // Split useragent into model/version
-        std::string::size_type slashpos = useragent.find('/');
-        if (slashpos != std::string::npos)
-        {
-            std::string model = useragent.substr(0, slashpos);
-            std::string version = useragent.substr(slashpos + 1);
-            if (not model.empty() && not version.empty())
-            {
-                doservice->setModel(model);
-                doservice->setVersion(version);
-            }
-        }
-
-        doservice->setLanguage(ctxptr->getLanguage());
-        doservice->setSerialNumber(ctxptr->getSerialNumber());
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "DaisyOnlineNode failed to initialize");
-    }
-
+    // Initialize the root node to use in NaviEngine
+    RootNode *rootNode = new RootNode;
 
     Navi *navi = new Navi(ctxptr);
-    navi->openMenu(doservice, true);
+    navi->openMenu(rootNode, true);
     if (not navi->good())
     {
         // Failed to open the root node.
@@ -1316,7 +1280,8 @@ void *ClientCore::clientcore_thread(void *ctx)
     while (Narrator::Instance()->isSpeaking())
     {
         usleep(20000);
-    };
+    }
+
     LOG4CXX_DEBUG(clientcoreLog, "Deleting narrator");
     delete narrator;
 

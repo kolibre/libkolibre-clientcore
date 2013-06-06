@@ -38,7 +38,7 @@ using namespace naviengine;
 DaisyOnlineBookNode::DaisyOnlineBookNode(std::string book_id, DaisyOnlineHandler *DOHandler) :
         book_id_(book_id), pDOHandler(DOHandler), daisyNaviActive(false)
 {
-    LOG4CXX_DEBUG(bookNodeLog, "constructor");
+    LOG4CXX_TRACE(bookNodeLog, "Constructor");
     play_before_onOpen_ = "";
     lastError = (errorType) -1;
     pDaisyNavi = new DaisyNavi;
@@ -46,7 +46,7 @@ DaisyOnlineBookNode::DaisyOnlineBookNode(std::string book_id, DaisyOnlineHandler
 
 DaisyOnlineBookNode::~DaisyOnlineBookNode()
 {
-    LOG4CXX_DEBUG(bookNodeLog, "destructor");
+    LOG4CXX_TRACE(bookNodeLog, "Destructor");
     delete pDaisyNavi;
 }
 

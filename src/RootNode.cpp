@@ -18,9 +18,12 @@
  */
 
 #include "RootNode.h"
+#include "DaisyOnlineNode.h"
 #include "Defines.h"
 #include "config.h"
 #include "CommandQueue2/CommandQueue.h"
+#include "MediaSourceManager.h"
+#include "Settings/Settings.h"
 
 #include <NaviEngine.h>
 
@@ -31,12 +34,15 @@ log4cxx::LoggerPtr rootNodeLog(log4cxx::Logger::getLogger("kolibre.clientcore.ro
 
 using namespace naviengine;
 
-RootNode::RootNode()
+RootNode::RootNode(const std::string useragent)
 {
+    LOG4CXX_TRACE(rootNodeLog, "Constructor");
+    userAgent_ = useragent;
 }
 
 RootNode::~RootNode()
 {
+    LOG4CXX_TRACE(rootNodeLog, "Destructor");
 }
 
 // NaviEngine functions
@@ -70,15 +76,80 @@ bool RootNode::up(NaviEngine& navi)
 
 bool RootNode::onOpen(NaviEngine& navi)
 {
-    currentChild_ = navi.getCurrentChoice();
-    announce();
+    navi.setCurrentChoice(NULL);
+    clearNodes();
+    navilist_.items.clear();
+
+    // Create sources defined in MediaSourceManager
+    LOG4CXX_INFO(rootNodeLog, "Creating children for root");
+
+    int daisyOnlineServices = MediaSourceManager::Instance()->getDaisyOnlineServices();
+    if (daisyOnlineServices > 0)
+    {
+        // We will only support on DaisyOnlineService at the moment
+        std::string name = MediaSourceManager::Instance()->getDOSname(0);
+        std::string url = MediaSourceManager::Instance()->getDOSurl(0);
+        std::string username = MediaSourceManager::Instance()->getDOSusername(0);
+        std::string password = MediaSourceManager::Instance()->getDOSpassword(0);
+
+        // Create a DaisyOnlineNode
+        DaisyOnlineNode* daisyOnlineNode = new DaisyOnlineNode(name, url, username, password, ".", userAgent_);
+        if (daisyOnlineNode->good())
+        {
+            daisyOnlineNode->name_ = ""; // Empty name means it narrates it self.
+
+            // Split userAgent into model/version
+            std::string::size_type slashpos = userAgent_.find('/');
+            if (slashpos != std::string::npos)
+            {
+                std::string model = userAgent_.substr(0, slashpos);
+                std::string version = userAgent_.substr(slashpos + 1);
+                if (not model.empty() && not version.empty())
+                {
+                    daisyOnlineNode->setModel(model);
+                    daisyOnlineNode->setVersion(version);
+                }
+            }
+
+            daisyOnlineNode->setLanguage(Settings::Instance()->read<std::string>("language", "sv"));
+            LOG4CXX_INFO(rootNodeLog, "Adding DaisyOnlineService '" << name << "'");
+            addNode(daisyOnlineNode);
+
+            // create a NaviListItem and store it in list for the NaviList signal
+            NaviListItem item(daisyOnlineNode->uri_, name);
+            navilist_.items.push_back(item);
+        }
+        else
+        {
+            LOG4CXX_ERROR(rootNodeLog, "DaisyOnlineNode failed to initialize");
+        }
+    }
+
+    if (navi.getCurrentChoice() == NULL && numberOfChildren() > 0)
+    {
+        navi.setCurrentChoice(firstChild());
+        currentChild_ = firstChild();
+    }
+
+    // Present children or open when only one child
+    if (numberOfChildren() != 1)
+    {
+        LOG4CXX_INFO(rootNodeLog, "Presenting current child in root");
+        currentChild_ = navi.getCurrentChoice();
+        announce();
+    }
+    else
+    {
+        LOG4CXX_INFO(rootNodeLog, "Opening first child in root");
+        return navi.select();
+    }
 
     return true;
 }
 
 bool RootNode::process(NaviEngine& navi, int command, void* data)
 {
-    return true;
+    return false;
 }
 
 bool RootNode::onNarrate()
