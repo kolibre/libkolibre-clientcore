@@ -39,6 +39,7 @@ RootNode::RootNode(const std::string useragent)
 {
     LOG4CXX_TRACE(rootNodeLog, "Constructor");
     userAgent_ = useragent;
+    name_ = "Root";
 }
 
 RootNode::~RootNode()
@@ -97,8 +98,6 @@ bool RootNode::onOpen(NaviEngine& navi)
         DaisyOnlineNode* daisyOnlineNode = new DaisyOnlineNode(name, url, username, password, ".", userAgent_);
         if (daisyOnlineNode->good())
         {
-            daisyOnlineNode->name_ = ""; // Empty name means it narrates it self.
-
             // Split userAgent into model/version
             std::string::size_type slashpos = userAgent_.find('/');
             if (slashpos != std::string::npos)

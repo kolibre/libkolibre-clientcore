@@ -47,6 +47,7 @@ DaisyOnlineNode::DaisyOnlineNode(const std::string name, const std::string uri, 
         good_(true), loggedIn_(false), currentChild_(0)
 {
     LOG4CXX_TRACE(onlineNodeLog, "Constructor");
+    name_ = "DaisyOnline_" + name;
     serviceName_ = name;
     serviceUri_ = uri;
     username_ = username;
