@@ -22,6 +22,11 @@
 
 #include <string>
 #include <cstdlib>
+#include <log4cxx/logger.h>
+#include <boost/filesystem.hpp>
+
+// create logger which will become a child to logger kolibre.clientcore
+log4cxx::LoggerPtr utilsLog(log4cxx::Logger::getLogger("kolibre.clientcore.utils"));
 
 #ifdef WIN32
 #define DEFAULT_DATAPATH "./"
@@ -62,7 +67,32 @@ public:
         return datapath;
     }
 
-private:
+    static bool isDir(std::string path)
+    {
+        try
+        {
+            if (boost::filesystem::exists(path))
+            {
+                if (boost::filesystem::is_directory(path))
+                {
+                    return true;
+                }
+                else
+                {
+                    LOG4CXX_WARN(utilsLog, path << " exists, but is not a directory");
+                }
+            }
+            else
+            {
+                LOG4CXX_WARN(utilsLog, path << " does not exist");
+            }
+        }
+        catch (const boost::filesystem::filesystem_error& ex)
+        {
+            LOG4CXX_ERROR(utilsLog, ex.what());
+        }
+        return false;
+    }
 };
 
 #endif

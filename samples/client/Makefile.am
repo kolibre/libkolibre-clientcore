@@ -21,7 +21,7 @@ AUTOMAKE_OPTIONS = foreign
 bin_PROGRAMS = KolibreSampleClient
 KolibreSampleClient_SOURCES = Main.cpp Input.cpp
 
-KolibreSampleClient_LDFLAGS = @LOG4CXX_LIBS@ @GLIB_LIBS@ -L$(top_builddir)/src/.libs -lkolibre-clientcore -lboost_regex
+KolibreSampleClient_LDFLAGS = @LOG4CXX_LIBS@ @GLIB_LIBS@ -L$(top_builddir)/src/.libs -lkolibre-clientcore -lboost_regex -lboost_filesystem
 KolibreSampleClient_CPPFLAGS = @LOG4CXX_CFLAGS@ @GLIB_CFLAGS@ -I$(top_srcdir)/src
 
 all-local:

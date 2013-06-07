@@ -26,6 +26,6 @@ mediasourcemanager_SOURCES = mediasourcemanager.cpp
 sleeptimer_SOURCES = sleeptimer.cpp
 getset_SOURCES = getset.cpp
 
-LDADD = -lkolibre-clientcore -lboost_regex
+LDADD = -lkolibre-clientcore -lboost_regex -lboost_filesystem
 AM_LDFLAGS = -L$(top_builddir)/src
 AM_CPPFLAGS = -I$(top_srcdir)/src

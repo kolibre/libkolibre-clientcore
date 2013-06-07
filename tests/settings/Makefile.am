@@ -24,8 +24,8 @@ TESTS = settings threads
 
 settings_SOURCES = main.cpp
 threads_SOURCES = threads.cpp
-settings_LDADD = @LOG4CXX_LIBS@ -L$(top_builddir)/src/Settings -lsettings -lsqlite3
-threads_LDADD = @LOG4CXX_LIBS@ -L$(top_builddir)/src/Settings -lsettings -lsqlite3
+settings_LDADD = @LOG4CXX_LIBS@ -L$(top_builddir)/src/Settings -lsettings -lsqlite3 -lboost_filesystem
+threads_LDADD = @LOG4CXX_LIBS@ -L$(top_builddir)/src/Settings -lsettings -lsqlite3 -lboost_filesystem
 AM_CPPFLAGS = @LOG4CXX_CFLAGS@
 
 
