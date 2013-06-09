@@ -18,13 +18,14 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-check_PROGRAMS = datapath trim isdir
+check_PROGRAMS = datapath trim isdir isfile
 
-TESTS = datapath.sh trim isdir
+TESTS = datapath.sh trim isdir isfile
 
 datapath_SOURCES = datapath.cpp
 trim_SOURCES = trim.cpp
 isdir_SOURCES = isdir.cpp
+isfile_SOURCES = isfile.cpp
 
 AM_CPPFLAGS = -I$(top_srcdir)/src
 AM_LDFLAGS = @LOG4CXX_LIBS@ -L$(top_builddir)/src -lboost_regex -lboost_filesystem

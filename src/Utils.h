@@ -67,7 +67,7 @@ public:
         return datapath;
     }
 
-    static bool isDir(std::string path)
+    static bool isDir(boost::filesystem::path path)
     {
         try
         {
@@ -80,6 +80,33 @@ public:
                 else
                 {
                     LOG4CXX_WARN(utilsLog, path << " exists, but is not a directory");
+                }
+            }
+            else
+            {
+                LOG4CXX_WARN(utilsLog, path << " does not exist");
+            }
+        }
+        catch (const boost::filesystem::filesystem_error& ex)
+        {
+            LOG4CXX_ERROR(utilsLog, ex.what());
+        }
+        return false;
+    }
+
+    static bool isFile(boost::filesystem::path path)
+    {
+        try
+        {
+            if (boost::filesystem::exists(path))
+            {
+                if (boost::filesystem::is_regular_file(path))
+                {
+                    return true;
+                }
+                else
+                {
+                    LOG4CXX_WARN(utilsLog, path << " exists, but is not a regular file");
                 }
             }
             else
