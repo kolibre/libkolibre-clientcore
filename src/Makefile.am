@@ -22,6 +22,7 @@ SRCS = \
 ClientCore.cpp \
 DaisyNavi.cpp \
 DaisyOnlineNode.cpp \
+DaisyBookNode.cpp \
 DaisyOnlineBookNode.cpp \
 MediaSourceManager.cpp \
 Navi.cpp \
@@ -54,6 +55,7 @@ EXTRA_DIST = CommandQueue2/CommandQueue.h \
 			 Commands/JumpCommand.h \
 			 Commands/NotifyCommands.h \
 			 DaisyNavi.h \
+			 DaisyBookNode.h \
 			 DaisyOnlineBookNode.h \
 			 DaisyOnlineNode.h \
 			 Defines.h \
