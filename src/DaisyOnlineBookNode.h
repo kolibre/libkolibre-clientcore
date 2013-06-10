@@ -20,28 +20,18 @@
 #ifndef DAISYONLINEBOOK_NODE
 #define DAISYONLINEBOOK_NODE
 
-#include <Nodes/VirtualMenuNode.h>
+#include "DaisyBookNode.h"
 
 #include <string>
 
-class DaisyNavi;
 class DaisyOnlineHandler;
 
-class DaisyOnlineBookNode: public naviengine::VirtualMenuNode
+class DaisyOnlineBookNode: public DaisyBookNode
 {
 public:
     DaisyOnlineBookNode(std::string book_id, DaisyOnlineHandler *DOHandler);
-    ~DaisyOnlineBookNode();
 
-    bool up(naviengine::NaviEngine&);
-    bool prev(naviengine::NaviEngine&);
-    bool next(naviengine::NaviEngine&);
-    bool select(naviengine::NaviEngine&);
-    bool selectByUri(naviengine::NaviEngine&, std::string);
-    bool menu(naviengine::NaviEngine&);
     bool onOpen(naviengine::NaviEngine&);
-    bool process(naviengine::NaviEngine&, int, void*);
-    bool onNarrate();
 
     enum errorType
     {
@@ -56,10 +46,7 @@ private:
     std::string book_id_;
     std::string last_modified_;
     DaisyOnlineHandler *pDOHandler;
-    DaisyNavi *pDaisyNavi;
-    bool daisyNaviActive;
 
-    std::string url_;
     errorType lastError;
 };
 
