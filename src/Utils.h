@@ -22,6 +22,7 @@
 
 #include <string>
 #include <cstdlib>
+#include <vector>
 #include <log4cxx/logger.h>
 #include <boost/filesystem.hpp>
 
@@ -43,6 +44,7 @@ log4cxx::LoggerPtr utilsLog(log4cxx::Logger::getLogger("kolibre.clientcore.utils
 class Utils
 {
 public:
+
     static void trim(std::string& s)
     {
         // Remove leading and trailing whitespace
@@ -119,6 +121,46 @@ public:
             LOG4CXX_ERROR(utilsLog, ex.what());
         }
         return false;
+    }
+
+    static std::vector<std::string> recursiveSearchByFilename(std::string path, std::string pattern)
+    {
+        LOG4CXX_INFO(utilsLog, "recursively searching '" << path << "' for files with name '" << pattern << "'");
+
+        std::vector<std::string> matches;
+        if (isDir(path))
+        {
+            for (boost::filesystem::recursive_directory_iterator end, dir(path); dir != end; ++dir)
+            {
+                boost::filesystem::path p(*dir);
+                if (isFile(p))
+                {
+                    if (p.filename() == pattern)
+                        matches.push_back(p.string());
+                }
+            }
+        }
+        return matches;
+    }
+
+    static std::vector<std::string> recursiveSearchByExtension(std::string path, std::string pattern)
+    {
+        LOG4CXX_INFO(utilsLog, "recursively searching '" << path << "' for files with extension '" << pattern << "'");
+
+        std::vector<std::string> matches;
+        if (isDir(path))
+        {
+            for (boost::filesystem::recursive_directory_iterator end, dir(path); dir != end; ++dir)
+            {
+                boost::filesystem::path p(*dir);
+                if (isFile(p))
+                {
+                    if (p.extension() == pattern)
+                        matches.push_back(p.string());
+                }
+            }
+        }
+        return matches;
     }
 };
 
