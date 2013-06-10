@@ -26,9 +26,6 @@
 #include <log4cxx/logger.h>
 #include <boost/filesystem.hpp>
 
-// create logger which will become a child to logger kolibre.clientcore
-log4cxx::LoggerPtr utilsLog(log4cxx::Logger::getLogger("kolibre.clientcore.utils"));
-
 #ifdef WIN32
 #define DEFAULT_DATAPATH "./"
 #define ENVIRONMENT_PATH "KOLIBRE_DATA_PATH_UTF8"
@@ -71,6 +68,9 @@ public:
 
     static bool isDir(boost::filesystem::path path)
     {
+        // create scoped logger which will become a child to logger kolibre.clientcore
+        log4cxx::LoggerPtr utilsLog(log4cxx::Logger::getLogger("kolibre.clientcore.utils"));
+
         try
         {
             if (boost::filesystem::exists(path))
@@ -98,6 +98,9 @@ public:
 
     static bool isFile(boost::filesystem::path path)
     {
+        // create scoped logger which will become a child to logger kolibre.clientcore
+        log4cxx::LoggerPtr utilsLog(log4cxx::Logger::getLogger("kolibre.clientcore.utils"));
+
         try
         {
             if (boost::filesystem::exists(path))
@@ -125,6 +128,9 @@ public:
 
     static std::vector<std::string> recursiveSearchByFilename(std::string path, std::string pattern)
     {
+        // create scoped logger which will become a child to logger kolibre.clientcore
+        log4cxx::LoggerPtr utilsLog(log4cxx::Logger::getLogger("kolibre.clientcore.utils"));
+
         LOG4CXX_INFO(utilsLog, "recursively searching '" << path << "' for files with name '" << pattern << "'");
 
         std::vector<std::string> matches;
@@ -145,6 +151,9 @@ public:
 
     static std::vector<std::string> recursiveSearchByExtension(std::string path, std::string pattern)
     {
+        // create scoped logger which will become a child to logger kolibre.clientcore
+        log4cxx::LoggerPtr utilsLog(log4cxx::Logger::getLogger("kolibre.clientcore.utils"));
+
         LOG4CXX_INFO(utilsLog, "recursively searching '" << path << "' for files with extension '" << pattern << "'");
 
         std::vector<std::string> matches;
