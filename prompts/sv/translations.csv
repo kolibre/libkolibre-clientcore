@@ -187,3 +187,13 @@
 "service error";"felaktigt svar från servern"
 "username password error";"inloggningen misslyckades, användaruppgifterna är felaktiga"
 "retrying shortly";"försöker igen om en liten stund"
+
+#
+# FILESYSTEM PROMPTS
+#
+
+"device";"enhet"
+"updating device";"uppdaterar enheten"
+"device contains {1} publication";"enheten innehåller en publikation"
+"device contains {2} publicatoins";"enheten innehåller {2:number} publikationer"
+"device contains no publications";"enheten innehåller inga publikationer"

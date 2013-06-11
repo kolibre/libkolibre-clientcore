@@ -186,3 +186,13 @@ prompt;"error loading data"
 prompt;"service error"
 prompt;"username password error"
 prompt;"retrying shortly"
+
+#
+# FILESYSTEM PROMPTS
+#
+
+prompt;"device"
+prompt;"updating device"
+prompt;"device contains {1} publication"
+prompt;"device contains {2} publicatoins"
+prompt;"device contains no publications"

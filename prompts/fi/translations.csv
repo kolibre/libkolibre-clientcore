@@ -187,3 +187,13 @@
 "service error";"virheellinen vastaus palvelusta"
 "username password error";"sisäänkirjautuminen epäonnistui, käyttäjätiedot ovat viallisia"
 "retrying shortly";"yritetään uudelleen hetken kuluttua"
+
+#
+# FILESYSTEM PROMPTS
+#
+
+"device";"laite"
+"updating device";"päivitetään laitetta"
+"device contains {1} publication";"laitteesta löytyy yksi julkaisu"
+"device contains {2} publicatoins";"laitteesta löytyy {2:number} julkaisua"
+"device contains no publications";"laitteesta ei löytynyt julkaisua"

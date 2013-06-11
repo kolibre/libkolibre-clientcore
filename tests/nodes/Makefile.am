@@ -18,11 +18,12 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-check_PROGRAMS = rootnode daisyonlinebooknode daisyonlinenode daisynavi
+check_PROGRAMS = rootnode filesystemnode daisyonlinebooknode daisyonlinenode daisynavi
 
-TESTS = rootnode daisyonlinebooknode.sh daisyonlinenode.sh daisynavi.sh
+TESTS = rootnode filesystemnode daisyonlinebooknode.sh daisyonlinenode.sh daisynavi.sh
 
 rootnode_SOURCES = rootnode.cpp
+filesystemnode_SOURCES = filesystemnode.cpp
 daisyonlinebooknode_SOURCES = daisyonlinebooknode.cpp
 daisyonlinenode_SOURCES = daisyonlinenode.cpp
 daisynavi_SOURCES = daisynavi.cpp

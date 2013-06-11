@@ -186,6 +186,16 @@
 "username password error"
 "retrying shortly"
 
+#
+# File System
+#
+
+"device"
+"updating device"
+"device contains {1} publication"
+"device contains {2} publicatoins"
+"device contains no publications"
+
 #@TODO
 # remove these prompts from source and use Narrator API instead
 

@@ -24,6 +24,7 @@ DaisyNavi.cpp \
 DaisyOnlineNode.cpp \
 DaisyBookNode.cpp \
 DaisyOnlineBookNode.cpp \
+FileSystemNode.cpp \
 MediaSourceManager.cpp \
 Navi.cpp \
 NaviListImpl.cpp \
@@ -59,6 +60,7 @@ EXTRA_DIST = CommandQueue2/CommandQueue.h \
 			 DaisyOnlineBookNode.h \
 			 DaisyOnlineNode.h \
 			 Defines.h \
+			 FileSystemNode.h \
 			 MediaSourceManager.h \
 			 Navi.h \
 			 NaviListImpl.h \
