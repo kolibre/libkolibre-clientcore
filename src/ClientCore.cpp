@@ -1104,7 +1104,8 @@ void *ClientCore::clientcore_thread(void *ctx)
     Player *player = Player::Instance();
 
     // Initialize the root node to use in NaviEngine
-    RootNode *rootNode = new RootNode;
+    std::string userAgent = ctxptr->getUserAgent();
+    RootNode *rootNode = new RootNode(userAgent);
 
     Navi *navi = new Navi(ctxptr);
     navi->openMenu(rootNode, true);
