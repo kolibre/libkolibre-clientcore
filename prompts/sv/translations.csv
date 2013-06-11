@@ -169,14 +169,26 @@
 "content contains too many navigation points, gui synchronization disabled";"materialet innehåller för många navigationspunkter, markering av nuvarande navigationspunkt avstängd"
 
 #
+# ROOT PROMPTS
+#
+
+"home";"hemkatalog"
+"updating home";"uppdaterar hemkatalogen"
+"home contains {1} source";"hemkatalogen innehåller en källa"
+"home contains {2} sources";"hemkatalogen innehåller {2:number} källor"
+"home contains no sources";"hemkatalogen innehåller inga källor"
+"source no. {1}";"källa {1:number}"
+"opening source";"öppnar källan"
+
+#
 # DAISYONLINE PROMPTS
 #
 
-"library";"bibliotek"
-"updating library";"uppdaterar biblioteket"
-"found {1} publication";"biblioteket innehåller en publikation"
-"found {2} publications";"biblioteket innehåller {2:number} publikationer"
-"no content found";"biblioteket innehåller inga publikationer"
+"service";"tjänst"
+"updating service";"uppdaterar tjänsten"
+"service contains {1} publication";"tjänsten innehåller en publikation"
+"service contains {2} publications";"tjänsten innehåller {2:number} publikationer"
+"service contains no publications";"tjänsten innehåller inga publikationer"
 "found {1} new publication";"Hittade en ny publikation"
 "found {2} new publications";"Hittade {2:number} nya publikationer"
 "publication no. {1}";"titel {1:number}"
@@ -195,5 +207,5 @@
 "device";"enhet"
 "updating device";"uppdaterar enheten"
 "device contains {1} publication";"enheten innehåller en publikation"
-"device contains {2} publicatoins";"enheten innehåller {2:number} publikationer"
+"device contains {2} publications";"enheten innehåller {2:number} publikationer"
 "device contains no publications";"enheten innehåller inga publikationer"

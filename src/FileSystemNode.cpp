@@ -171,7 +171,7 @@ void FileSystemNode::announce()
     else if (numItems > 1)
     {
         Narrator::Instance()->setParameter("2", numItems);
-        Narrator::Instance()->play(_N("device contains {2} publication"));
+        Narrator::Instance()->play(_N("device contains {2} publications"));
     }
     Narrator::Instance()->playLongpause();
 

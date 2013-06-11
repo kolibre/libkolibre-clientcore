@@ -19,13 +19,16 @@
 
 #include "RootNode.h"
 #include "DaisyOnlineNode.h"
+#include "FileSystemNode.h"
 #include "Defines.h"
 #include "config.h"
 #include "CommandQueue2/CommandQueue.h"
 #include "Commands/InternalCommands.h"
 #include "MediaSourceManager.h"
 #include "Settings/Settings.h"
+#include "Utils.h"
 
+#include <Narrator.h>
 #include <NaviEngine.h>
 
 #include <log4cxx/logger.h>
@@ -125,6 +128,24 @@ bool RootNode::onOpen(NaviEngine& navi)
         }
     }
 
+    int fileSystemPaths = MediaSourceManager::Instance()->getFileSystemPaths();
+    for (int i = 0; i < fileSystemPaths; i++)
+    {
+        std::string name = MediaSourceManager::Instance()->getFSPname(i);
+        std::string path = MediaSourceManager::Instance()->getFSPpath(0);
+
+        if (Utils::isDir(path))
+        {
+            LOG4CXX_INFO(rootNodeLog, "Adding FileSystemNode '" << name << "'");
+            FileSystemNode *fileSystemNode = new FileSystemNode(name, path);
+            addNode(fileSystemNode);
+
+            // create a NaviListItem and store it in list for the NaviList signal
+            NaviListItem item(fileSystemNode->uri_, name);
+            navilist_.items.push_back(item);
+        }
+    }
+
     if (navi.getCurrentChoice() == NULL && numberOfChildren() > 0)
     {
         navi.setCurrentChoice(firstChild());
@@ -160,6 +181,8 @@ bool RootNode::process(NaviEngine& navi, int command, void* data)
 bool RootNode::onNarrate()
 {
     const bool isSelfNarrated = true;
+    Narrator::Instance()->play(_N("choose option using left and right arrows, open using play button"));
+    Narrator::Instance()->playLongpause();
     announceSelection();
     return isSelfNarrated;
 }
@@ -179,13 +202,19 @@ void RootNode::announce()
 
     if (numItems == 0)
     {
+        Narrator::Instance()->play(_N("home contains no sources"));
     }
     else if (numItems == 1)
     {
+        Narrator::Instance()->setParameter("1", numItems);
+        Narrator::Instance()->play(_N("home contains {1} source"));
     }
     else if (numItems > 1)
     {
+        Narrator::Instance()->setParameter("2", numItems);
+        Narrator::Instance()->play(_N("home contains {2} sources"));
     }
+    Narrator::Instance()->playLongpause();
 
     announceSelection();
 }
@@ -202,6 +231,10 @@ void RootNode::announceSelection()
             currentChoice++;
             current = current->prev_;
         }
+
+        Narrator::Instance()->setParameter("1", currentChoice + 1);
+        Narrator::Instance()->play(_N("source no. {1}"));
+        //Narrator::Instance()->play(currentChild_->name_.c_str());
 
         NaviListItem item = navilist_.items[currentChoice];
         cq2::Command<NaviListItem> naviItem(item);

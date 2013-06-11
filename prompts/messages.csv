@@ -168,14 +168,26 @@ prompt;"content error"
 prompt;"content contains too many navigation points, gui synchronization disabled"
 
 #
+# ROOT PROMPTS
+#
+
+prompt;"home"
+prompt;"updating home"
+prompt;"home contains {1} source"
+prompt;"home contains {2} sources"
+prompt;"home contains no sources"
+prompt;"source no. {1}"
+prompt;"opening source"
+
+#
 # DAISYONLINE PROMPTS
 #
 
-prompt;"library"
-prompt;"updating library"
-prompt;"found {1} publication"
-prompt;"found {2} publications"
-prompt;"no content found"
+prompt;"service"
+prompt;"updating service"
+prompt;"service contains {1} publication"
+prompt;"service contains {2} publications"
+prompt;"service contains no publications"
 prompt;"found {1} new publication"
 prompt;"found {2} new publications"
 prompt;"publication no. {1}"
@@ -194,5 +206,5 @@ prompt;"retrying shortly"
 prompt;"device"
 prompt;"updating device"
 prompt;"device contains {1} publication"
-prompt;"device contains {2} publicatoins"
+prompt;"device contains {2} publications"
 prompt;"device contains no publications"

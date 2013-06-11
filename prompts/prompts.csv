@@ -167,14 +167,26 @@
 "content contains too many navigation points, gui synchronization disabled"
 
 #
+# Root
+#
+
+"home"
+"updating home"
+"home contains {1} source"
+"home contains {2} sources"
+"home contains no sources"
+"source no. {1}"
+"opening source"
+
+#
 # Daisy Online
 #
 
-"library"
-"updating library"
-"found {1} publication"
-"found {2} publications"
-"no content found"
+"service"
+"updating service"
+"service contains {1} publication"
+"service contains {2} publications"
+"service contains no publications"
 "found {1} new publication"
 "found {2} new publications"
 "publication no. {1}"
@@ -193,7 +205,7 @@
 "device"
 "updating device"
 "device contains {1} publication"
-"device contains {2} publicatoins"
+"device contains {2} publications"
 "device contains no publications"
 
 #@TODO

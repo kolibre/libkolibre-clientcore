@@ -169,14 +169,27 @@
 "content contains too many navigation points, gui synchronization disabled";"aineistossa on liian monta navigointipistettä, nykyisen navigaatiopisteen seuraaminen kytketty pois päältä"
 
 #
+# ROOT PROMPTS
+#
+
+"home";"koitkansio"
+"updating home";"päivitetään koitkansiota"
+"home contains {1} source";"koitkansiosta löytyy yksi lähde"
+"home contains {2} sources";"koitkansiosta löytyy {2:number} lähdettä"
+"home contains no sources";"koitkansiosta ei löytynyt lähdettä"
+"source no. {1}";"lähde {1:number}"
+"opening source";"avataan lähdettä"
+
+
+#
 # DAISYONLINE PROMPTS
 #
 
-"library";"kirjasto"
-"updating library";"päivitetään kirjastoa"
-"found {1} publication";"kirjastosta löytyy yksi julkaisu"
-"found {2} publications";"kirjastosta löytyy {2:number} julkaisua"
-"no content found";"kirjastosta ei löytynyt julkaisua"
+"service";"palvelu"
+"updating service";"päivitetään palvelua"
+"service contains {1} publication";"palvelusta löytyy yksi julkaisu"
+"service contains {2} publications";"palvelusta löytyy {2:number} julkaisua"
+"service contains no publications";"palvelusta ei löytynyt julkaisua"
 "found {1} new publication";"uusi julkaisu löytyi"
 "found {2} new publications";"{2:number} uutta julkaisua löytyi"
 "publication no. {1}";"Julkaisu {1:number}"
@@ -195,5 +208,5 @@
 "device";"laite"
 "updating device";"päivitetään laitetta"
 "device contains {1} publication";"laitteesta löytyy yksi julkaisu"
-"device contains {2} publicatoins";"laitteesta löytyy {2:number} julkaisua"
+"device contains {2} publications";"laitteesta löytyy {2:number} julkaisua"
 "device contains no publications";"laitteesta ei löytynyt julkaisua"

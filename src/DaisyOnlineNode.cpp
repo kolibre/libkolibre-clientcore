@@ -81,7 +81,7 @@ DaisyOnlineNode::DaisyOnlineNode(const std::string name, const std::string uri, 
     version_ = string(VERSION_PACKAGE_VERSION);
     serialNumber_ = "";
 
-    play_before_onOpen_ = _N("updating library");
+    play_before_onOpen_ = _N("updating service");
 
     // connect slots to signals
     sessionInit_signal.connect(boost::bind(&DaisyOnlineNode::onSessionInit, this));
@@ -667,7 +667,7 @@ bool DaisyOnlineNode::process(NaviEngine& navi, int command, void* data)
             c();
         }
 
-        play_before_onOpen_ = _N("library");
+        play_before_onOpen_ = _N("service");
         lastUpdate_ = time(NULL);
         navi.setCurrentChoice(firstChild());
         currentChild_ = firstChild();
@@ -799,25 +799,21 @@ void DaisyOnlineNode::announce()
     cq2::Command<NaviList> naviList(navilist);
     naviList();
 
-    // we do not need to narrate 'library' here because the next
-    // strings to narrate contains the word library
-    //Narrator::Instance()->play(_N("library"));
-
     int numItems = numberOfChildren();
 
     if (numItems == 0)
     {
-        Narrator::Instance()->play(_N("no content found"));
+        Narrator::Instance()->play(_N("service contains no publications"));
     }
     else if (numItems == 1)
     {
         Narrator::Instance()->setParameter("1", numItems);
-        Narrator::Instance()->play(_N("found {1} publication"));
+        Narrator::Instance()->play(_N("service contains {1} publication"));
     }
     else if (numItems > 1)
     {
         Narrator::Instance()->setParameter("2", numItems);
-        Narrator::Instance()->play(_N("found {2} publications"));
+        Narrator::Instance()->play(_N("service contains {2} publications"));
     }
     Narrator::Instance()->playLongpause();
 

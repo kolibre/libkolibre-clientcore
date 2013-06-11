@@ -1088,18 +1088,6 @@ void *ClientCore::clientcore_thread(void *ctx)
 {
     ClientCore* ctxptr = (ClientCore*) ctx;
 
-    // Abort and exit application if no service has been added
-    pthread_mutex_lock(&ctxptr->clientcoreMutex);
-    int services = MediaSourceManager::Instance()->getDaisyOnlineServices();
-    pthread_mutex_unlock(&ctxptr->clientcoreMutex);
-    if (services == 0)
-    {
-        pthread_mutex_lock(&ctxptr->clientcoreMutex);
-        ctxptr->clientcoreRunning = false;
-        pthread_mutex_unlock(&ctxptr->clientcoreMutex);
-        return NULL;
-    }
-
     // say welcome
     Narrator::Instance()->play(_N("welcome"));
     usleep(500000);
