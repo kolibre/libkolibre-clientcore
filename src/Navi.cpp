@@ -47,7 +47,77 @@ Navi::~Navi()
 
 bool Navi::process(int command, void* data)
 {
-    LOG4CXX_INFO(naviLog, "Processing command: " << command);
+    std::string commandName;
+    switch(command)
+    {
+    case COMMAND_NONE:
+        commandName = "COMMAND_NONE";
+        break;
+    case COMMAND_HOME:
+        commandName = "COMMAND_HOME";
+        break;
+    case COMMAND_BACK:
+        commandName = "COMMAND_BACK";
+        break;
+    case COMMAND_PAUSE:
+        commandName = "COMMAND_PAUSE";
+        break;
+    case COMMAND_UP:
+        commandName = "COMMAND_UP";
+        break;
+    case COMMAND_DOWN:
+        commandName = "COMMAND_DOWN";
+        break;
+    case COMMAND_LEFT:
+        commandName = "COMMAND_LEFT";
+        break;
+    case COMMAND_RIGHT:
+        commandName = "COMMAND_RIGHT";
+        break;
+    case COMMAND_BOOKMARK:
+        commandName = "COMMAND_BOOKMARK";
+        break;
+    case COMMAND_OPEN_CONTEXTMENU:
+        commandName = "COMMAND_OPEN_CONTEXTMENU";
+        break;
+    case COMMAND_OPEN_BOOKINFO:
+        commandName = "COMMAND_OPEN_BOOKINFO";
+        break;
+    case COMMAND_OPEN_MENU_GOTOTIMENODE:
+        commandName = "COMMAND_OPEN_MENU_GOTOTIMENODE";
+        break;
+    case COMMAND_OPEN_MENU_GOTOPERCENTNODE:
+        commandName = "COMMAND_OPEN_MENU_GOTOPERCENTNODE";
+        break;
+    case COMMAND_OPEN_MENU_GOTOPAGENODE:
+        commandName = "COMMAND_OPEN_MENU_GOTOPAGENODE";
+        break;
+    case COMMAND_NEXT:
+        commandName = "COMMAND_NEXT";
+        break;
+    case COMMAND_LAST:
+        commandName = "COMMAND_LAST";
+        break;
+    case COMMAND_INFO:
+        commandName = "COMMAND_INFO";
+        break;
+    case COMMAND_NARRATORFINISHED:
+        commandName = "COMMAND_NARRATORFINISHED";
+        break;
+    case COMMAND_DO_GETCONTENTLIST:
+        commandName = "COMMAND_DO_GETCONTENTLIST";
+        break;
+    case COMMAND_RETRY_LOGIN:
+        commandName = "COMMAND_RETRY_LOGIN";
+        break;
+    case COMMAND_RETRY_LOGIN_FORCED:
+        commandName = "COMMAND_RETRY_LOGIN_FORCED";
+        break;
+    default:
+        commandName = "UNKOWN";
+        break;
+    }
+    LOG4CXX_INFO(naviLog, "Processing command: " << commandName << " ("<< command <<")");
 
     switch (command)
     {
@@ -68,7 +138,6 @@ bool Navi::process(int command, void* data)
     switch (command)
     {
     case COMMAND_INFO:
-        LOG4CXX_INFO(naviLog, "COMMAND_INFO received");
         if (not NaviEngine::process(command, data))
         {
             narrateNode();
@@ -76,44 +145,37 @@ bool Navi::process(int command, void* data)
         break;
 
     case COMMAND_HOME:
-        LOG4CXX_INFO(naviLog, "COMMAND_HOME received");
         LOG4CXX_INFO(naviLog, "Returning to top menu");
         top();
         break;
 
     case COMMAND_RIGHT:
-        LOG4CXX_INFO(naviLog, "COMMAND_RIGHT received");
         LOG4CXX_INFO(naviLog, "Going to next item");
         next();
         break;
 
     case COMMAND_LEFT:
-        LOG4CXX_INFO(naviLog, "COMMAND_LEFT received");
         LOG4CXX_INFO(naviLog, "Going to prev item");
         prev();
         break;
 
     case COMMAND_DOWN:
-        LOG4CXX_INFO(naviLog, "COMMAND_DOWN received");
         LOG4CXX_INFO(naviLog, "Selecting item");
         select();
         break;
 
     case COMMAND_UP:
-        LOG4CXX_INFO(naviLog, "COMMAND_UP received");
         LOG4CXX_INFO(naviLog, "Going parent item");
         up();
         break;
 
     case COMMAND_OPEN_CONTEXTMENU:
-        LOG4CXX_INFO(naviLog, "COMMAND_OPEN_CONTEXTMENU received");
         LOG4CXX_INFO(naviLog, "Opening context menu");
         if (!openContextMenu())
             next();
         break;
 
     case COMMAND_PAUSE:
-        LOG4CXX_INFO(naviLog, "COMMAND_PAUSE received");
         if (not NaviEngine::process(command, data))
         {
             select();
@@ -121,7 +183,6 @@ bool Navi::process(int command, void* data)
         break;
 
     case COMMAND_BACK:
-        LOG4CXX_INFO(naviLog, "COMMAND_BACK received");
         LOG4CXX_INFO(naviLog, "Going back");
         if (not NaviEngine::process(command, data))
         {
