@@ -672,6 +672,15 @@ bool DaisyOnlineNode::process(NaviEngine& navi, int command, void* data)
         navi.setCurrentChoice(firstChild());
         currentChild_ = firstChild();
         announce();
+
+        if (numberOfChildren() == 1)
+        {
+            LOG4CXX_INFO(onlineNodeLog, "Opening the only child");
+            // wait for narrator before sending command
+            usleep(500000); while (Narrator::Instance()->isSpeaking()) usleep(100000);
+            cq2::Command<INTERNAL_COMMAND> c(COMMAND_DOWN);
+            c();
+        }
     }
         break;
 

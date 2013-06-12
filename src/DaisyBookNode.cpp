@@ -19,7 +19,9 @@
 
 #include "DaisyBookNode.h"
 #include "DaisyNavi.h"
+#include "Defines.h"
 
+#include <Narrator.h>
 #include <NaviEngine.h>
 
 #include <log4cxx/logger.h>
@@ -104,6 +106,8 @@ bool DaisyBookNode::onOpen(NaviEngine& navi)
     {
         return pDaisyNavi->onOpen(navi);
     }
+
+    Narrator::Instance()->play(_N("opening publication"));
 
     if (not daisyUri_.empty() && pDaisyNavi->open(daisyUri_) && pDaisyNavi->onOpen(navi))
     {

@@ -83,6 +83,8 @@ bool FileSystemNode::onOpen(NaviEngine& navi)
     clearNodes();
     navilist_.items.clear();
 
+    Narrator::Instance()->play(_N("updating device"));
+
     // Create sources defined in MediaSourceManager
     LOG4CXX_INFO(fsNodeLog, "Searching for supported content in path '" << fsPath_ << "'");
 
@@ -111,20 +113,14 @@ bool FileSystemNode::onOpen(NaviEngine& navi)
         currentChild_ = firstChild();
     }
 
-    // Present children or open when only one child
-    if (numberOfChildren() != 1)
+    currentChild_ = navi.getCurrentChoice();
+    announce();
+
+    if (numberOfChildren() == 1)
     {
-        LOG4CXX_INFO(fsNodeLog, "Presenting current child in root");
-        currentChild_ = navi.getCurrentChoice();
-        announce();
-    }
-    else
-    {
-        LOG4CXX_INFO(fsNodeLog, "Opening first child in root");
-        //navi.select();
-        // If we execute navi.select() from here we will end up in an infinite loop
-        // thus we must select by sending a command to navi
-        // send command to select current child
+        LOG4CXX_INFO(fsNodeLog, "Opening the only child");
+        // wait for narrator before sending command
+        usleep(500000); while (Narrator::Instance()->isSpeaking()) usleep(100000);
         cq2::Command<INTERNAL_COMMAND> c(COMMAND_DOWN);
         c();
     }

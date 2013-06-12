@@ -23,6 +23,7 @@
 #include "DaisyNavi.h"
 #include "Defines.h"
 
+#include <Narrator.h>
 #include <NaviEngine.h>
 #include <DaisyOnlineHandler.h>
 
