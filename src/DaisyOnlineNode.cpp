@@ -146,13 +146,18 @@ bool DaisyOnlineNode::up(NaviEngine& navi)
     return ret;
 }
 
-bool DaisyOnlineNode::onNarrate()
+bool DaisyOnlineNode::narrateInfo()
 {
     const bool isSelfNarrated = true;
-
     Narrator::Instance()->play(_N("choose option using left and right arrows, open using play button"));
     Narrator::Instance()->playLongpause();
     announceSelection();
+    return isSelfNarrated;
+}
+
+bool DaisyOnlineNode::onNarrate()
+{
+    const bool isSelfNarrated = true;
     return isSelfNarrated;
 }
 

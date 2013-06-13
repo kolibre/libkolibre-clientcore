@@ -260,13 +260,11 @@ void GotoTimeNode::beforeOnOpen()
     Narrator::Instance()->play(_N("opening jump to time"));
 }
 
-bool GotoTimeNode::onNarrate()
+bool GotoTimeNode::narrateInfo()
 {
-    bool isSelfNarrated = false;
+    const bool isSelfNarrated = true;
     if (isOpen)
     {
-        isSelfNarrated = true;
-
         Narrator::Instance()->play(info_.c_str());
         Narrator::Instance()->play(mapNarrations[NARRATE_GOTO].c_str());
         Narrator::Instance()->playLongpause();
@@ -275,6 +273,12 @@ bool GotoTimeNode::onNarrate()
         //Narrate max
         narrateValue(iMax, true);
     }
+    return isSelfNarrated;
+}
+
+bool GotoTimeNode::onNarrate()
+{
+    const bool isSelfNarrated = false;
     return isSelfNarrated;
 }
 

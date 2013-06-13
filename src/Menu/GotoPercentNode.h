@@ -40,6 +40,7 @@ public:
     bool selectByUri(naviengine::NaviEngine&, std::string);
     bool onOpen(naviengine::NaviEngine&);
     void beforeOnOpen();
+    bool narrateInfo();
     bool onNarrate();
 
 private:

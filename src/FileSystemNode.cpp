@@ -136,12 +136,18 @@ bool FileSystemNode::process(NaviEngine& navi, int command, void* data)
     return false;
 }
 
-bool FileSystemNode::onNarrate()
+bool FileSystemNode::narrateInfo()
 {
     const bool isSelfNarrated = true;
     Narrator::Instance()->play(_N("choose option using left and right arrows, open using play button"));
     Narrator::Instance()->playLongpause();
     announceSelection();
+    return isSelfNarrated;
+}
+
+bool FileSystemNode::onNarrate()
+{
+    const bool isSelfNarrated = true;
     return isSelfNarrated;
 }
 

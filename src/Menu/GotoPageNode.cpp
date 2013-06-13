@@ -52,7 +52,7 @@ GotoPageNode::GotoPageNode(int max, DaisyNavi* daisyNavi) :
     name_ = _N("jump to page");
     info_ = _N("choose page using left and right arrows, jump to selected page using play button");
 
-    // create virtual childs
+    // create virtual children
     for (int i = 0; i < iMax; i++)
     {
         children.push_back(VirtualNode(daisyNavi->getPageLabel(i)));
@@ -140,13 +140,11 @@ void GotoPageNode::beforeOnOpen()
     Narrator::Instance()->play(_N("opening jump to page"));
 }
 
-bool GotoPageNode::onNarrate()
+bool GotoPageNode::narrateInfo()
 {
-    bool isSelfNarrated = false;
+    const bool isSelfNarrated = true;
     if (isOpen)
     {
-        isSelfNarrated = true;
-
         Narrator::Instance()->play(info_.c_str());
         Narrator::Instance()->play(mapNarrations[NARRATE_GOTO].c_str());
         Narrator::Instance()->playLongpause();
@@ -155,6 +153,12 @@ bool GotoPageNode::onNarrate()
         //Narrate max
         narrateValue(iMax, true);
     }
+    return isSelfNarrated;
+}
+
+bool GotoPageNode::onNarrate()
+{
+    const bool isSelfNarrated = false;
     return isSelfNarrated;
 }
 

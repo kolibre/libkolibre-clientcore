@@ -85,6 +85,14 @@ public:
     {
         // Should never be opened
     }
+    virtual bool narrateName()
+    {
+        return true; // NaviEngine should not narrate name
+    }
+    virtual bool narrateInfo()
+    {
+        return true; // NaviEngine should not narrate info
+    }
 
     // Always narrated by itself.
     virtual bool onNarrate();

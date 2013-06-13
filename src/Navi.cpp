@@ -141,7 +141,7 @@ bool Navi::process(int command, void* data)
     case COMMAND_INFO:
         if (not NaviEngine::process(command, data))
         {
-            narrateNode();
+            narrateInfoForCurrentNode();
         }
         break;
 
@@ -204,6 +204,23 @@ bool Navi::process(int command, void* data)
     return true;
 }
 
+void Navi::narrateInfoForCurrentNode()
+{
+    if (not getCurrentNode()->narrateInfo())
+    {
+        std::string name = getCurrentNode()->name_;
+        if (not name.empty())
+            narrate(name);
+
+        std::string info = getCurrentNode()->info_;
+        if (not info.empty())
+            narrate(info);
+
+        if (not getCurrentNode()->isVirtual())
+            narrateNode(getCurrentChoice());
+    }
+}
+
 void Navi::narrateChange(const MenuState& before, const MenuState& after)
 {
     /*
@@ -246,7 +263,7 @@ void Navi::narrateChange(const MenuState& before, const MenuState& after)
             }
         }
 
-        if (not after.state.currentNode->onNarrate())
+        if (not after.state.currentNode->onNarrate() && not after.state.currentNode->isVirtual())
         {
             string name = after.state.currentNode->name_;
             if (name != "")
