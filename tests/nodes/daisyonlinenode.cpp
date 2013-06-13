@@ -123,7 +123,7 @@ int main(int argc, char **argv)
 
     Navi navi;
     DaisyOnlineNode::errorType error = (DaisyOnlineNode::errorType)-1;
-    DaisyOnlineNode *node = new DaisyOnlineNode("localhost", argv[1], "", "", ".", "");
+    DaisyOnlineNode *node = new DaisyOnlineNode("localhost", argv[1], "", "", "");
     navi.openMenu(node, false);
 
     // open should fail with incorrect username and password

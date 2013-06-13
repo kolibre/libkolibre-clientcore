@@ -43,7 +43,7 @@ log4cxx::LoggerPtr onlineNodeLog(log4cxx::Logger::getLogger("kolibre.clientcore.
 
 using namespace naviengine;
 
-DaisyOnlineNode::DaisyOnlineNode(const std::string name, const std::string uri, const std::string username, const std::string password, const std::string& client_home, string useragent) :
+DaisyOnlineNode::DaisyOnlineNode(const std::string name, const std::string uri, const std::string username, const std::string password, std::string useragent) :
         good_(true), loggedIn_(false), currentChild_(0)
 {
     LOG4CXX_TRACE(onlineNodeLog, "Constructor");

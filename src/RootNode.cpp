@@ -98,7 +98,7 @@ bool RootNode::onOpen(NaviEngine& navi)
         std::string password = MediaSourceManager::Instance()->getDOSpassword(0);
 
         // Create a DaisyOnlineNode
-        DaisyOnlineNode* daisyOnlineNode = new DaisyOnlineNode(name, url, username, password, ".", userAgent_);
+        DaisyOnlineNode* daisyOnlineNode = new DaisyOnlineNode(name, url, username, password, userAgent_);
         if (daisyOnlineNode->good())
         {
             // Split userAgent into model/version
