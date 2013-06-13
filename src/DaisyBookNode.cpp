@@ -107,8 +107,6 @@ bool DaisyBookNode::onOpen(NaviEngine& navi)
         return pDaisyNavi->onOpen(navi);
     }
 
-    Narrator::Instance()->play(_N("opening publication"));
-
     if (not daisyUri_.empty() && pDaisyNavi->open(daisyUri_) && pDaisyNavi->onOpen(navi))
     {
         LOG4CXX_INFO(daisyBookNodeLog, "Opening Daisy book with uri '" << daisyUri_ << "'");
@@ -118,6 +116,12 @@ bool DaisyBookNode::onOpen(NaviEngine& navi)
 
     daisyNaviActive = false;
     return daisyNaviActive;
+}
+
+void DaisyBookNode::beforeOnOpen()
+{
+    if (not daisyNaviActive)
+        Narrator::Instance()->play(_N("opening publication"));
 }
 
 bool DaisyBookNode::process(NaviEngine& navi, int command, void* data)

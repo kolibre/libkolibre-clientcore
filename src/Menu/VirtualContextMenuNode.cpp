@@ -17,19 +17,23 @@
  * along with kolibre-clientcore. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NAVIENGINE_BOOKINFONODE
-#define NAVIENGINE_BOOKINFONODE
+#include "VirtualContextMenuNode.h"
+#include "../Defines.h"
 
-#include "ContextMenuNode.h"
+#include <Narrator.h>
 
-class BookInfoNode: public ContextMenuNode
+#include <log4cxx/logger.h>
+
+// create logger which will become a child to logger kolibre.clientcore
+log4cxx::LoggerPtr vcontextMenuNodeLog(log4cxx::Logger::getLogger("kolibre.clientcore.virtualcontextmenunode"));
+
+VirtualContextMenuNode::VirtualContextMenuNode(const std::string& name, const std::string& playBeforeOnOpen) : VirtualMenuNode(name)
 {
-public:
-    BookInfoNode(const std::string&, const std::string&);
+    playBeforeOnOpen_ = playBeforeOnOpen;
+    info_ = _N("choose option using left and right arrows, open using play button");
+}
 
-    bool onOpen(naviengine::NaviEngine&);
-    bool select(naviengine::NaviEngine&);
-    bool process(naviengine::NaviEngine&, int, void*);
-};
-
-#endif
+void VirtualContextMenuNode::beforeOnOpen()
+{
+    Narrator::Instance()->play(playBeforeOnOpen_.c_str());
+}

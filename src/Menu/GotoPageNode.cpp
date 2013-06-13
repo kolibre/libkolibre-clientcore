@@ -51,7 +51,6 @@ GotoPageNode::GotoPageNode(int max, DaisyNavi* daisyNavi) :
 
     name_ = _N("jump to page");
     info_ = _N("choose page using left and right arrows, jump to selected page using play button");
-    play_before_onOpen_ = _N("opening jump to page");
 
     // create virtual childs
     for (int i = 0; i < iMax; i++)
@@ -134,6 +133,11 @@ bool GotoPageNode::onOpen(NaviEngine&)
     renderChild(true);
     narrateEnterType();
     return true;
+}
+
+void GotoPageNode::beforeOnOpen()
+{
+    Narrator::Instance()->play(_N("opening jump to page"));
 }
 
 bool GotoPageNode::onNarrate()

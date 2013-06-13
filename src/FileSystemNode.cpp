@@ -83,8 +83,6 @@ bool FileSystemNode::onOpen(NaviEngine& navi)
     clearNodes();
     navilist_.items.clear();
 
-    Narrator::Instance()->play(_N("updating device"));
-
     // Create sources defined in MediaSourceManager
     LOG4CXX_INFO(fsNodeLog, "Searching for supported content in path '" << fsPath_ << "'");
 
@@ -126,6 +124,11 @@ bool FileSystemNode::onOpen(NaviEngine& navi)
     }
 
     return true;
+}
+
+void FileSystemNode::beforeOnOpen()
+{
+    Narrator::Instance()->play(_N("updating device"));
 }
 
 bool FileSystemNode::process(NaviEngine& navi, int command, void* data)

@@ -47,7 +47,8 @@ double calculateTempo(int selection)
     return (double) (selection / 10.0) + 1;
 }
 
-TempoNode::TempoNode()
+TempoNode::TempoNode(const std::string& name, const std::string playBeforeOnOpen) :
+        VirtualContextMenuNode(name, playBeforeOnOpen)
 {
     isOpen = false;
     currentChild = 0;

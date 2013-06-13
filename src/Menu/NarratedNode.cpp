@@ -31,7 +31,6 @@ NarratedNode::NarratedNode(const std::string& name)
 {
     name_ = name;
     narratedStrings.push_back(name);
-    play_before_onOpen_ = "";
 }
 
 NarratedNode::NarratedNode(const std::string& name, int number)
@@ -39,7 +38,6 @@ NarratedNode::NarratedNode(const std::string& name, int number)
     appendNarratedString(number);
     name_ = name;
     narratedStrings.push_back(name);
-    play_before_onOpen_ = "";
 
     std::ostringstream uri_from_anything;
     uri_from_anything << reinterpret_cast<long>(this);

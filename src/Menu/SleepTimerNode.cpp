@@ -36,7 +36,8 @@ log4cxx::LoggerPtr sleepTimeNodeLog(log4cxx::Logger::getLogger("kolibre.clientco
 
 using namespace naviengine;
 
-SleepTimerNode::SleepTimerNode(ClientCore* clientcore) :
+SleepTimerNode::SleepTimerNode(ClientCore* clientcore, const std::string& name, const std::string& playBeforeOnOpen) :
+        VirtualContextMenuNode(name, playBeforeOnOpen),
         clientcore_(clientcore)
 {
     isOpen = false;

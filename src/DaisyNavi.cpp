@@ -19,6 +19,7 @@
 
 #include "DaisyNavi.h"
 #include "Navi.h"
+#include "Menu/ContextMenuNode.h"
 #include "Menu/BookInfoNode.h"
 #include "Menu/NarratedNode.h"
 #include "Menu/GotoPageNode.h"
@@ -124,10 +125,7 @@ bool DaisyNavi::menu(NaviEngine& navi)
     //GOTO
     if (bookInfo->mTotalTime.tm_hour != -1 && bookInfo->mTotalTime.tm_min != -1 && bookInfo->mTotalTime.tm_sec != -1)
     {
-        MenuNode* jumpNode = new MenuNode();
-        jumpNode->name_ = _N("jump to");
-        jumpNode->info_ = _N("choose option using left and right arrows, open using play button");
-        jumpNode->play_before_onOpen_ = _N("opening jump to");
+        ContextMenuNode* jumpNode = new ContextMenuNode(_N("jump to"), _N("opening jump to"));
         contextMenu->addNode(jumpNode);
         {
             const unsigned int totalTime = bookInfo->mTotalTime.tm_hour * 60 * 60 + bookInfo->mTotalTime.tm_min * 60 + bookInfo->mTotalTime.tm_sec;
@@ -148,10 +146,9 @@ bool DaisyNavi::menu(NaviEngine& navi)
         }
     }
 
-    BookInfoNode* info = new BookInfoNode;
-    buildInfoNode(info);
-    info->play_before_onOpen_ = _N("loading content info");
-    contextMenu->addNode(info);
+    BookInfoNode* infoNode = new BookInfoNode(_N("content info"), _N("loading content info"));
+    buildInfoNode(infoNode);
+    contextMenu->addNode(infoNode);
 
     bool success = navi.openMenu(contextMenu, true);
     if (success)
@@ -1464,9 +1461,9 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
         break;
     case COMMAND_OPEN_BOOKINFO:
     {
-        BookInfoNode* info = new BookInfoNode;
-        buildInfoNode(info);
-        if (navi.openMenu(info, false))
+        BookInfoNode* infoNode = new BookInfoNode(_N("content info"), _N("loading content info"));
+        buildInfoNode(infoNode);
+        if (navi.openMenu(infoNode, false))
         {
             bContextMenuIsOpen = true;
             Narrator::Instance()->setPushCommandFinished(false); // While menu is open don't send NARRATORFINISHED COMMANDS TO THE QUEUE

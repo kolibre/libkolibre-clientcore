@@ -39,6 +39,7 @@ public:
     // virtual methods from naviengine::AnyNode
     bool menu(naviengine::NaviEngine&);
     bool onOpen(naviengine::NaviEngine&);
+    void beforeOnOpen();
     bool process(naviengine::NaviEngine&, int command, void* data = 0);
     bool next(naviengine::NaviEngine&);
     bool prev(naviengine::NaviEngine&);

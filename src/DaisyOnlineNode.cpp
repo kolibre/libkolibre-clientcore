@@ -81,8 +81,6 @@ DaisyOnlineNode::DaisyOnlineNode(const std::string name, const std::string uri, 
     version_ = string(VERSION_PACKAGE_VERSION);
     serialNumber_ = "";
 
-    play_before_onOpen_ = _N("updating service");
-
     // connect slots to signals
     sessionInit_signal.connect(boost::bind(&DaisyOnlineNode::onSessionInit, this));
     issueContent_signal.connect(boost::bind(&DaisyOnlineNode::onIssueContent, this));
@@ -145,40 +143,12 @@ bool DaisyOnlineNode::menu(NaviEngine& navi)
 bool DaisyOnlineNode::up(NaviEngine& navi)
 {
     bool ret = MenuNode::up(navi);
-
-    if (ret == false)
-    {
-        // Don't update library unless 5 seconds has passed since the last update
-        if (difftime(time(NULL), lastUpdate_) < 5)
-        {
-            LOG4CXX_WARN(onlineNodeLog, "Update aborted since 5 seconds hasn't passed since last update");
-            announceSelection();
-            return true;
-        }
-
-        loggedIn_ = false;
-
-        NaviList navilist;
-        navilist.name_ = _("Updating library");
-        navilist.info_ = _("Updating content list, please wait");
-        cq2::Command<NaviList> naviList(navilist);
-        naviList();
-
-        play_before_onOpen_ = _N("updating library");
-        Narrator::Instance()->play(play_before_onOpen_.c_str());
-        onOpen(navi);
-    }
-
     return ret;
 }
 
 bool DaisyOnlineNode::onNarrate()
 {
     const bool isSelfNarrated = true;
-
-    // don't narrate anything if we are updating the library
-    if (play_before_onOpen_ == _N("updating library"))
-        return isSelfNarrated;
 
     Narrator::Instance()->play(_N("choose option using left and right arrows, open using play button"));
     Narrator::Instance()->playLongpause();
@@ -637,6 +607,11 @@ bool DaisyOnlineNode::onOpen(NaviEngine& navi)
     return true;
 }
 
+void DaisyOnlineNode::beforeOnOpen()
+{
+    Narrator::Instance()->play(_N("updating service"));
+}
+
 bool DaisyOnlineNode::process(NaviEngine& navi, int command, void* data)
 {
     LOG4CXX_INFO(onlineNodeLog, "Processing command: " << command);
@@ -667,7 +642,6 @@ bool DaisyOnlineNode::process(NaviEngine& navi, int command, void* data)
             c();
         }
 
-        play_before_onOpen_ = _N("service");
         lastUpdate_ = time(NULL);
         navi.setCurrentChoice(firstChild());
         currentChild_ = firstChild();

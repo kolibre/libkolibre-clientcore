@@ -95,7 +95,6 @@ GotoTimeNode::GotoTimeNode(int max, DaisyNavi* daisyNavi) :
     iBookTotalTimeSeconds = iMax;
     name_ = _N("jump to time");
     info_ = _N("choose time using left and right arrows, jump to selected time using play button");
-    play_before_onOpen_ = _N("opening jump to time");
 }
 
 /*
@@ -254,6 +253,11 @@ bool GotoTimeNode::onOpen(NaviEngine&)
     renderChild(true);
     narrateEnterType();
     return true;
+}
+
+void GotoTimeNode::beforeOnOpen()
+{
+    Narrator::Instance()->play(_N("opening jump to time"));
 }
 
 bool GotoTimeNode::onNarrate()

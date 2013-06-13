@@ -55,7 +55,6 @@ GotoPercentNode::GotoPercentNode(int max, DaisyNavi* daisyNavi) :
 
     name_ = _N("jump to percent");
     info_ = _N("choose percent using left and right arrows, jump to selected percent using play button");
-    play_before_onOpen_ = _N("opening jump to percent");
 
     // create virtual childs
     for (int i = 0; i <= 100; i++)
@@ -132,6 +131,11 @@ bool GotoPercentNode::onOpen(NaviEngine&)
     renderChild(true);
     narrateEnterType();
     return true;
+}
+
+void GotoPercentNode::beforeOnOpen()
+{
+    Narrator::Instance()->play(_N("opening jump to percent"));
 }
 
 bool GotoPercentNode::onNarrate()

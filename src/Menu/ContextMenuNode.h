@@ -17,19 +17,19 @@
  * along with kolibre-clientcore. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef NAVIENGINE_BOOKINFONODE
-#define NAVIENGINE_BOOKINFONODE
+#ifndef _CONTEXTMENUNODE_H
+#define _CONTEXTMENUNODE_H
 
-#include "ContextMenuNode.h"
+#include <Nodes/MenuNode.h>
 
-class BookInfoNode: public ContextMenuNode
+class ContextMenuNode: public naviengine::MenuNode
 {
 public:
-    BookInfoNode(const std::string&, const std::string&);
+    ContextMenuNode(const std::string&, const std::string&);
+    void beforeOnOpen();
 
-    bool onOpen(naviengine::NaviEngine&);
-    bool select(naviengine::NaviEngine&);
-    bool process(naviengine::NaviEngine&, int, void*);
+protected:
+    std::string playBeforeOnOpen_;
 };
 
 #endif

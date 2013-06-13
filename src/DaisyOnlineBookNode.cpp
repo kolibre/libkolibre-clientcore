@@ -41,7 +41,6 @@ DaisyOnlineBookNode::DaisyOnlineBookNode(std::string book_id, DaisyOnlineHandler
     LOG4CXX_TRACE(bookNodeLog, "Constructor");
     book_id_ = book_id;
     pDOHandler = DOHandler;
-    play_before_onOpen_ = "";
     lastError = (errorType) -1;
 }
 
@@ -54,8 +53,6 @@ bool DaisyOnlineBookNode::onOpen(NaviEngine& navi)
 
     time_t starttime, timenow;
     time(&starttime);
-
-    Narrator::Instance()->play(_N("opening publication"));
 
     daisyUri_ = "";
     pDaisyNavi->parent_ = this;

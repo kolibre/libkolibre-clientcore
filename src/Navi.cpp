@@ -23,6 +23,7 @@
 #include "NaviListItem.h"
 #include "NaviList.h"
 #include "NaviListImpl.h"
+#include "Menu/ContextMenuNode.h"
 #include "Menu/TempoNode.h"
 #include "Menu/SleepTimerNode.h"
 #include "Commands/InternalCommands.h"
@@ -312,27 +313,18 @@ void Navi::narrateSetParam(std::string param, int number)
 naviengine::MenuNode* Navi::buildContextMenu()
 {
     using namespace naviengine;
-    MenuNode* contextMenu = new MenuNode();
-    contextMenu->name_ = _N("menu");
-    contextMenu->play_before_onOpen_ = _N("opening main menu");
-    contextMenu->info_ = _N("choose option using left and right arrows, open using play button");
+    ContextMenuNode* contextMenu = new ContextMenuNode(_N("menu"), _N("opening main menu"));
 
     // We have so few settings that we can add them directly under context
     {
-        VirtualMenuNode* subMenuNode = 0;
+        VirtualContextMenuNode* subMenuNode = 0;
 
         //TEMPO
-        subMenuNode = new TempoNode;
-        subMenuNode->name_ = _N("playback speed");
-        subMenuNode->play_before_onOpen_ = _N("opening playback speed menu");
-        subMenuNode->info_ = _N("choose option using left and right arrows, open using play button");
+        subMenuNode = new TempoNode(_N("playback speed"), _N("opening playback speed menu"));
         contextMenu->addNode(subMenuNode);
 
         //SLEEP
-        subMenuNode = new SleepTimerNode(clientcore_);
-        subMenuNode->name_ = _N("sleep timer");
-        subMenuNode->play_before_onOpen_ = _N("opening sleep timer");
-        subMenuNode->info_ = _N("choose option using left and right arrows, open using play button");
+        subMenuNode = new SleepTimerNode(clientcore_, _N("sleep timer"), _N("opening sleep timer"));
         contextMenu->addNode(subMenuNode);
     }
 

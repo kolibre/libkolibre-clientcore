@@ -38,6 +38,7 @@ public:
     bool select(naviengine::NaviEngine&);
     bool selectByUri(naviengine::NaviEngine&, std::string);
     bool onOpen(naviengine::NaviEngine&);
+    void beforeOnOpen();
     bool onNarrate();
 
 private:

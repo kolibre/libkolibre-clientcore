@@ -81,6 +81,10 @@ public:
     {
         return false; // Should never be opened
     }
+    virtual void beforeOnOpen()
+    {
+        // Should never be opened
+    }
 
     // Always narrated by itself.
     virtual bool onNarrate();
