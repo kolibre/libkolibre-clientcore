@@ -182,6 +182,7 @@
 # Daisy Online
 #
 
+"online service"
 "service"
 "updating service"
 "service contains {1} publication"
@@ -202,6 +203,10 @@
 # File System
 #
 
+"usb device"
+"sd device"
+"cdrom device"
+"local device"
 "device"
 "updating device"
 "device contains {1} publication"

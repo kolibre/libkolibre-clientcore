@@ -185,6 +185,7 @@
 # DAISYONLINE PROMPTS
 #
 
+"online service";"verkkopalvelu"
 "service";"palvelu"
 "updating service";"päivitetään palvelua"
 "service contains {1} publication";"palvelusta löytyy yksi julkaisu"
@@ -205,6 +206,10 @@
 # FILESYSTEM PROMPTS
 #
 
+"usb device";"usb muisti"
+"sd device";"sd-kortti"
+"cdrom device";"cd-levy"
+"local device";"paikallinen muisti"
 "device";"laite"
 "updating device";"päivitetään laitetta"
 "device contains {1} publication";"laitteesta löytyy yksi julkaisu"

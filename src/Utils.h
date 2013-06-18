@@ -20,6 +20,7 @@
 #ifndef _UTILS_H
 #define _UTILS_H
 
+#include <algorithm>
 #include <string>
 #include <cstdlib>
 #include <vector>
@@ -170,6 +171,19 @@ public:
             }
         }
         return matches;
+    }
+
+    static std::string toLower(std::string data)
+    {
+        std::transform(data.begin(), data.end(), data.begin(), ::tolower);
+        return data;
+    }
+
+    static bool contains(std::string haystack, std::string needle)
+    {
+        if (std::string::npos != haystack.find(needle))
+            return true;
+        return false;
     }
 };
 

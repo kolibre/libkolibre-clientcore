@@ -184,6 +184,7 @@
 # DAISYONLINE PROMPTS
 #
 
+"online service";"nättjänst"
 "service";"tjänst"
 "updating service";"uppdaterar tjänsten"
 "service contains {1} publication";"tjänsten innehåller en publikation"
@@ -204,6 +205,10 @@
 # FILESYSTEM PROMPTS
 #
 
+"usb device";"usb minne"
+"sd device";"sd kort"
+"cdrom device";"cd-skiva"
+"local device";"lokalt minne"
 "device";"enhet"
 "updating device";"uppdaterar enheten"
 "device contains {1} publication";"enheten innehåller en publikation"

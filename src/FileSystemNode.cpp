@@ -38,7 +38,7 @@ using namespace naviengine;
 FileSystemNode::FileSystemNode(const std::string name, const std::string path)
 {
     LOG4CXX_TRACE(fsNodeLog, "Constructor");
-    name_ = "FileSystem";
+    name_ = "FileSystem_" + name;
     fsName_ = name;
     fsPath_ = path;
 }
@@ -134,6 +134,21 @@ void FileSystemNode::beforeOnOpen()
 bool FileSystemNode::process(NaviEngine& navi, int command, void* data)
 {
     return false;
+}
+
+bool FileSystemNode::narrateName()
+{
+    const bool isSelfNarrated = true;
+    std::string lcName = Utils::toLower(fsName_);
+    if (Utils::contains(lcName, "usb"))
+        Narrator::Instance()->play(_N("usb device"));
+    else if (Utils::contains(lcName, "sd"))
+        Narrator::Instance()->play(_N("sd device"));
+    else if (Utils::contains(lcName, "cdrom"))
+        Narrator::Instance()->play(_N("cdrom device"));
+    else
+        Narrator::Instance()->play(_N("local device"));
+    return isSelfNarrated;
 }
 
 bool FileSystemNode::narrateInfo()

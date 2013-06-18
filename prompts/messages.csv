@@ -183,6 +183,7 @@ prompt;"opening source"
 # DAISYONLINE PROMPTS
 #
 
+prompt;"online service"
 prompt;"service"
 prompt;"updating service"
 prompt;"service contains {1} publication"
@@ -203,6 +204,10 @@ prompt;"retrying shortly"
 # FILESYSTEM PROMPTS
 #
 
+prompt;"usb device"
+prompt;"sd device"
+prompt;"cdrom device"
+prompt;"local device"
 prompt;"device"
 prompt;"updating device"
 prompt;"device contains {1} publication"

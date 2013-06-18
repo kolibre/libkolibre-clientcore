@@ -233,7 +233,7 @@ void RootNode::announceSelection()
 
         Narrator::Instance()->setParameter("1", currentChoice + 1);
         Narrator::Instance()->play(_N("source no. {1}"));
-        //Narrator::Instance()->play(currentChild_->name_.c_str());
+        currentChild_->narrateName();
 
         NaviListItem item = navilist_.items[currentChoice];
         cq2::Command<NaviListItem> naviItem(item);
