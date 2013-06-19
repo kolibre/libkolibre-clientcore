@@ -38,7 +38,6 @@
 #include <unistd.h>
 #include <iostream>
 #include <boost/regex.hpp>
-#include <algorithm>
 #include <libintl.h>
 #include <log4cxx/logger.h>
 
@@ -258,8 +257,7 @@ void ClientCore::setLanguage(std::string lang)
     if (boost::regex_match(lang.c_str(), m, e))
     {
         // only use the first two letters in lower case
-        std::string langCode = lang.substr(0, 2);
-        std::transform(langCode.begin(), langCode.end(), langCode.begin(), ::tolower);
+        std::string langCode = Utils::toLower(lang.substr(0, 2));
         Settings *settings = Settings::Instance();
         settings->write<std::string>("language", langCode);
         LOG4CXX_DEBUG(clientcoreLog, "Setting language to '" << langCode << "'");

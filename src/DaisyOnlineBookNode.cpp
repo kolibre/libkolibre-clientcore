@@ -22,13 +22,13 @@
 #include "CommandQueue2/CommandQueue.h"
 #include "DaisyNavi.h"
 #include "Defines.h"
+#include "Utils.h"
 
 #include <Narrator.h>
 #include <NaviEngine.h>
 #include <DaisyOnlineHandler.h>
 
 #include <cstring>
-#include <algorithm>
 #include <log4cxx/logger.h>
 
 // create logger which will become a child to logger kolibre.clientcore
@@ -112,10 +112,7 @@ bool DaisyOnlineBookNode::onOpen(NaviEngine& navi)
         }
 
         // is this ncc.html file
-        std::string filename(resources[i].getLocalUri());
-        //filename = tolower(filename.c_str());
-        std::transform(filename.begin(), filename.end(), filename.begin(), (int (*)(int))tolower);
-
+        std::string filename = Utils::toLower(resources[i].getLocalUri());
         if (filename == "ncc.html")
         {
             LOG4CXX_INFO(bookNodeLog, "Found uri to ncc: " << daisyUri_);

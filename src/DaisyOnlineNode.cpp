@@ -27,6 +27,7 @@
 #include "Commands/InternalCommands.h"
 #include "CommandQueue2/CommandQueue.h"
 #include "MediaSourceManager.h"
+#include "Utils.h"
 
 #include <DataStreamHandler.h>
 #include <Narrator.h>
@@ -34,7 +35,6 @@
 
 #include <time.h>
 #include <iostream>
-#include <algorithm>
 #include <libintl.h>
 #include <log4cxx/logger.h>
 
@@ -783,8 +783,7 @@ std::string DaisyOnlineNode::getLangCode(std::string language)
         return "unknown";
     }
 
-    std::string lang_code = lang_str.substr(0, 2);
-    std::transform(lang_code.begin(), lang_code.end(), lang_code.begin(), ::tolower);
+    std::string lang_code = Utils::toLower(lang_str.substr(0, 2));
 
     return lang_code;
 }
