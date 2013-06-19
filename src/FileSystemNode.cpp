@@ -28,6 +28,7 @@
 #include <Narrator.h>
 #include <NaviEngine.h>
 
+#include <sstream>
 #include <log4cxx/logger.h>
 
 // create logger which will become a child to logger kolibre.clientcore
@@ -94,7 +95,9 @@ bool FileSystemNode::onOpen(NaviEngine& navi)
         DaisyBookNode* node = new DaisyBookNode(uris[0]);
 
         // invent a name for it
-        node->name_ = "foo";
+        ostringstream oss;
+        oss << (i+1);
+        node->name_ = "title_" + oss.str();
 
         // add node
         addNode(node);

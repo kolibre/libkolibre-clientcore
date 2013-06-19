@@ -132,7 +132,7 @@ bool RootNode::onOpen(NaviEngine& navi)
     for (int i = 0; i < fileSystemPaths; i++)
     {
         std::string name = MediaSourceManager::Instance()->getFSPname(i);
-        std::string path = MediaSourceManager::Instance()->getFSPpath(0);
+        std::string path = MediaSourceManager::Instance()->getFSPpath(i);
 
         if (Utils::isDir(path))
         {
