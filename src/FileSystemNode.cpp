@@ -92,7 +92,7 @@ bool FileSystemNode::onOpen(NaviEngine& navi)
     {
         // create book node
         LOG4CXX_DEBUG(fsNodeLog, "Creating book node: '" <<  uris[i] << "'");
-        DaisyBookNode* node = new DaisyBookNode(uris[0]);
+        DaisyBookNode* node = new DaisyBookNode(uris[i]);
 
         // invent a name for it
         ostringstream oss;
