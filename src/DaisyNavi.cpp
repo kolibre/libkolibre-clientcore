@@ -171,10 +171,12 @@ void DaisyNavi::buildInfoNode(BookInfoNode* info)
     info->info_ = _("navigate using left and right arrows. if no input is given, all information will be read automatically");
 
     // TITLE
-    NarratedNode* title = new NarratedNode(_N("content title"), ++childNumber);
-    title->appendNarratedString(parent_->name_); // This code belongs in DaisyOnlineBookNode.
-    title->appendNarratedString(_N("longpause"));
-    info->addNode(title);
+    // Don't add title to book info since we can't play titles for offline content
+    //NarratedNode* title = new NarratedNode(_N("content title"), ++childNumber);
+    //title->appendNarratedString(parent_->name_); // This code belongs in DaisyOnlineBookNode.
+    //title->appendNarratedString(_N("longpause"));
+    //info->addNode(title);
+
     // TIMEINFO
     if (bookInfo->hasTime)
     {
