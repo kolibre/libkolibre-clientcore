@@ -87,6 +87,7 @@ private:
     std::string language_;
 
     bool loggedIn_;
+    bool serviceUpdated_;
     NaviList navilist;
     AnyNode* currentChild_;
 

@@ -52,6 +52,7 @@ public:
 private:
     NaviList navilist_;
     AnyNode* currentChild_;
+    bool pathUpdated_;
 
     std::string fsName_;
     std::string fsPath_;

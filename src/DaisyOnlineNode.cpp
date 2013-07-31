@@ -44,7 +44,7 @@ log4cxx::LoggerPtr onlineNodeLog(log4cxx::Logger::getLogger("kolibre.clientcore.
 using namespace naviengine;
 
 DaisyOnlineNode::DaisyOnlineNode(const std::string name, const std::string uri, const std::string username, const std::string password, std::string useragent) :
-        good_(true), loggedIn_(false), currentChild_(0)
+        good_(true), currentChild_(0)
 {
     LOG4CXX_TRACE(onlineNodeLog, "Constructor");
     name_ = "DaisyOnline_" + name;
@@ -57,6 +57,8 @@ DaisyOnlineNode::DaisyOnlineNode(const std::string name, const std::string uri, 
     lastUpdate_ = -1;
     lastError_ = (DaisyOnlineNode::errorType)-1;
     lastLogOnAttempt_ = (DaisyOnlineNode::errorType)-1;
+    loggedIn_ = false;
+    serviceUpdated_ = false;
 
     if (useragent.length() == 0)
         useragent = string(VERSION_PACKAGE_NAME) + "/" + VERSION_PACKAGE_VERSION;
@@ -142,6 +144,8 @@ bool DaisyOnlineNode::menu(NaviEngine& navi)
 
 bool DaisyOnlineNode::up(NaviEngine& navi)
 {
+    loggedIn_ = false;
+    serviceUpdated_ = false;
     bool ret = MenuNode::up(navi);
     return ret;
 }
@@ -559,6 +563,7 @@ DaisyOnlineNode::errorType DaisyOnlineNode::createBookNodes(kdo::ContentList* co
 
     LOG4CXX_DEBUG(onlineNodeLog, added << " book nodes added");
 
+    serviceUpdated_ = true;
     lastError_ = OK;
     return lastError_;
 }
@@ -604,7 +609,7 @@ DaisyOnlineNode::errorType DaisyOnlineNode::faultHandler(DaisyOnlineHandler::sta
 
 bool DaisyOnlineNode::onOpen(NaviEngine& navi)
 {
-    if (loggedIn_ && navi.good())
+    if (loggedIn_ && serviceUpdated_ && navi.good())
     {
         currentChild_ = navi.getCurrentChoice();
         announce();
@@ -621,7 +626,8 @@ bool DaisyOnlineNode::onOpen(NaviEngine& navi)
 
 void DaisyOnlineNode::beforeOnOpen()
 {
-    Narrator::Instance()->play(_N("updating service"));
+    if (not serviceUpdated_)
+        Narrator::Instance()->play(_N("updating service"));
 }
 
 bool DaisyOnlineNode::process(NaviEngine& navi, int command, void* data)

@@ -42,6 +42,7 @@ FileSystemNode::FileSystemNode(const std::string name, const std::string path)
     name_ = "FileSystem_" + name;
     fsName_ = name;
     fsPath_ = path;
+    pathUpdated_ = false;
 }
 
 FileSystemNode::~FileSystemNode()
@@ -74,44 +75,50 @@ bool FileSystemNode::menu(NaviEngine& navi)
 
 bool FileSystemNode::up(NaviEngine& navi)
 {
+    pathUpdated_ = false;
     bool ret = MenuNode::up(navi);
     return ret;
 }
 
 bool FileSystemNode::onOpen(NaviEngine& navi)
 {
-    navi.setCurrentChoice(NULL);
-    clearNodes();
-    navilist_.items.clear();
-
-    // Create sources defined in MediaSourceManager
-    LOG4CXX_INFO(fsNodeLog, "Searching for supported content in path '" << fsPath_ << "'");
-
-    std::vector<std::string> uris = Utils::recursiveSearchByFilename(fsPath_, "ncc.html");
-    for (int i = 0; i < uris.size(); i++)
+    if (not pathUpdated_)
     {
-        // create book node
-        LOG4CXX_DEBUG(fsNodeLog, "Creating book node: '" <<  uris[i] << "'");
-        DaisyBookNode* node = new DaisyBookNode(uris[i]);
+        navi.setCurrentChoice(NULL);
+        clearNodes();
+        navilist_.items.clear();
 
-        // invent a name for it
-        ostringstream oss;
-        oss << (i+1);
-        node->name_ = "title_" + oss.str();
+        // Create sources defined in MediaSourceManager
+        LOG4CXX_INFO(fsNodeLog, "Searching for supported content in path '" << fsPath_ << "'");
 
-        // add node
-        addNode(node);
+        std::vector<std::string> uris = Utils::recursiveSearchByFilename(fsPath_, "ncc.html");
+        for (int i = 0; i < uris.size(); i++)
+        {
+            // create book node
+            LOG4CXX_DEBUG(fsNodeLog, "Creating book node: '" <<  uris[i] << "'");
+            DaisyBookNode* node = new DaisyBookNode(uris[i]);
 
-        // create a NaviListItem and store it in list for the NaviList signal
-        NaviListItem item(node->uri_, node->name_);
-        navilist_.items.push_back(item);
+            // invent a name for it
+            ostringstream oss;
+            oss << (i+1);
+            node->name_ = "title_" + oss.str();
 
-    }
+            // add node
+            addNode(node);
 
-    if (navi.getCurrentChoice() == NULL && numberOfChildren() > 0)
-    {
-        navi.setCurrentChoice(firstChild());
-        currentChild_ = firstChild();
+            // create a NaviListItem and store it in list for the NaviList signal
+            NaviListItem item(node->uri_, node->name_);
+            navilist_.items.push_back(item);
+
+        }
+
+        if (navi.getCurrentChoice() == NULL && numberOfChildren() > 0)
+        {
+            navi.setCurrentChoice(firstChild());
+            currentChild_ = firstChild();
+        }
+
+        pathUpdated_ = true;
     }
 
     currentChild_ = navi.getCurrentChoice();
@@ -131,7 +138,8 @@ bool FileSystemNode::onOpen(NaviEngine& navi)
 
 void FileSystemNode::beforeOnOpen()
 {
-    Narrator::Instance()->play(_N("updating device"));
+    if (not pathUpdated_)
+        Narrator::Instance()->play(_N("updating device"));
 }
 
 bool FileSystemNode::process(NaviEngine& navi, int command, void* data)
