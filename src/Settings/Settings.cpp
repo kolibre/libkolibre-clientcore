@@ -186,6 +186,8 @@ Settings::Settings():
 Settings::~Settings()
 {
     LOG4CXX_INFO(settingsLog, "Deleting settings instance");
+    delete pDBHandle;
+    pDBHandle=NULL;
 }
 
 bool Settings::setVersion(int version)
