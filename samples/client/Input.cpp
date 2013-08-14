@@ -120,6 +120,8 @@ Input::Input()
 
     int id = 0;
 
+    // Set default mousetype
+    mousetype = MOUSE_TYPE_NONE;
     if (mousefd != -1)
     {
 
