@@ -36,3 +36,5 @@ clean-local: clean-local-check
 
 clean-local-check:
 	-rm -rf *.db
+
+.NOTPARALLEL:
