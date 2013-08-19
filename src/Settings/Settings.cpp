@@ -192,6 +192,7 @@ Settings::~Settings()
 
 bool Settings::setVersion(int version)
 {
+    LOG4CXX_DEBUG(settingsLog, "Setting database version to " << version);
     try {
         pthread_mutex_lock( &settings_mutex );
         if (!pDBHandle->prepare("create table if not exists version (number INT)"))
@@ -206,9 +207,9 @@ bool Settings::setVersion(int version)
             throw 1;
         }
         pthread_mutex_unlock(&settings_mutex);
-        int version = getVersion();
+        int previousVersion = getVersion();
         pthread_mutex_lock( &settings_mutex );
-        if (version == 0)
+        if (previousVersion == 0)
         {
             LOG4CXX_DEBUG(settingsLog, "insert into version " << version);
             if (!pDBHandle->prepare("insert into version values(?)"))
