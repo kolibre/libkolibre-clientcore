@@ -261,7 +261,7 @@ int Settings::getVersion()
             throw 1;
         }
 
-        DBResult result;
+        settings::DBResult result;
         if (!pDBHandle->perform(&result))
         {
             LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");
@@ -316,7 +316,7 @@ bool Settings::read(SettingsItem &item, const string &_setting)
             throw 1;
         }
 
-        DBResult result;
+        settings::DBResult result;
         if (!pDBHandle->perform(&result))
         {
             LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");
@@ -353,7 +353,7 @@ bool Settings::read(SettingsItem &item, const string &_setting)
             throw 1;
         }
 
-        DBResult result2;
+        settings::DBResult result2;
         if (!pDBHandle->perform(&result2))
         {
             LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");
