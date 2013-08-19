@@ -36,7 +36,8 @@ void remove_file(const char* file)
         cout << "Settings db removed" << endl;
 }
 
-void *exerciseDatabase( void *ptr ){
+void *exerciseDatabase( void *ptr )
+{
     Settings *settings = Settings::Instance();
 
     assert(settings->write<int>("integerValue", 13));
@@ -88,10 +89,8 @@ int main(void)
     logger->setLevel(log4cxx::Level::getTrace());
     cout << "1..2" << endl;
     cout << "#" << endl
-        << "# Try reading and  writing to database from differetnt threadsry" << endl
+        << "# Try reading and writing to database from different threads" << endl
         << "#" << endl;
-
-    
 
     //Remove old settings databases
     remove_file( (data_path_value + "/settings.db").c_str() );
