@@ -37,7 +37,7 @@ log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("kolibre"));
 log4cxx::LoggerPtr sampleClientMainLog(log4cxx::Logger::getLogger("kolibre.sampleclient.main"));
 
 // exit values:     0 -> SIGINT, SIGQUIT, SIGTERM
-//                  1 -> SLEEPTIMER
+//                  100 -> SLEEPTIMER TIMEOUT
 int exitValue = 0;
 bool exitSignal = false;
 void handleSignal(int sig);
@@ -156,7 +156,7 @@ int main(int argc, char **argv)
 // Handle boost signals
 void onSleepTimeout()
 {
-    exitValue = -1;
+    exitValue = 100;
 }
 
 // Handle the different unix signals we might recieve
