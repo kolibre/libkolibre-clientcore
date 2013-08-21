@@ -436,7 +436,12 @@ bool DaisyNavi::onOpen(NaviEngine&)
         lastsection = -1;
         return true;
     }
-    bool hasLastmark = dh->setupBook();
+
+    if (not dh->setupBook())
+    {
+        dh->closeBook();
+        return false;
+    }
 
     DaisyHandler::BookInfo *bookInfo = dh->getBookInfo();
     DaisyHandler::PosInfo *posInfo = dh->getPosInfo();
@@ -452,7 +457,7 @@ bool DaisyNavi::onOpen(NaviEngine&)
      sectionIdxReportingEnabled = ((bookInfo->mTocItems + pageCount) < 1000);
      */
 
-    if (hasLastmark)
+    if (dh->continueFromLastmark())
     {
         narrator->play(_N("continuing from last known position"));
         narrator->playShortpause();
