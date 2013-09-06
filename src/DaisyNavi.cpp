@@ -1542,6 +1542,9 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
     if (amisSuccess == false)
     {
         amis::AmisError err = dh->getLastError();
+        stringstream details;
+        details << ": \"" << err.getMessage() << "\" in file " << err.getFilename() << " from " << err.getSourceModuleName();
+
         switch (err.getCode())
         {
         case amis::AT_END:
@@ -1552,42 +1555,55 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
             break;
 
         case amis::AT_BEGINNING:
-            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error AT_BEGINNING");
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error AT_BEGINNING" << details);
             narrator->play(_N("start of content"));
             break;
 
+        case PERMISSION_ERROR:
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error PERMISSION_ERROR" << details);
+            narrator->play(_N("error loading data"));
+            player->stop();
+            break;
+
+        case IO_ERROR:
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error IO_ERROR" << details);
+            narrator->play(_N("error loading data"));
+            player->stop();
+            break;
+
         case amis::NOT_FOUND:
-            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error NOT_FOUND");
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error NOT_FOUND" << details);
             narrator->play(_N("error loading data"));
             break;
 
         case amis::UNDEFINED_ERROR:
-            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error UNDEFINED_ERROR");
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error UNDEFINED_ERROR" << details);
             narrator->play(_N("content error"));
             break;
 
         case amis::NOT_SUPPORTED:
-            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error NOT_SUPPORTED");
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error NOT_SUPPORTED" << details);
             narrator->play(_N("content error"));
             break;
 
         case amis::PARSE_ERROR:
-            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error PARSE_ERROR");
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error PARSE_ERROR" << details);
             narrator->play(_N("content error"));
             break;
 
         case amis::NOT_INITIALIZED:
-            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error NOT_INITIALIZED");
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error NOT_INITIALIZED" << details);
             narrator->play(_N("content error"));
             break;
 
         case amis::OK:
-            LOG4CXX_WARN(daisyNaviLog, "Jump failed with error OK");
+            LOG4CXX_WARN(daisyNaviLog, "Jump failed with error OK" << details);
             break;
         default:
-            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with no error set");
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with but error code was not handled" << details);
             break;
         }
+        return false;
     }
     else
     {
@@ -1596,6 +1612,7 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
         {
         case COMMAND_UP:
         case COMMAND_DOWN:
+        case COMMAND_INFO:
             break;
         default:
             bUserAtEndOfBook = false;
