@@ -1562,15 +1562,17 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
 
         case PERMISSION_ERROR:
             LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error PERMISSION_ERROR" << details);
+            closeBook();
             narrator->play(_N("error loading data"));
-            player->stop();
-            break;
+            while(narrator->isSpeaking());
+            return up(navi); // return to parent node
 
         case IO_ERROR:
             LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error IO_ERROR" << details);
+            closeBook();
             narrator->play(_N("error loading data"));
-            player->stop();
-            break;
+            while(narrator->isSpeaking());
+            return up(navi); // return to parent node
 
         case amis::NOT_FOUND:
             LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error NOT_FOUND" << details);
