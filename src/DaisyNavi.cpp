@@ -1542,8 +1542,9 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
     if (amisSuccess == false)
     {
         amis::AmisError err = dh->getLastError();
-        stringstream details;
-        details << ": \"" << err.getMessage() << "\" in file " << err.getFilename() << " from " << err.getSourceModuleName();
+        stringstream ss;
+        ss << ": \"" << err.getMessage() << "\" in file " << err.getFilename() << " from " << err.getSourceModuleName();
+        std::string details = ss.str();
 
         switch (err.getCode())
         {
