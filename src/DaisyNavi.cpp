@@ -617,7 +617,7 @@ DaisyNavi::DaisyNavi()
     // Setup mutex variable
     playerCallbackMutex = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
     pthread_mutex_init(playerCallbackMutex, NULL);
-    bPlayerReallySendEOS = false;
+    bOpeningNext = false;
 
     DaisyNaviLevel level("TOPLEVEL");
     cq2::Command<DaisyNaviLevel> daisyLevel(level);
@@ -652,18 +652,18 @@ bool DaisyNavi::playAudio(string filename, long long startms, long long stopms)
     return true;
 }
 
-void DaisyNavi::setPlayerReallySendEOS(bool setting)
+void DaisyNavi::setOpeningNext(bool setting)
 {
     pthread_mutex_lock(playerCallbackMutex);
-    bPlayerReallySendEOS = setting;
+    bOpeningNext = setting;
     pthread_mutex_unlock(playerCallbackMutex);
 }
 
-bool DaisyNavi::getPlayerReallySendEOS()
+bool DaisyNavi::isOpeningNext()
 {
     bool setting = false;
     pthread_mutex_lock(playerCallbackMutex);
-    setting = bPlayerReallySendEOS;
+    setting = bOpeningNext;
     pthread_mutex_unlock(playerCallbackMutex);
     return setting;
 }
@@ -699,29 +699,13 @@ bool DaisyNavi::playerMessageSlot(Player::playerMessage msg)
 
     case Player::PLAYER_ATEOS:
         LOG4CXX_INFO(daisyNaviLog, "ATEOS callback");
-        setPlayerReallySendEOS(true);
-        usleep(1000000); // Wait for previous file to finish playing
-        if (getPlayerReallySendEOS())
-        {
-            //player->stop();
-            // This _used_ _to_ eventually result
-            // in dh->nextPhrase() being called
-            // from the kolibre_thread context
-            // which continued the reader, but
-            // this seems a bit silly since the
-            // call passes through this class.
-            // BUG: with the NaviEngine framework
-            // COMMAND NEXT is not passed down
-            // from ClientCore.cpp to DaisyNavi,
-            // there is no reason why ClientCore.cpp
-            // should know anything about a next
-            // phrase command.
+        if(!isOpeningNext()) {
             cq2::Command<INTERNAL_COMMAND> c(COMMAND_NEXT);
             c();
         }
         else
         {
-            LOG4CXX_WARN(daisyNaviLog, "ATEOS not sending COMMAND_NEXT since some player event happened while waiting for stream to finish playing");
+            LOG4CXX_WARN(daisyNaviLog, "ATEOS not sending COMMAND_NEXT we are already handling opening next");
         }
         return true;
         break;
@@ -916,7 +900,7 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
     LOG4CXX_DEBUG(daisyNaviLog, "Processing command: " << command);
     bool amisSuccess = true;
     unsigned int totalTime;
-    setPlayerReallySendEOS(false);
+
     DaisyHandler::BookInfo *bookInfo;
 
     // If we are pausing, any key should continue playback
@@ -1308,10 +1292,12 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
     case COMMAND_NEXT:
         LOG4CXX_INFO(daisyNaviLog, "COMMAND_NEXT received");
         LOG4CXX_INFO(daisyNaviLog, "Going to next phrase");
+        setOpeningNext(true);
         amisSuccess = dh->nextPhrase();
         LOG4CXX_INFO(daisyNaviLog, "operation" << (amisSuccess == true ? " was successful" : " failed"));
         if (amisSuccess && !player->isPlaying() && !narrator->isSpeaking())
             player->resume();
+        setOpeningNext(false);
         break;
 
     case COMMAND_PAUSE:
