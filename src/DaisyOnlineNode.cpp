@@ -394,6 +394,7 @@ DaisyOnlineNode::errorType DaisyOnlineNode::issueContentList(kdo::ContentList* c
         if ((i > 1) && (timenow - starttime > 3))
         {
             Narrator::Instance()->playWait();
+            time(&starttime);
         }
 
         // wait until we can issue this item unless it's the first item in contentList
@@ -500,6 +501,7 @@ DaisyOnlineNode::errorType DaisyOnlineNode::createBookNodes(kdo::ContentList* co
         if ((i + 1 < numberOfContentItems) && (timenow - starttime > 3))
         {
             Narrator::Instance()->playWait();
+            time(&starttime);
         }
 
         // join id and text string to avoid duplicates in database
