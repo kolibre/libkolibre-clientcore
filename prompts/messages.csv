@@ -59,6 +59,14 @@ prompt;"disable sleep timer"
 prompt;"sleep timer enabled"
 prompt;"sleep timer disabled"
 
+# auto open content
+prompt;"auto play"
+prompt;"opening auto play"
+prompt;"enable auto play"
+prompt;"disable auto play"
+prompt;"auto play enabled"
+prompt;"auto play disabled"
+
 # jump to
 prompt;"jump to"
 prompt;"jump to percent"

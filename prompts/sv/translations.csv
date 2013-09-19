@@ -60,6 +60,14 @@
 "sleep timer enabled";"Insomningstimern är inställd på"
 "sleep timer disabled";"Automatisk avstängning är avaktiverad"
 
+# auto open content
+"auto play";"automatisk uppspelning"
+"opening auto play";"öppnar automatisk uppspelning"
+"enable auto play";"aktivera automatisk uppspelning"
+"disable auto play";"avaktivera automatisk uppspelning"
+"auto play enabled";"automatisk uppspelning aktiverad"
+"auto play disabled";"automatisk uppspelning avaktiverad"
+
 # jump to
 "jump to";"hoppa till"
 "jump to percent";"procent"

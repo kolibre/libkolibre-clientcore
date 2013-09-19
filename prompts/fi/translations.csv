@@ -60,6 +60,14 @@
 "sleep timer enabled";"Automaattinen sammutus on asettu"
 "sleep timer disabled";"Automaattinen sammutus kytketty pois päältä"
 
+# auto open content
+"auto play";"automaattinen toisto"
+"opening auto play";"avataan automaattinen toisto"
+"enable auto play";"aseta automaattinen toisto"
+"disable auto play";"kytke automaattinen toisto pois päältä"
+"auto play enabled";"automaattinen toisto on asettu"
+"auto play disabled";"automaattinen toisto kytketty pois päältä"
+
 # jump to
 "jump to";"siirry kohteeseen"
 "jump to percent";"siirry prosenttiin"

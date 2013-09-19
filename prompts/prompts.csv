@@ -55,6 +55,14 @@
 "sleep timer enabled"
 "sleep timer disabled"
 
+# auto open content
+"auto play"
+"opening auto play"
+"enable auto play"
+"disable auto play"
+"auto play enabled"
+"auto play disabled"
+
 # jump to menu
 "jump to"
 "jump to percent"

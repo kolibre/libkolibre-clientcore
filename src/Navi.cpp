@@ -25,6 +25,7 @@
 #include "NaviListImpl.h"
 #include "Menu/TempoNode.h"
 #include "Menu/SleepTimerNode.h"
+#include "Menu/AutoPlayNode.h"
 #include "Commands/InternalCommands.h"
 #include "CommandQueue2/CommandQueue.h"
 
@@ -271,6 +272,13 @@ naviengine::MenuNode* Navi::buildContextMenu()
         subMenuNode = new SleepTimerNode(clientcore_);
         subMenuNode->name_ = _N("sleep timer");
         subMenuNode->play_before_onOpen_ = _N("opening sleep timer");
+        subMenuNode->info_ = _N("choose option using left and right arrows, open using play button");
+        contextMenu->addNode(subMenuNode);
+
+        // AUTOPLAY
+        subMenuNode = new AutoPlayNode();
+        subMenuNode->name_ = _N("auto play");
+        subMenuNode->play_before_onOpen_ = _N("opening auto play");
         subMenuNode->info_ = _N("choose option using left and right arrows, open using play button");
         contextMenu->addNode(subMenuNode);
     }
