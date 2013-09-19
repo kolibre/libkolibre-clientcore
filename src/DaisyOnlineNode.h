@@ -103,6 +103,7 @@ private:
     std::string version_;
     std::string language_;
 
+    bool firstChildNotOpened_;
     bool loggedIn_;
     NaviList navilist;
     AnyNode* currentChild_;

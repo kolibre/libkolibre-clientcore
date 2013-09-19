@@ -86,6 +86,7 @@ DaisyOnlineNode::~DaisyOnlineNode()
 DaisyOnlineNode::DaisyOnlineNode(const std::string uri, const std::string username, const std::string password, const std::string& client_home, string useragent) :
         good_(true), loggedIn_(false), currentChild_(0)
 {
+    firstChildNotOpened_ = true;
     username_ = username;
     password_ = password;
     previousUsername_ = "";
@@ -634,6 +635,17 @@ bool DaisyOnlineNode::process(NaviEngine& navi, int command, void* data)
         navi.setCurrentChoice(firstChild());
         currentChild_ = firstChild();
         announce();
+
+        bool autoPlay = Settings::Instance()->read<bool>("autoplay", false);
+        if (autoPlay && firstChildNotOpened_ && numberOfChildren() >= 1)
+        {
+            // wait for narrator before sending command
+            usleep(500000); while (Narrator::Instance()->isSpeaking()) usleep(100000);
+            firstChildNotOpened_ = false;
+            LOG4CXX_INFO(onlineNodeLog, "auto open first child");
+            cq2::Command<INTERNAL_COMMAND> c(COMMAND_DOWN);
+            c();
+        }
     }
         break;
 
