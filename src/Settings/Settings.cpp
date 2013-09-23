@@ -186,10 +186,13 @@ Settings::Settings():
 Settings::~Settings()
 {
     LOG4CXX_INFO(settingsLog, "Deleting settings instance");
+    delete pDBHandle;
+    pDBHandle=NULL;
 }
 
 bool Settings::setVersion(int version)
 {
+    LOG4CXX_DEBUG(settingsLog, "Setting database version to " << version);
     try {
         pthread_mutex_lock( &settings_mutex );
         if (!pDBHandle->prepare("create table if not exists version (number INT)"))
@@ -204,9 +207,9 @@ bool Settings::setVersion(int version)
             throw 1;
         }
         pthread_mutex_unlock(&settings_mutex);
-        int version = getVersion();
+        int previousVersion = getVersion();
         pthread_mutex_lock( &settings_mutex );
-        if (version == 0)
+        if (previousVersion == 0)
         {
             LOG4CXX_DEBUG(settingsLog, "insert into version " << version);
             if (!pDBHandle->prepare("insert into version values(?)"))
@@ -258,7 +261,7 @@ int Settings::getVersion()
             throw 1;
         }
 
-        DBResult result;
+        settings::DBResult result;
         if (!pDBHandle->perform(&result))
         {
             LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");
@@ -313,7 +316,7 @@ bool Settings::read(SettingsItem &item, const string &_setting)
             throw 1;
         }
 
-        DBResult result;
+        settings::DBResult result;
         if (!pDBHandle->perform(&result))
         {
             LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");
@@ -350,7 +353,7 @@ bool Settings::read(SettingsItem &item, const string &_setting)
             throw 1;
         }
 
-        DBResult result2;
+        settings::DBResult result2;
         if (!pDBHandle->perform(&result2))
         {
             LOG4CXX_ERROR(settingsLog, "Query failed '" << pDBHandle->getLasterror() << "'");

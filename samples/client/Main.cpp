@@ -36,8 +36,11 @@ log4cxx::LoggerPtr logger(log4cxx::Logger::getLogger("kolibre"));
 // create logger which will become a child to logger kolibre.sampleclient
 log4cxx::LoggerPtr sampleClientMainLog(log4cxx::Logger::getLogger("kolibre.sampleclient.main"));
 
-// exit values:     0 -> SIGINT, SIGQUIT, SIGTERM
-//                  1 -> SLEEPTIMER
+// exit values:     0   -> NORMAL QUIT
+//                  2   -> SIGINT
+//                  3   -> SIGQUIT
+//                  15  -> SIGTERM
+//                  100 -> SLEEPTIMER TIMEOUT
 int exitValue = 0;
 bool exitSignal = false;
 void handleSignal(int sig);
@@ -150,13 +153,14 @@ int main(int argc, char **argv)
     LOG4CXX_DEBUG(sampleClientMainLog, "Deleting input");
     delete input;
 
+    LOG4CXX_INFO(sampleClientMainLog, "Exiting application with value " << exitValue);
     return exitValue;
 }
 
 // Handle boost signals
 void onSleepTimeout()
 {
-    exitValue = -1;
+    exitValue = 100;
 }
 
 // Handle the different unix signals we might recieve
@@ -165,7 +169,24 @@ void handleSignal(int sig)
     if (!exitSignal)
     {
         exitSignal = true;
-        LOG4CXX_INFO(sampleClientMainLog, "Caught signal (" << sig << "), exiting");
+        exitValue = sig;
+        std::string signal;
+        switch (sig)
+        {
+            case 2:
+                signal = "SIGINT";
+                break;
+            case 3:
+                signal = "SIGQUIT";
+                break;
+            case 15:
+                signal = "SIGTERM";
+                break;
+            default:
+                signal = "UNKNOWN";
+                break;
+        }
+        LOG4CXX_INFO(sampleClientMainLog, "Caught signal '" << signal << "' (" << sig << "), exiting application");
         Input *input = Input::Instance();
         input->keyPressed_signal(ClientCore::EXIT);
         sleep(1);

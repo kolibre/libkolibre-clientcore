@@ -50,7 +50,7 @@ GotoPageNode::GotoPageNode(int max, DaisyNavi* daisyNavi) :
     mapNarrations[NARRATE_GOINGTO] = _N("jumping to");
 
     name_ = _N("jump to page");
-    info_ = _N("choose page using left and right arrows, jump to selected page using down arrow");
+    info_ = _N("choose page using left and right arrows, jump to selected page using play button");
     play_before_onOpen_ = _N("opening jump to page");
 
     // create virtual childs

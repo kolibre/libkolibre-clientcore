@@ -16,6 +16,8 @@
 # along with kolibre-clientcore. If not, see <http://www.gnu.org/licenses/>.
 #
 
+AUTOMAKE_OPTIONS = foreign
+
 SUBDIRS = src tests $(subdirs)
 
 if SAMPLES

@@ -56,6 +56,14 @@ Input * Input::Instance()
     return pinstance;
 }
 
+enum SleepTimerOption {
+    SLEEP_OFF = 0,
+    SLEEP_15,
+    SLEEP_30,
+    SLEEP_60,
+    SLEEP_OPTION_COUNT,
+};
+
 /**
  * Constructor
  *
@@ -112,6 +120,8 @@ Input::Input()
 
     int id = 0;
 
+    // Set default mousetype
+    mousetype = MOUSE_TYPE_NONE;
     if (mousefd != -1)
     {
 
@@ -204,6 +214,7 @@ void *input_thread(void *input)
     fd_set readfds;
     int largest_fd = 0;
 
+    SleepTimerOption sleepTimerOption = SLEEP_OFF;
     ClientCore::COMMAND key_pressed = (ClientCore::COMMAND) -1;
 
     int bytes_read;
@@ -291,6 +302,11 @@ void *input_thread(void *input)
                     break;
                 case 104:
                     key_pressed = ClientCore::HOME;
+                    break;
+                case 115:
+                    // cycle between sleep timer options when key 's' is pressed
+                    sleepTimerOption = (SleepTimerOption)((sleepTimerOption + 1) % SLEEP_OPTION_COUNT);
+                    key_pressed = (ClientCore::COMMAND)(ClientCore::SLEEP_OFF + sleepTimerOption);
                     break;
                 case 27:
                     switch (buffer[1])

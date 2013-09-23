@@ -25,6 +25,7 @@
 #include "NaviListImpl.h"
 #include "Menu/TempoNode.h"
 #include "Menu/SleepTimerNode.h"
+#include "Menu/AutoPlayNode.h"
 #include "Commands/InternalCommands.h"
 #include "CommandQueue2/CommandQueue.h"
 
@@ -254,7 +255,7 @@ naviengine::MenuNode* Navi::buildContextMenu()
     MenuNode* contextMenu = new MenuNode();
     contextMenu->name_ = _N("menu");
     contextMenu->play_before_onOpen_ = _N("opening main menu");
-    contextMenu->info_ = _N("choose option using left and right arrows, open using down arrow");
+    contextMenu->info_ = _N("choose option using left and right arrows, open using play button");
 
     // We have so few settings that we can add them directly under context
     {
@@ -264,14 +265,21 @@ naviengine::MenuNode* Navi::buildContextMenu()
         subMenuNode = new TempoNode;
         subMenuNode->name_ = _N("playback speed");
         subMenuNode->play_before_onOpen_ = _N("opening playback speed menu");
-        subMenuNode->info_ = _N("choose option using left and right arrows, open using down arrow");
+        subMenuNode->info_ = _N("choose option using left and right arrows, open using play button");
         contextMenu->addNode(subMenuNode);
 
         //SLEEP
         subMenuNode = new SleepTimerNode(clientcore_);
         subMenuNode->name_ = _N("sleep timer");
         subMenuNode->play_before_onOpen_ = _N("opening sleep timer");
-        subMenuNode->info_ = _N("choose option using left and right arrows, open using down arrow");
+        subMenuNode->info_ = _N("choose option using left and right arrows, open using play button");
+        contextMenu->addNode(subMenuNode);
+
+        // AUTOPLAY
+        subMenuNode = new AutoPlayNode();
+        subMenuNode->name_ = _N("auto play");
+        subMenuNode->play_before_onOpen_ = _N("opening auto play");
+        subMenuNode->info_ = _N("choose option using left and right arrows, open using play button");
         contextMenu->addNode(subMenuNode);
     }
 

@@ -131,6 +131,7 @@ bool DaisyOnlineBookNode::onOpen(NaviEngine& navi)
         cq2::Command<INTERNAL_COMMAND> c(COMMAND_HOME);
         c();
         daisyNaviActive = false;
+        delete contentResources;
         return daisyNaviActive;
     }
 
@@ -150,6 +151,7 @@ bool DaisyOnlineBookNode::onOpen(NaviEngine& navi)
         cq2::Command<INTERNAL_COMMAND> c(COMMAND_HOME);
         c();
         daisyNaviActive = false;
+        delete contentResources;
         return daisyNaviActive;
     }
 
@@ -181,6 +183,8 @@ bool DaisyOnlineBookNode::onOpen(NaviEngine& navi)
             break;
         }
     }
+
+    delete contentResources;
 
     if (url_ == "")
     {

@@ -126,7 +126,7 @@ bool DaisyNavi::menu(NaviEngine& navi)
     {
         MenuNode* jumpNode = new MenuNode();
         jumpNode->name_ = _N("jump to");
-        jumpNode->info_ = _N("choose option using left and right arrows, open using down arrow");
+        jumpNode->info_ = _N("choose option using left and right arrows, open using play button");
         jumpNode->play_before_onOpen_ = _N("opening jump to");
         contextMenu->addNode(jumpNode);
         {
@@ -482,7 +482,7 @@ bool DaisyNavi::onOpen(NaviEngine&)
             player->resume();
     }
 
-    // If the Narrator is speaking DaisyNavi wants to know when it ends
+    // We are now ready to handle NARRATORFINISHED COMMANDS
     Narrator::Instance()->setPushCommandFinished(true);
 
     DaisyNaviLevel level(dh->getNaviLevelStr());
@@ -602,6 +602,9 @@ private:
 // DaisyNavi constructor
 DaisyNavi::DaisyNavi()
 {
+    // Disable NARRATORFINISHED COMMANDS while we are setting up the book
+    Narrator::Instance()->setPushCommandFinished(false);
+
     narrator = Narrator::Instance();
     player = Player::Instance();
     dh = DaisyHandler::Instance();
@@ -614,7 +617,7 @@ DaisyNavi::DaisyNavi()
     // Setup mutex variable
     playerCallbackMutex = (pthread_mutex_t *) malloc(sizeof(pthread_mutex_t));
     pthread_mutex_init(playerCallbackMutex, NULL);
-    bPlayerReallySendEOS = false;
+    bOpeningNext = false;
 
     DaisyNaviLevel level("TOPLEVEL");
     cq2::Command<DaisyNaviLevel> daisyLevel(level);
@@ -649,18 +652,18 @@ bool DaisyNavi::playAudio(string filename, long long startms, long long stopms)
     return true;
 }
 
-void DaisyNavi::setPlayerReallySendEOS(bool setting)
+void DaisyNavi::setOpeningNext(bool setting)
 {
     pthread_mutex_lock(playerCallbackMutex);
-    bPlayerReallySendEOS = setting;
+    bOpeningNext = setting;
     pthread_mutex_unlock(playerCallbackMutex);
 }
 
-bool DaisyNavi::getPlayerReallySendEOS()
+bool DaisyNavi::isOpeningNext()
 {
     bool setting = false;
     pthread_mutex_lock(playerCallbackMutex);
-    setting = bPlayerReallySendEOS;
+    setting = bOpeningNext;
     pthread_mutex_unlock(playerCallbackMutex);
     return setting;
 }
@@ -696,29 +699,13 @@ bool DaisyNavi::playerMessageSlot(Player::playerMessage msg)
 
     case Player::PLAYER_ATEOS:
         LOG4CXX_INFO(daisyNaviLog, "ATEOS callback");
-        setPlayerReallySendEOS(true);
-        usleep(1000000); // Wait for previous file to finish playing
-        if (getPlayerReallySendEOS())
-        {
-            //player->stop();
-            // This _used_ _to_ eventually result
-            // in dh->nextPhrase() being called
-            // from the kolibre_thread context
-            // which continued the reader, but
-            // this seems a bit silly since the
-            // call passes through this class.
-            // BUG: with the NaviEngine framework
-            // COMMAND NEXT is not passed down
-            // from ClientCore.cpp to DaisyNavi,
-            // there is no reason why ClientCore.cpp
-            // should know anything about a next
-            // phrase command.
+        if(!isOpeningNext()) {
             cq2::Command<INTERNAL_COMMAND> c(COMMAND_NEXT);
             c();
         }
         else
         {
-            LOG4CXX_WARN(daisyNaviLog, "ATEOS not sending COMMAND_NEXT since some player event happened while waiting for stream to finish playing");
+            LOG4CXX_WARN(daisyNaviLog, "ATEOS not sending COMMAND_NEXT we are already handling opening next");
         }
         return true;
         break;
@@ -737,10 +724,10 @@ bool DaisyNavi::playerMessageSlot(Player::playerMessage msg)
         LOG4CXX_INFO(daisyNaviLog, "ERROR callback");
         usleep(500000);
         narrator->play(_N("error loading data"));
-        narrator->play(_N("retrying shortly"));
         ErrorMessage error(NETWORK, "Error streaming data");
         cq2::Command<ErrorMessage> message(error);
         message();
+        closeBook();
     }
         return false;
         break;
@@ -797,6 +784,7 @@ bool DaisyNavi::open(const string &uri)
             if (waitCounter++ == 30)
             {
                 Narrator::Instance()->playWait();
+                waitCounter = 0;
             }
         }
 
@@ -912,7 +900,7 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
     LOG4CXX_DEBUG(daisyNaviLog, "Processing command: " << command);
     bool amisSuccess = true;
     unsigned int totalTime;
-    setPlayerReallySendEOS(false);
+
     DaisyHandler::BookInfo *bookInfo;
 
     // If we are pausing, any key should continue playback
@@ -1304,10 +1292,12 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
     case COMMAND_NEXT:
         LOG4CXX_INFO(daisyNaviLog, "COMMAND_NEXT received");
         LOG4CXX_INFO(daisyNaviLog, "Going to next phrase");
+        setOpeningNext(true);
         amisSuccess = dh->nextPhrase();
         LOG4CXX_INFO(daisyNaviLog, "operation" << (amisSuccess == true ? " was successful" : " failed"));
         if (amisSuccess && !player->isPlaying() && !narrator->isSpeaking())
             player->resume();
+        setOpeningNext(false);
         break;
 
     case COMMAND_PAUSE:
@@ -1538,6 +1528,10 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
     if (amisSuccess == false)
     {
         amis::AmisError err = dh->getLastError();
+        stringstream ss;
+        ss << ": \"" << err.getMessage() << "\" in file " << err.getFilename() << " from " << err.getSourceModuleName();
+        std::string details = ss.str();
+
         switch (err.getCode())
         {
         case amis::AT_END:
@@ -1548,42 +1542,57 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
             break;
 
         case amis::AT_BEGINNING:
-            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error AT_BEGINNING");
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error AT_BEGINNING" << details);
             narrator->play(_N("start of content"));
             break;
 
+        case PERMISSION_ERROR:
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error PERMISSION_ERROR" << details);
+            closeBook();
+            narrator->play(_N("error loading data"));
+            while(narrator->isSpeaking());
+            return up(navi); // return to parent node
+
+        case IO_ERROR:
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error IO_ERROR" << details);
+            closeBook();
+            narrator->play(_N("error loading data"));
+            while(narrator->isSpeaking());
+            return up(navi); // return to parent node
+
         case amis::NOT_FOUND:
-            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error NOT_FOUND");
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error NOT_FOUND" << details);
             narrator->play(_N("error loading data"));
             break;
 
         case amis::UNDEFINED_ERROR:
-            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error UNDEFINED_ERROR");
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error UNDEFINED_ERROR" << details);
             narrator->play(_N("content error"));
             break;
 
         case amis::NOT_SUPPORTED:
-            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error NOT_SUPPORTED");
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error NOT_SUPPORTED" << details);
             narrator->play(_N("content error"));
             break;
 
         case amis::PARSE_ERROR:
-            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error PARSE_ERROR");
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error PARSE_ERROR" << details);
             narrator->play(_N("content error"));
             break;
 
         case amis::NOT_INITIALIZED:
-            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error NOT_INITIALIZED");
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error NOT_INITIALIZED" << details);
             narrator->play(_N("content error"));
             break;
 
         case amis::OK:
-            LOG4CXX_WARN(daisyNaviLog, "Jump failed with error OK");
+            LOG4CXX_WARN(daisyNaviLog, "Jump failed with error OK" << details);
             break;
         default:
-            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with no error set");
+            LOG4CXX_ERROR(daisyNaviLog, "Jump failed with but error code was not handled" << details);
             break;
         }
+        return false;
     }
     else
     {
@@ -1592,6 +1601,7 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
         {
         case COMMAND_UP:
         case COMMAND_DOWN:
+        case COMMAND_INFO:
             break;
         default:
             bUserAtEndOfBook = false;
