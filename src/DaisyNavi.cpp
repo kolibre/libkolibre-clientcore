@@ -699,13 +699,15 @@ bool DaisyNavi::playerMessageSlot(Player::playerMessage msg)
 
     case Player::PLAYER_ATEOS:
         LOG4CXX_INFO(daisyNaviLog, "ATEOS callback");
-        if(!isOpeningNext()) {
+        if(!isOpeningNext() &&
+                dh->getState() != DaisyHandler::HANDLER_CLOSED &&
+                dh->getState() != DaisyHandler::HANDLER_ERROR) {
             cq2::Command<INTERNAL_COMMAND> c(COMMAND_NEXT);
             c();
         }
         else
         {
-            LOG4CXX_WARN(daisyNaviLog, "ATEOS not sending COMMAND_NEXT we are already handling opening next");
+            LOG4CXX_WARN(daisyNaviLog, "ATEOS not sending COMMAND_NEXT");
         }
         return true;
         break;
