@@ -37,6 +37,7 @@
 #include <algorithm>
 #include <libintl.h>
 #include <log4cxx/logger.h>
+#include <XmlError.h>
 
 // create logger which will become a child to logger kolibre.clientcore
 log4cxx::LoggerPtr onlineNodeLog(log4cxx::Logger::getLogger("kolibre.clientcore.daisyonlinenode"));
@@ -721,7 +722,13 @@ size_t DaisyOnlineNode::downloadData(string uri, char **destinationbuffer)
 
     do
     {
-        bytes_read = is->readBytes(bufptr, bufsize - bytes_read_total);
+        try {
+            bytes_read = is->readBytes(bufptr, bufsize - bytes_read_total);
+        } catch (XmlError e) {
+            LOG4CXX_ERROR(onlineNodeLog,
+                "XmlError was thrown from instream: " << e.code() << ": " << e.getMessage());
+            bytes_read = 0;
+        }
         if (bytes_read < 0)
         {
             LOG4CXX_ERROR(onlineNodeLog, "Failed to load data: " << is->getErrorMsg());
