@@ -1570,7 +1570,10 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
             closeBook();
             narrator->play(_N("error loading data"));
             while(narrator->isSpeaking());
-            return up(navi); // return to parent node
+            if (open() && onOpen(navi))
+                return true; // Re-open publication
+            else
+                return up(navi); // Go back if reopening did not succeed
 
         case amis::NOT_FOUND:
             LOG4CXX_ERROR(daisyNaviLog, "Jump failed with error NOT_FOUND" << details);
