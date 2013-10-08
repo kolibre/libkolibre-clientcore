@@ -113,12 +113,14 @@ private:
     boost::signals2::connection playerMsgCon;
     boost::signals2::connection playerTimeCon;
     // signals and slots end
+    bool open();
     void setOpeningNext(bool);
     bool isOpeningNext();
     void buildInfoNode(BookInfoNode* info);
     amis::DaisyHandler *dh;
     Narrator *narrator;
     Player *player;
+    std::string mUri;
     bool bBookIsOpen;
     bool bUserAtEndOfBook;
     bool bContextMenuIsOpen;

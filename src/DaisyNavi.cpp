@@ -747,40 +747,11 @@ bool DaisyNavi::isOpen()
     return bBookIsOpen;
 }
 
-bool DaisyNavi::open(const string &uri)
+bool DaisyNavi::open()
 {
-
-    string newuri = uri;
-    // Extract protocol, servername and path from url
-    string protocol = "";
-    string username;
-    string password;
-    string server = "";
-    string path = "";
-    string tmp;
     bUserAtEndOfBook = false;
 
-    string::size_type pos = newuri.find("//");
-    if (pos != string::npos)
-    {
-        protocol = newuri.substr(0, pos + 2);
-        tmp = newuri.substr(pos + 2);
-        pos = tmp.find("/");
-        if (pos != string::npos)
-        {
-            server = tmp.substr(0, pos);
-            path = tmp.substr(pos);
-
-            if (username != "" && password != "")
-            {
-                newuri = protocol + username + ":" + password + "@" + server + path;
-            }
-        }
-    }
-
-    LOG4CXX_DEBUG(daisyNaviLog, "opening book " << uri);
-
-    if (dh->openBook(newuri) == true)
+    if (dh->openBook(mUri) == true)
     {
         int waitCounter = 0;
         while (dh->getState() == DaisyHandler::HANDLER_OPENING)
@@ -829,6 +800,40 @@ bool DaisyNavi::open(const string &uri)
     }
 
     return true;
+}
+
+bool DaisyNavi::open(const string &uri)
+{
+
+    mUri = uri;
+    // Extract protocol, servername and path from url
+    string protocol = "";
+    string username;
+    string password;
+    string server = "";
+    string path = "";
+    string tmp;
+
+    string::size_type pos = uri.find("//");
+    if (pos != string::npos)
+    {
+        protocol = uri.substr(0, pos + 2);
+        tmp = uri.substr(pos + 2);
+        pos = tmp.find("/");
+        if (pos != string::npos)
+        {
+            server = tmp.substr(0, pos);
+            path = tmp.substr(pos);
+
+            if (username != "" && password != "")
+            {
+                mUri = protocol + username + ":" + password + "@" + server + path;
+            }
+        }
+    }
+
+    LOG4CXX_DEBUG(daisyNaviLog, "opening book " << uri);
+    return open();
 }
 
 bool DaisyNavi::closeBook()
