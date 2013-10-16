@@ -782,6 +782,7 @@ bool DaisyNavi::open()
                 usleep(20000);
             return false;
         }
+        Narrator::Instance()->stop();
         LOG4CXX_DEBUG(daisyNaviLog, "state == DaisyHandler::HANDLER_OPEN");
 
         bBookIsOpen = true;
