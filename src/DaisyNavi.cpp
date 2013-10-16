@@ -89,6 +89,7 @@ bool DaisyNavi::up(NaviEngine& navi)
     {
         Narrator::Instance()->setPushCommandFinished(false); // Let the parent enable callbacks if he needs them.
         bContextMenuIsOpen = false;
+        bReopeningBook = false;
         // disconnect from player slots
         if (playerMsgCon.connected())
         {
@@ -457,7 +458,7 @@ bool DaisyNavi::onOpen(NaviEngine&)
      sectionIdxReportingEnabled = ((bookInfo->mTocItems + pageCount) < 1000);
      */
 
-    if (dh->continueFromLastmark())
+    if (not bReopeningBook && dh->continueFromLastmark())
     {
         narrator->play(_N("continuing from last known position"));
         narrator->playShortpause();
@@ -486,6 +487,7 @@ bool DaisyNavi::onOpen(NaviEngine&)
         if (!narrator->isSpeaking())
             player->resume();
     }
+    bReopeningBook = false;
 
     // We are now ready to handle NARRATORFINISHED COMMANDS
     Narrator::Instance()->setPushCommandFinished(true);
@@ -617,6 +619,7 @@ DaisyNavi::DaisyNavi()
     bPlaybackIsPaused = false;
     bContextMenuIsOpen = false;
     bBookIsOpen = false;
+    bReopeningBook = false;
     bookmarkState = BOOKMARK_DEFAULT;
 
     // Setup mutex variable
@@ -839,6 +842,7 @@ bool DaisyNavi::open(const string &uri)
 bool DaisyNavi::closeBook()
 {
     bBookIsOpen = false;
+    bReopeningBook = false;
     LOG4CXX_DEBUG(daisyNaviLog, "closing book");
     player->stop();
     dh->closeBook();
@@ -1570,6 +1574,7 @@ bool DaisyNavi::process(NaviEngine& navi, int command, void* data)
             closeBook();
             narrator->play(_N("error loading data"));
             while(narrator->isSpeaking());
+            bReopeningBook = true;
             if (open() && onOpen(navi))
                 return true; // Re-open publication
             else

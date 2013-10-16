@@ -122,6 +122,7 @@ private:
     Player *player;
     std::string mUri;
     bool bBookIsOpen;
+    bool bReopeningBook;
     bool bUserAtEndOfBook;
     bool bContextMenuIsOpen;
     int lastReportedPlayerPosition;
