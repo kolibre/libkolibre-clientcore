@@ -29,11 +29,11 @@
 #include <cstdio>
 #include <log4cxx/logger.h>
 
-// create logger which will become a child to logger kolibre.clientcore
-log4cxx::LoggerPtr dbLog(log4cxx::Logger::getLogger("kolibre.clientcore.db"));
 
 using namespace std;
 
+// create logger which will become a child to logger kolibre.clientcore
+log4cxx::LoggerPtr dbLog(log4cxx::Logger::getLogger("kolibre.clientcore.db"));
 
 int busyHandler(void *pArg1, int iPriorCalls)
 {
@@ -260,7 +260,6 @@ bool DB::perform(DBResult *result)
     pStatement = NULL;
     return ret;
 }
-}
 
 DBResult::DBResult()
 {
@@ -429,4 +428,6 @@ long DBResult::getDataSize(const long column)
         return sqlite3_column_bytes(pStatement, column);
 
     return 0;
+}
+
 }

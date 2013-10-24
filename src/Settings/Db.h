@@ -25,9 +25,11 @@
 
 using namespace std;
 
-class DBResult;
 
 namespace settings {
+
+class DBResult;
+
 class DB
 {
 public:
@@ -96,7 +98,6 @@ private:
     bool bClosedb;
     int rc;
 };
-}
 
 class DBResult
 {
@@ -140,4 +141,5 @@ private:
     sqlite3_stmt *pStatement;
 };
 
+}
 #endif

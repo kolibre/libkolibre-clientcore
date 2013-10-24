@@ -37,6 +37,7 @@
 #include <algorithm>
 #include <libintl.h>
 #include <log4cxx/logger.h>
+#include <XmlError.h>
 
 // create logger which will become a child to logger kolibre.clientcore
 log4cxx::LoggerPtr onlineNodeLog(log4cxx::Logger::getLogger("kolibre.clientcore.daisyonlinenode"));
@@ -51,7 +52,7 @@ bool DaisyOnlineNode::onNarrate()
     if (play_before_onOpen_ == _N("updating library"))
         return isSelfNarrated;
 
-    Narrator::Instance()->play(_N("choose option using left and right arrows, open using down arrow"));
+    Narrator::Instance()->play(_N("choose option using left and right arrows, open using play button"));
     Narrator::Instance()->playLongpause();
     announceSelection();
     return isSelfNarrated;
@@ -86,10 +87,12 @@ DaisyOnlineNode::~DaisyOnlineNode()
 DaisyOnlineNode::DaisyOnlineNode(const std::string uri, const std::string username, const std::string password, const std::string& client_home, string useragent) :
         good_(true), loggedIn_(false), currentChild_(0)
 {
+    firstChildNotOpened_ = true;
     username_ = username;
     password_ = password;
     previousUsername_ = "";
     previousPassword_ = "";
+    lastUpdate_ = -1;
     lastError_ = (DaisyOnlineNode::errorType)-1;
     lastLogOnAttempt_ = (DaisyOnlineNode::errorType)-1;
 
@@ -152,6 +155,14 @@ bool DaisyOnlineNode::up(NaviEngine& navi)
 
     if (ret == false)
     {
+        // Don't update library unless 5 seconds has passed since the last update
+        if (difftime(time(NULL), lastUpdate_) < 5)
+        {
+            LOG4CXX_WARN(onlineNodeLog, "Update aborted since 5 seconds hasn't passed since last update");
+            announceSelection();
+            return true;
+        }
+
         loggedIn_ = false;
 
         NaviList navilist;
@@ -243,6 +254,8 @@ DaisyOnlineNode::errorType DaisyOnlineNode::sessionInit()
 {
     good_ = false;
     loggedIn_ = false;
+    // we must set lastUpdate_ here to block queued update requests
+    lastUpdate_ = time(NULL);
     LOG4CXX_INFO(onlineNodeLog, "Trying to establish a Daisy Online session");
 
     // logOn
@@ -257,6 +270,8 @@ DaisyOnlineNode::errorType DaisyOnlineNode::sessionInit()
         LOG4CXX_WARN(onlineNodeLog, "logOn failed, service return false, please check check username and password");
         errorstring_ = "wrong username or password";
         lastError_ = USERNAME_PASSWORD_ERROR;
+        // if logOn failed we allow new update requests
+        lastUpdate_ = -1;
         return lastError_;
     }
 
@@ -381,6 +396,7 @@ DaisyOnlineNode::errorType DaisyOnlineNode::issueContentList(kdo::ContentList* c
         if ((i > 1) && (timenow - starttime > 3))
         {
             Narrator::Instance()->playWait();
+            time(&starttime);
         }
 
         // wait until we can issue this item unless it's the first item in contentList
@@ -487,6 +503,7 @@ DaisyOnlineNode::errorType DaisyOnlineNode::createBookNodes(kdo::ContentList* co
         if ((i + 1 < numberOfContentItems) && (timenow - starttime > 3))
         {
             Narrator::Instance()->playWait();
+            time(&starttime);
         }
 
         // join id and text string to avoid duplicates in database
@@ -615,13 +632,21 @@ bool DaisyOnlineNode::process(NaviEngine& navi, int command, void* data)
         }
 
         play_before_onOpen_ = _N("library");
+        lastUpdate_ = time(NULL);
         navi.setCurrentChoice(firstChild());
         currentChild_ = firstChild();
         announce();
 
-        // in case user har stresspressed update button, we flush the queue.
-        // TODO: flushing the queue does not seem to work, but tests shows that it works
-        //cq2::Dispatcher::instance().flushQueue();
+        bool autoPlay = Settings::Instance()->read<bool>("autoplay", false);
+        if (autoPlay && firstChildNotOpened_ && numberOfChildren() >= 1)
+        {
+            // wait for narrator before sending command
+            usleep(500000); while (Narrator::Instance()->isSpeaking()) usleep(100000);
+            firstChildNotOpened_ = false;
+            LOG4CXX_INFO(onlineNodeLog, "auto open first child");
+            cq2::Command<INTERNAL_COMMAND> c(COMMAND_DOWN);
+            c();
+        }
     }
         break;
 
@@ -693,12 +718,17 @@ size_t DaisyOnlineNode::downloadData(string uri, char **destinationbuffer)
     LOG4CXX_DEBUG(onlineNodeLog, "Opening data stream for uri: " << uri);
 
     InputStream *is = NULL;
-    is = DataStreamHandler::Instance()->newStream(uri);
-    is->useCache(false);
+    is = DataStreamHandler::Instance()->newStream(uri, false, false);
 
     do
     {
-        bytes_read = is->readBytes(bufptr, bufsize - bytes_read_total);
+        try {
+            bytes_read = is->readBytes(bufptr, bufsize - bytes_read_total);
+        } catch (XmlError e) {
+            LOG4CXX_ERROR(onlineNodeLog,
+                "XmlError was thrown from instream: " << e.code() << ": " << e.getMessage());
+            bytes_read = 0;
+        }
         if (bytes_read < 0)
         {
             LOG4CXX_ERROR(onlineNodeLog, "Failed to load data: " << is->getErrorMsg());
@@ -845,5 +875,11 @@ void DaisyOnlineNode::announceResult(DaisyOnlineNode::errorType error)
 
     default:
         break;
+    }
+
+    //If error occurred during login then send notification
+    if(!loggedIn_){
+        cq2::Command<NOTIFY_COMMAND> notify(NOTIFY_LOGIN_FAIL);
+        notify();
     }
 }

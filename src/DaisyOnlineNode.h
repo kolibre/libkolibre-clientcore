@@ -103,10 +103,12 @@ private:
     std::string version_;
     std::string language_;
 
+    bool firstChildNotOpened_;
     bool loggedIn_;
     NaviList navilist;
     AnyNode* currentChild_;
 
+    time_t lastUpdate_;
     errorType lastError_;
     errorType lastLogOnAttempt_;
     std::string errorstring_;

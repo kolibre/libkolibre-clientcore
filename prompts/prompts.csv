@@ -32,7 +32,7 @@
 
 "menu"
 "opening main menu"
-"choose option using left and right arrows, open using down arrow"
+"choose option using left and right arrows, open using play button"
 "option"
 "contains {1} option"
 "contains {2} options"
@@ -55,6 +55,14 @@
 "sleep timer enabled"
 "sleep timer disabled"
 
+# auto open content
+"auto play"
+"opening auto play"
+"enable auto play"
+"disable auto play"
+"auto play enabled"
+"auto play disabled"
+
 # jump to menu
 "jump to"
 "jump to percent"
@@ -65,9 +73,9 @@
 "opening jump to percent"
 "opening jump to page"
 "opening jump to time"
-"choose percent using left and right arrows, jump to selected percent using down arrow"
-"choose page using left and right arrows, jump to selected page using down arrow"
-"choose time using left and right arrows, jump to selected time using down arrow"
+"choose percent using left and right arrows, jump to selected percent using play button"
+"choose page using left and right arrows, jump to selected page using play button"
+"choose time using left and right arrows, jump to selected time using play button"
 "pages"
 "special page"
 "percent"

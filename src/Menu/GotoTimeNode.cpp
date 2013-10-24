@@ -94,7 +94,7 @@ GotoTimeNode::GotoTimeNode(int max, DaisyNavi* daisyNavi) :
 
     iBookTotalTimeSeconds = iMax;
     name_ = _N("jump to time");
-    info_ = _N("choose time using left and right arrows, jump to selected time using down arrow");
+    info_ = _N("choose time using left and right arrows, jump to selected time using play button");
     play_before_onOpen_ = _N("opening jump to time");
 }
 

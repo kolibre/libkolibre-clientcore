@@ -113,20 +113,23 @@ private:
     boost::signals2::connection playerMsgCon;
     boost::signals2::connection playerTimeCon;
     // signals and slots end
-    void setPlayerReallySendEOS(bool);
-    bool getPlayerReallySendEOS();
+    bool open();
+    void setOpeningNext(bool);
+    bool isOpeningNext();
     void buildInfoNode(BookInfoNode* info);
     amis::DaisyHandler *dh;
     Narrator *narrator;
     Player *player;
+    std::string mUri;
     bool bBookIsOpen;
+    bool bReopeningBook;
     bool bUserAtEndOfBook;
     bool bContextMenuIsOpen;
     int lastReportedPlayerPosition;
     bool sectionIdxReportingEnabled;
 
     pthread_mutex_t *playerCallbackMutex;
-    bool bPlayerReallySendEOS;
+    bool bOpeningNext;
 
     void postBookData();
     Handle_JumpToSecond* jumpHandler1;

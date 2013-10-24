@@ -37,7 +37,7 @@
 
 "menu";"pikavalikko"
 "opening main menu";"avataan pikavalikkoa"
-"choose option using left and right arrows, open using down arrow";"valitse vaihtoehto vasemmalla tai oikealla nuolella, avaa painamalla alaspäin suuntautuvaa nuolta"
+"choose option using left and right arrows, open using play button";"valitse vaihtoehto vasemmalla tai oikealla nuolella, avaa painamalla toisto näppäintä"
 "option";"vaihtoehto"
 "contains {1} option";"sisältää yksi vaihtoehto"
 "contains {2} options";"sisältää {2:number} vaihtoehtoa"
@@ -60,6 +60,14 @@
 "sleep timer enabled";"Automaattinen sammutus on asettu"
 "sleep timer disabled";"Automaattinen sammutus kytketty pois päältä"
 
+# auto open content
+"auto play";"automaattinen toisto"
+"opening auto play";"avataan automaattinen toisto"
+"enable auto play";"aseta automaattinen toisto"
+"disable auto play";"kytke automaattinen toisto pois päältä"
+"auto play enabled";"automaattinen toisto on asettu"
+"auto play disabled";"automaattinen toisto kytketty pois päältä"
+
 # jump to
 "jump to";"siirry kohteeseen"
 "jump to percent";"siirry prosenttiin"
@@ -70,9 +78,9 @@
 "opening jump to percent";"avataan siirry prosenttiin"
 "opening jump to page";"avataan siirry sivulle"
 "opening jump to time";"avataan aikasiirtymä"
-"choose percent using left and right arrows, jump to selected percent using down arrow";"valitse prosentti vasemmalla tai oikealla nuolella, siirry valittuun prosenttimäärään painamalla alaspäin suuntautuvaa nuolta"
-"choose page using left and right arrows, jump to selected page using down arrow";"valitse sivu vasemmalla tai oikealla nuolella, siirry valitulle sivulle painamalla alaspäin suuntautuvaa nuolta"
-"choose time using left and right arrows, jump to selected time using down arrow";"valitse aika vasemmalla tai oikealla nuolella, aikasiirtymä vahvistetaan painamalla alaspäin suuntautuvaa nuolta"
+"choose percent using left and right arrows, jump to selected percent using play button";"valitse prosentti vasemmalla tai oikealla nuolella, siirry valittuun prosenttimäärään painamalla toisto näppäintä"
+"choose page using left and right arrows, jump to selected page using play button";"valitse sivu vasemmalla tai oikealla nuolella, siirry valitulle sivulle painamalla toisto näppäintä"
+"choose time using left and right arrows, jump to selected time using play button";"valitse aika vasemmalla tai oikealla nuolella, aikasiirtymä vahvistetaan painamalla toisto näppäintä"
 "pages";"sivua"
 "special page";"erikoissivu"
 "percent";"prosenttia"
