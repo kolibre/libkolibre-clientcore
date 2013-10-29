@@ -55,6 +55,7 @@ int main(int argc, char **argv)
         printf("       -r Remember password\n");
         printf("       -l language options: fi, se, en [default: sv]\n");
         printf("       -c log configuration file\n");
+        printf("       -i use input device instead of stdin\n");
         return 1;
     }
     signal(SIGINT, handleSignal);
@@ -68,6 +69,7 @@ int main(int argc, char **argv)
     password = argv[3];
 
     bool rememberPassword = false;
+    std::string inputDev = "";
 
     // Initiate logging
     char *logConf = NULL;
@@ -77,7 +79,7 @@ int main(int argc, char **argv)
 
     // Handle option flags
     int opt;
-    while ((opt = getopt(argc, argv, "rl:c:")) != -1)
+    while ((opt = getopt(argc, argv, "rl:c:i:")) != -1)
     {
         switch (opt)
         {
@@ -105,6 +107,12 @@ int main(int argc, char **argv)
             logConf = optarg;
             break;
         }
+        case 'i':
+        {
+            inputDev = optarg;
+            break;
+        }
+
         default:
             printf("Unknown option: %c", opt);
             break;
@@ -143,6 +151,8 @@ int main(int argc, char **argv)
     clientcore->sleepTimeout_signal.connect(&onSleepTimeout);
     Input *input = Input::Instance();
     input->keyPressed_signal.connect(boost::bind(&ClientCore::pushCommand, clientcore, _1));
+    if(inputDev.compare("") != 0)
+        input->set_input_device(inputDev);
 
     while (clientcore->isRunning())
         usleep(100000);
