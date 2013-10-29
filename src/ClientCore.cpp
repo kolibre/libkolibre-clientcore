@@ -889,7 +889,7 @@ private:
             break;
         case NOTIFY_LOGIN_FAIL:
         {
-            LOG4CXX_DEBUG(clientcoreLog, "NOTIFY_LOGIN_FAIL received");
+            LOG4CXX_WARN(clientcoreLog, "NOTIFY_LOGIN_FAIL received");
             state_->retryLogin = true;
             clientcore_->loginResult_signal(false);
         }
@@ -927,7 +927,7 @@ private:
 
     void handle(ErrorMessage error)
     {
-        LOG4CXX_DEBUG(clientcoreLog, "ErrorMessage received");
+        LOG4CXX_ERROR(clientcoreLog, "ErrorMessage received");
         clientcore_->errorMessage_signal(error);
     }
 };
