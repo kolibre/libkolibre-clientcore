@@ -41,10 +41,13 @@ log4cxx::LoggerPtr sampleClientMainLog(log4cxx::Logger::getLogger("kolibre.sampl
 //                  3   -> SIGQUIT
 //                  15  -> SIGTERM
 //                  100 -> SLEEPTIMER TIMEOUT
+//                  101 -> LOGIN FAILED
 int exitValue = 0;
 bool exitSignal = false;
 void handleSignal(int sig);
 void onSleepTimeout();
+void onInvalidAuth();
+
 
 int main(int argc, char **argv)
 {
@@ -150,6 +153,7 @@ int main(int argc, char **argv)
 
     // Connect slots to signals
     clientcore->sleepTimeout_signal.connect(&onSleepTimeout);
+    clientcore->invalidAuth_signal.connect(&onInvalidAuth);
     Input *input = Input::Instance();
     input->keyPressed_signal.connect(boost::bind(&ClientCore::pushCommand, clientcore, _1));
     if(inputDev.compare("") != 0)
@@ -203,3 +207,16 @@ void handleSignal(int sig)
         sleep(1);
     }
 }
+
+void onInvalidAuth() {
+    if (!exitSignal)
+    {
+        exitSignal = true;
+        exitValue = 101;
+
+        LOG4CXX_INFO(sampleClientMainLog, "Login failed, exiting application");
+        Input *input = Input::Instance();
+        input->keyPressed_signal(ClientCore::EXIT);
+    }
+}
+

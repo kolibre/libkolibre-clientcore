@@ -269,6 +269,8 @@ DaisyOnlineNode::errorType DaisyOnlineNode::sessionInit()
     {
         LOG4CXX_WARN(onlineNodeLog, "logOn failed, service return false, please check check username and password");
         errorstring_ = "wrong username or password";
+        cq2::Command<NOTIFY_COMMAND> notify(NOTIFY_INVALID_AUTH);
+        notify();
         lastError_ = USERNAME_PASSWORD_ERROR;
         // if logOn failed we allow new update requests
         lastUpdate_ = -1;

@@ -299,6 +299,10 @@ public:
      */
     boost::signals2::signal<void()> sleepTimeout_signal;
     /**
+     * Invalid username or password
+     */
+    boost::signals2::signal<void()> invalidAuth_signal;
+    /**
      * Loging results are emitted via this signal
      */
     boost::signals2::signal<void(bool)> loginResult_signal;
