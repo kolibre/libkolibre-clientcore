@@ -48,9 +48,9 @@ void onSleepTimeout();
 
 int main(int argc, char **argv)
 {
-    if (argc < 3)
+    if (argc < 4)
     {
-        printf("usage: %s <service_url> <username> <password> [OPTIONS]\n", argv[0]);
+        printf("usage: %s <service_url> <username> <password> <useragent> [OPTIONS]\n", argv[0]);
         printf(" OPTIONS\n");
         printf("       -r Remember password\n");
         printf("       -l language options: fi, se, en [default: sv]\n");
@@ -63,10 +63,11 @@ int main(int argc, char **argv)
     signal(SIGTERM, handleSignal);
 
     // store required arguments before parsing optional
-    std::string service_url, username, password;
+    std::string service_url, username, password, useragent;
     service_url = argv[1];
     username = argv[2];
     password = argv[3];
+    useragent = argv[4];
 
     bool rememberPassword = false;
     std::string inputDev = "";
@@ -142,7 +143,7 @@ int main(int argc, char **argv)
     // Set language
     ClientCore::setLanguage(language);
 
-    ClientCore *clientcore = new ClientCore(service_url, "KolibreSampleClient/0.0.1");
+    ClientCore *clientcore = new ClientCore(service_url, useragent);
 
     clientcore->setUsername(username);
     clientcore->setPassword(password, rememberPassword);
