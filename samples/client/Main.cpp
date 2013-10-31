@@ -41,20 +41,24 @@ log4cxx::LoggerPtr sampleClientMainLog(log4cxx::Logger::getLogger("kolibre.sampl
 //                  3   -> SIGQUIT
 //                  15  -> SIGTERM
 //                  100 -> SLEEPTIMER TIMEOUT
+//                  101 -> LOGIN FAILED
 int exitValue = 0;
 bool exitSignal = false;
 void handleSignal(int sig);
 void onSleepTimeout();
+void onInvalidAuth();
+
 
 int main(int argc, char **argv)
 {
-    if (argc < 3)
+    if (argc < 4)
     {
-        printf("usage: %s <service_url> <username> <password> [OPTIONS]\n", argv[0]);
+        printf("usage: %s <service_url> <username> <password> <useragent> [OPTIONS]\n", argv[0]);
         printf(" OPTIONS\n");
         printf("       -r Remember password\n");
         printf("       -l language options: fi, se, en [default: sv]\n");
         printf("       -c log configuration file\n");
+        printf("       -i use input device instead of stdin\n");
         return 1;
     }
     signal(SIGINT, handleSignal);
@@ -62,12 +66,14 @@ int main(int argc, char **argv)
     signal(SIGTERM, handleSignal);
 
     // store required arguments before parsing optional
-    std::string service_url, username, password;
+    std::string service_url, username, password, useragent;
     service_url = argv[1];
     username = argv[2];
     password = argv[3];
+    useragent = argv[4];
 
     bool rememberPassword = false;
+    std::string inputDev = "";
 
     // Initiate logging
     char *logConf = NULL;
@@ -77,7 +83,7 @@ int main(int argc, char **argv)
 
     // Handle option flags
     int opt;
-    while ((opt = getopt(argc, argv, "rl:c:")) != -1)
+    while ((opt = getopt(argc, argv, "rl:c:i:")) != -1)
     {
         switch (opt)
         {
@@ -105,6 +111,12 @@ int main(int argc, char **argv)
             logConf = optarg;
             break;
         }
+        case 'i':
+        {
+            inputDev = optarg;
+            break;
+        }
+
         default:
             printf("Unknown option: %c", opt);
             break;
@@ -134,15 +146,18 @@ int main(int argc, char **argv)
     // Set language
     ClientCore::setLanguage(language);
 
-    ClientCore *clientcore = new ClientCore(service_url, "KolibreSampleClient/0.0.1");
+    ClientCore *clientcore = new ClientCore(service_url, useragent);
 
     clientcore->setUsername(username);
     clientcore->setPassword(password, rememberPassword);
 
     // Connect slots to signals
     clientcore->sleepTimeout_signal.connect(&onSleepTimeout);
+    clientcore->invalidAuth_signal.connect(&onInvalidAuth);
     Input *input = Input::Instance();
     input->keyPressed_signal.connect(boost::bind(&ClientCore::pushCommand, clientcore, _1));
+    if(inputDev.compare("") != 0)
+        input->set_input_device(inputDev);
 
     while (clientcore->isRunning())
         usleep(100000);
@@ -192,3 +207,16 @@ void handleSignal(int sig)
         sleep(1);
     }
 }
+
+void onInvalidAuth() {
+    if (!exitSignal)
+    {
+        exitSignal = true;
+        exitValue = 101;
+
+        LOG4CXX_INFO(sampleClientMainLog, "Login failed, exiting application");
+        Input *input = Input::Instance();
+        input->keyPressed_signal(ClientCore::EXIT);
+    }
+}
+

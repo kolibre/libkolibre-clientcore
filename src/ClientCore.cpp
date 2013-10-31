@@ -592,6 +592,10 @@ private:
         case ClientCore::EXIT:
         {
             LOG4CXX_INFO(clientcoreLog, "ClientCore::EXIT received");
+            if (state_->retryLogin)
+            {
+                usleep(50000); while (Narrator::Instance()->isSpeaking()) usleep(100000);
+            }
             clientcore_->shutdown();
         }
             break;
@@ -889,9 +893,16 @@ private:
             break;
         case NOTIFY_LOGIN_FAIL:
         {
-            LOG4CXX_DEBUG(clientcoreLog, "NOTIFY_LOGIN_FAIL received");
+            LOG4CXX_WARN(clientcoreLog, "NOTIFY_LOGIN_FAIL received");
             state_->retryLogin = true;
             clientcore_->loginResult_signal(false);
+        }
+            break;
+        case NOTIFY_INVALID_AUTH:
+        {
+            LOG4CXX_DEBUG(clientcoreLog, "NOTIFY_INVALID_AUTH received");
+            state_->retryLogin = true;
+            clientcore_->invalidAuth_signal();
         }
             break;
         }
@@ -927,7 +938,7 @@ private:
 
     void handle(ErrorMessage error)
     {
-        LOG4CXX_DEBUG(clientcoreLog, "ErrorMessage received");
+        LOG4CXX_ERROR(clientcoreLog, "ErrorMessage received");
         clientcore_->errorMessage_signal(error);
     }
 };

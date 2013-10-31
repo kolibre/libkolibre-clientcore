@@ -35,6 +35,7 @@ public:
     ~Input();
 
     boost::signals2::signal<void(ClientCore::COMMAND)> keyPressed_signal;
+    bool set_input_device(std::string dev);
 
 private:
     pthread_mutex_t inputMutex;
@@ -48,9 +49,12 @@ private:
     int kb_startup_mode;
     struct termios kb_startup_settings;
     int keyboardfd;
+    int inputfd;
 
     int read_mouse_id(int mousefd);
     int write_to_mouse(int mousefd, unsigned char *data, size_t len);
+    int fill_buffer(unsigned char buffer[], struct input_event ev[], int count);
+
     int mousefd;
     int mousetype;
     unsigned char mbuttons;
