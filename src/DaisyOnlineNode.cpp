@@ -183,22 +183,24 @@ void DaisyOnlineNode::onSessionInit()
 {
     LOG4CXX_DEBUG(onlineNodeLog, "sessionInit signal triggered");
 
-    // Don't try session initialization if username or password hasn't changed ...
-    username_ = Settings::Instance()->read<std::string>("username", "");
-    password_ = Settings::Instance()->read<std::string>("password", "");
-    if (previousUsername_ == username_ && previousPassword_ == password_)
+    // ... and last logon attempt failed due to incorrect username or password
+    if (lastLogOnAttempt_ == USERNAME_PASSWORD_ERROR)
     {
-        // ... and last logon attempt failed due to incorrect username or password
-        if (lastLogOnAttempt_ == USERNAME_PASSWORD_ERROR)
+        // Don't try session initialization if username or password hasn't changed ...
+        username_ = Settings::Instance()->read<std::string>("username", "");
+        password_ = Settings::Instance()->read<std::string>("password", "");
+        if (previousUsername_ == username_ && previousPassword_ == password_)
         {
-            LOG4CXX_WARN(onlineNodeLog, "aborting session initialization since nothing has changed since last attampt");
+            LOG4CXX_WARN(onlineNodeLog, "aborting session initialization since nothing has changed since last attempt");
             return;
         }
     }
 
+
     // Notify user that logon failed if username is not set
     if (username_.empty())
     {
+        LOG4CXX_WARN(onlineNodeLog, "User name is empty. Sending login fail");
         cq2::Command<NOTIFY_COMMAND> notify(NOTIFY_LOGIN_FAIL);
         notify();
         return;
