@@ -125,10 +125,10 @@ int main(int argc, char **argv)
 
     Navi navi;
     DaisyOnlineNode::errorType error = (DaisyOnlineNode::errorType)-1;
-    DaisyOnlineNode *node = new DaisyOnlineNode(argv[1], "", "", ".", "");
+    DaisyOnlineNode *node = new DaisyOnlineNode(argv[1], "incorrect", "incorrect", ".", "");
     navi.openMenu(node, false);
 
-    // open sould fail with incorrect username and password
+    // open should fail with incorrect username and password
     assert(node->onOpen(navi));
     error = node->getLastError();
     assert(error == DaisyOnlineNode::USERNAME_PASSWORD_ERROR);

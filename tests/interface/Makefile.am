@@ -25,6 +25,6 @@ TESTS = sleeptimer getset
 sleeptimer_SOURCES = sleeptimer.cpp
 getset_SOURCES = getset.cpp
 
-LDADD = -lkolibre-clientcore -lboost_regex
-AM_LDFLAGS = -L$(top_builddir)/src
+LDADD = $(top_builddir)/src/libkolibre-clientcore.la
+AM_LDFLAGS = -L$(top_builddir)/src @LOG4CXX_LIBS@ -lboost_regex
 AM_CPPFLAGS = -I$(top_srcdir)/src
