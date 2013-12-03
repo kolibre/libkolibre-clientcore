@@ -1082,8 +1082,23 @@ void *ClientCore::clientcore_thread(void *ctx)
 
     std::string useragent = ctxptr->mUserAgent;
     std::string service_url = ctxptr->mServiceUrl;
-    std::string username = ctxptr->getUsername();
-    std::string password = ctxptr->getPassword();
+
+    std::string username = "";
+    std::string password = "";
+
+
+    //wait half a second for user credentials
+    for (int i=0; i<6 && username.empty() && password.empty(); i++) {
+        if (i>0){
+            LOG4CXX_DEBUG(clientcoreLog, "Waiting for user credentials");
+            usleep(100000);
+        }
+        username = ctxptr->getUsername();
+        password = ctxptr->getPassword();
+    }
+
+    if (username.empty() && password.empty())
+        LOG4CXX_WARN(clientcoreLog, "User credentials are empty");
 
     DataStreamHandler::Instance()->setUseragent(useragent);
     player->setUseragent(useragent);
