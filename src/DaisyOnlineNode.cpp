@@ -641,7 +641,7 @@ bool DaisyOnlineNode::process(NaviEngine& navi, int command, void* data)
         currentChild_ = firstChild();
         announce();
 
-        bool autoPlay = Settings::Instance()->read<bool>("autoplay", false);
+        bool autoPlay = Settings::Instance()->read<bool>("autoplay", true);
         if (autoPlay && firstChildNotOpened_ && numberOfChildren() >= 1)
         {
             // wait for narrator before sending command

@@ -35,6 +35,8 @@ using namespace std;
 // create logger which will become a child to logger kolibre.clientcore
 log4cxx::LoggerPtr dbLog(log4cxx::Logger::getLogger("kolibre.clientcore.db"));
 
+namespace settings {
+
 int busyHandler(void *pArg1, int iPriorCalls)
 {
     LOG4CXX_WARN(dbLog, "busyHandler " << iPriorCalls << " !!");
@@ -53,8 +55,6 @@ int busyHandler(void *pArg1, int iPriorCalls)
     return 0;
 }
 
-namespace settings {
-
 DB::DB(const string &database):
     mDatabase(database), pDBHandle(NULL), pStatement(NULL), mLasterror(""), mLastquery("")
 {
@@ -66,7 +66,7 @@ DB::DB(sqlite3 *handle)
     pStatement = NULL;
     pDBHandle = handle;
     int sleepMode = 1;
-    sqlite3_busy_handler(pDBHandle, &busyHandler, &sleepMode);
+    sqlite3_busy_handler(pDBHandle, &settings::busyHandler, &sleepMode);
 }
 
 bool DB::connect()
@@ -84,7 +84,7 @@ bool DB::connect()
     }
 
     int sleepMode = 1;
-    sqlite3_busy_handler(pDBHandle, &busyHandler, &sleepMode);
+    sqlite3_busy_handler(pDBHandle, &settings::busyHandler, &sleepMode);
 
     bClosedb = true;
     return true;

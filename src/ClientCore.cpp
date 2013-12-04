@@ -321,6 +321,7 @@ void ClientCore::setUsername(const std::string username)
     pthread_mutex_lock(&clientcoreMutex);
     mUsername = username;
     pthread_mutex_unlock(&clientcoreMutex);
+    LOG4CXX_DEBUG(clientcoreLog, "Setting username");
     Settings::Instance()->write<std::string>("username", username);
 }
 
@@ -1081,10 +1082,23 @@ void *ClientCore::clientcore_thread(void *ctx)
 
     std::string useragent = ctxptr->mUserAgent;
     std::string service_url = ctxptr->mServiceUrl;
-    std::string username = ctxptr->mUsername;
-    std::string password = ctxptr->mPassword;
-    ctxptr->setUsername(username);
-    ctxptr->setPassword(password, true); // will default to remember password
+
+    std::string username = "";
+    std::string password = "";
+
+
+    //wait half a second for user credentials
+    for (int i=0; i<6 && username.empty() && password.empty(); i++) {
+        if (i>0){
+            LOG4CXX_DEBUG(clientcoreLog, "Waiting for user credentials");
+            usleep(100000);
+        }
+        username = ctxptr->getUsername();
+        password = ctxptr->getPassword();
+    }
+
+    if (username.empty() && password.empty())
+        LOG4CXX_WARN(clientcoreLog, "User credentials are empty");
 
     DataStreamHandler::Instance()->setUseragent(useragent);
     player->setUseragent(useragent);
