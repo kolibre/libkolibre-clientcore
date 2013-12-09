@@ -81,6 +81,10 @@ public:
     {
         return false; // Should never be opened
     }
+    virtual bool abort()
+    {
+        return true;
+    }
 
     // Always narrated by itself.
     virtual bool onNarrate();

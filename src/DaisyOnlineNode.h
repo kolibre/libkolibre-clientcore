@@ -76,8 +76,10 @@ public:
     bool next(naviengine::NaviEngine&);
     bool prev(naviengine::NaviEngine&);
     bool up(naviengine::NaviEngine&);
+    bool abort();
     bool onNarrate();
     bool onRender();
+    void onNarratorDone();
 
     enum errorType
     {
@@ -103,7 +105,7 @@ private:
     std::string version_;
     std::string language_;
 
-    bool firstChildNotOpened_;
+    bool openFirstChild_;
     bool loggedIn_;
     NaviList navilist;
     AnyNode* currentChild_;
@@ -116,6 +118,7 @@ private:
     // signals and slots to control invocation of DaisyOnline calls
     boost::signals2::signal<void()> sessionInit_signal;
     boost::signals2::signal<void()> issueContent_signal;
+    boost::signals2::connection narratorDoneConnection;
     void onSessionInit();
     void onIssueContent();
     // signals and slots to control invocation of DaisyOnline calls end

@@ -756,18 +756,25 @@ bool DaisyNavi::open()
 
     if (dh->openBook(mUri) == true)
     {
+        bool bPlayingJingle = false;
         int waitCounter = 0;
         while (dh->getState() == DaisyHandler::HANDLER_OPENING)
         {
             LOG4CXX_DEBUG(daisyNaviLog, "state == DaisyHandler::HANDLER_OPENING");
             usleep(100000);
             // when 3 seconds has passed, play wait jingle
-            if (waitCounter++ == 30)
+            if (!narrator->isSpeaking() && waitCounter++ == 30)
             {
                 Narrator::Instance()->playWait();
                 waitCounter = 0;
+                bPlayingJingle = true;
             }
+
         }
+
+        //Dont wait for jingle to finish
+        if(bPlayingJingle)
+            narrator->stop();
 
         if (dh->getState() != DaisyHandler::HANDLER_OPEN)
         {
@@ -782,7 +789,7 @@ bool DaisyNavi::open()
                 usleep(20000);
             return false;
         }
-        Narrator::Instance()->stop();
+
         LOG4CXX_DEBUG(daisyNaviLog, "state == DaisyHandler::HANDLER_OPEN");
 
         bBookIsOpen = true;

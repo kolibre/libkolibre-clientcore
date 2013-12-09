@@ -61,6 +61,7 @@ bool Navi::process(int command, void* data)
     case COMMAND_BACK:
     case COMMAND_HOME:
         Narrator::Instance()->stop();
+        NaviEngine::getCurrentNode()->abort();
         break;
     default:
         break;
