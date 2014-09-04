@@ -56,7 +56,7 @@ int main(int argc, char **argv)
         printf("usage: %s <service_url> <username> <password> <useragent> [OPTIONS]\n", argv[0]);
         printf(" OPTIONS\n");
         printf("       -r Remember password\n");
-        printf("       -l language options: fi, se, en [default: sv]\n");
+        printf("       -l language options: fi, se, en [default: en]\n");
         printf("       -c log configuration file\n");
         printf("       -i use input device instead of stdin\n");
         return 1;
@@ -79,7 +79,7 @@ int main(int argc, char **argv)
     char *logConf = NULL;
 
     // Initiate lanuage variable with default swedish
-    std::string language = "sv";
+    std::string language = "en";
 
     // Handle option flags
     int opt;
