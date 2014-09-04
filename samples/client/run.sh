@@ -18,18 +18,13 @@
 # along with kolibre-clientcore. If not, see <http://www.gnu.org/licenses/>.
 #
 
-if [ $# -ne 2 ]; then
-    echo "Usage: $0 <username> <password>"
-    exit
-fi
-
 #
 # Setup parameters
 #
 
-SERVICE_URL=https://beta.pratsam.com/daisyonline/service.php
-USERNAME=$1
-PASSWORD=$2
+SERVICE_URL=http://kados.kolibre.org/service.php
+USERNAME=kolibre
+PASSWORD=kolibre
 
 KOLIBRE_PREFIX=$(sh kolibre_prefix.sh)
 
