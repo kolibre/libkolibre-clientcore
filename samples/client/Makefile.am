@@ -24,10 +24,13 @@ KolibreSampleClient_SOURCES = Main.cpp Input.cpp
 KolibreSampleClient_LDFLAGS = @LOG4CXX_LIBS@ -L$(top_builddir)/src/.libs -lkolibre-clientcore -lboost_regex
 KolibreSampleClient_CPPFLAGS = @LOG4CXX_CFLAGS@ -I$(top_srcdir)/src
 
-all-local:
+copy-files:
 	cp $(top_srcdir)/samples/client/run $(top_builddir)/samples/client
 	cp $(top_srcdir)/samples/client/run.sh $(top_builddir)/samples/client
 	cp $(top_srcdir)/samples/client/log4cxx.conf $(top_builddir)/samples/client
+
+all-local:
+	if [ $(top_srcdir) != $(top_builddir) ]; then make copy-files; fi
 
 EXTRA_DIST = run.sh \
 			 Input.h
