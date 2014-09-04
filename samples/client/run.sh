@@ -29,7 +29,7 @@ PASSWORD=kolibre
 KOLIBRE_PREFIX=$(sh kolibre_prefix.sh)
 
 if [ -x /usr/bin/gdb ]; then
-    PREFIX="libtool --mode=execute gdb -return-child-result -x ${srcdir:-.}/run --args"
+    PREFIX="libtool --mode=execute gdb --return-child-result -batch -x ${srcdir:-.}/run --args"
 fi
 
 #
