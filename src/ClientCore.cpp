@@ -420,7 +420,7 @@ void ClientCore::setPassword(const std::string password, bool remember)
     }
     else
     {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot set service passwor");
+        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot set service password");
     }
     pthread_mutex_unlock(&clientcoreMutex);
 }
