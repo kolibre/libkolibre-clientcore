@@ -175,6 +175,16 @@ dnl--------------------------------------------
 AC_ARG_WITH([samples], AS_HELP_STRING([--with-samples], [build applications in samples folder]))
 AM_CONDITIONAL(SAMPLES, test "x$with_samples" = "xyes")
 
+dnl-------------------------------------------
+dnl Check for sample dependencies
+dnl--------------------------------------------
+AM_COND_IF(SAMPLES,
+           [
+            PKG_CHECK_MODULES(GLIB, glib-2.0 >= 2.0)
+            AC_SUBST(GLIB_CFLAGS)
+            AC_SUBST(GLIB_LIBS)
+            ])
+
 AC_CONFIG_FILES([libkolibre-clientcore.pc
                  src/version.h
                  Makefile

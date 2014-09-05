@@ -26,6 +26,7 @@
 #include <cstdlib>
 #include <ctime>
 #include <string>
+#include <vector>
 #include <boost/signals2.hpp>
 
 #ifdef WIN32
@@ -91,7 +92,7 @@ struct BookSectionInfo
 };
 
 /**
- * A enumerated list od errro types
+ * A enumerated list of error types
  */
 enum ErrorType
 {
@@ -146,7 +147,7 @@ enum SleepTimerStates
 class KOLIBRE_API ClientCore
 {
 public:
-    ClientCore(const std::string service_url = "https://daisy.kolibre.com/daisyonline/service.php", const std::string useragent = "");
+    ClientCore(const std::string useragent = "");
     ~ClientCore();
 
     enum COMMAND
@@ -156,7 +157,7 @@ public:
         DOWN,                           /**< Open selected child node */
         LEFT,                           /**< Go to previous child node */
         RIGHT,                          /**< Go to next child node */
-        BACK,                           /**< Go to perent node or back in history during playback */
+        BACK,                           /**< Go to parent node or back in history during playback */
         EXIT,                           /**< Exit the application */
         PAUSE,                          /**< Open selected child node or pause the playback */
         BOOKMARK,                       /**< Enter bookmark management */
@@ -183,6 +184,10 @@ public:
     // player/narrator control functions
     void setSpeedPercent(int percent);
     void narratorFinished();
+
+    // handle online and offline sources
+    int addDaisyOnlineService(std::string name, std::string url, std::string username, std::string password, bool rememberPassword = false);
+    int addFileSystemPath(std::string name, std::string path);
 
     // getters and setters
     void setManualSound(const char *);
@@ -214,6 +219,7 @@ public:
     bool jumpToSecond(unsigned int second);
     bool jumpToUri(const std::string uri);
     bool isRunning();
+    void start();
     void shutdown();
 
     /**
@@ -350,18 +356,74 @@ private:
     pthread_mutex_t clientcoreMutex;
     pthread_t clientcoreThread;
     bool clientcoreRunning;
+    bool threadStarted;
     time_t sleepTimerStart;
     time_t sleepTimerEnd;
     int sleepTimerSetting;
     int sleepTimerState;
     std::string mManualOggfile;
     std::string mAboutOggfile;
-    std::string mServiceUrl;
-    std::string mUsername;
-    std::string mPassword;
     std::string mDownloadFolder;
     std::string mUserAgent;
     std::string mSerialNumber;
+
+    /**
+     * A data type to hold information about a DaisyOnline service
+     */
+    struct DaisyOnlineService
+    {
+        DaisyOnlineService(std::string name, std::string url, std::string username, std::string password, bool remember) :
+            name(name), url(url), username(username), password(password), rememberPassword(remember)
+        {
+        }
+        /**
+         *  The name of the DaisyOnline service to distinguish it from other services
+         */
+        std::string name;
+
+        /**
+         * URL for the service
+         */
+        std::string url;
+
+        /**
+         * Username to be used for authenticating a user on the service
+         */
+        std::string username;
+
+        /**
+         * Password to be used for authenticating a user on the service
+         */
+        std::string password;
+
+        /**
+         * Boolean the determine if we shall remember the password for the service
+         */
+        bool rememberPassword;
+    };
+
+    /**
+     * A data type to hold information about a file system path
+     */
+    struct FileSystemPath
+    {
+        FileSystemPath(std::string name, std::string path) :
+            name(name), path(path)
+        {
+        }
+        /**
+         * The name of the path to distinguish it from other paths
+         */
+        std::string name;
+
+        /**
+         * The path on the file system
+         */
+        std::string path;
+    };
+
+    std::vector<DaisyOnlineService> DaisyOnlineServices;
+    std::vector<FileSystemPath> FileSystemPaths;
 };
 
 #endif

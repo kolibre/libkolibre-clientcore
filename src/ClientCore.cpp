@@ -51,10 +51,9 @@ using namespace std;
 /**
  * Constructor
  *
- * @param service_url The service url this application shall connect to
  * @param useragent The user-agent property in HTTP headers this application shall use
  */
-ClientCore::ClientCore(const std::string service_url, const std::string useragent)
+ClientCore::ClientCore(const std::string useragent)
 {
     LOG4CXX_INFO(clientcoreLog, VERSION_PACKAGE_NAME << " " << VERSION_PACKAGE_VERSION << " built " << __DATE__ << " " << __TIME__);
 
@@ -93,31 +92,15 @@ ClientCore::ClientCore(const std::string service_url, const std::string useragen
 
     bindtextdomain(PACKAGE, "locale");
 
-    // Read stored values from settings.db, default to hardcoded vaules
-    mServiceUrl = settings->read<std::string>("service_url", service_url);
-
-    // Set correct domain in settings
-    settings->setDomain(mServiceUrl);
-
-    // Get stored username and password for that domain
-    mUsername = settings->read<std::string>("username", "");
-    mPassword = settings->read<std::string>("password", "");
-
     // Initialize mutex
     pthread_mutex_init(&clientcoreMutex, NULL);
 
     // Initialize sleep timer
     setSleepTimerState(SLEEP_TIMER_OFF);
 
-    // Start commandhandler thread
-    LOG4CXX_INFO(clientcoreLog, "Setting up clientcoreThread");
-    if (pthread_create(&clientcoreThread, NULL, &ClientCore::clientcore_thread, this))
-    {
-        LOG4CXX_FATAL(clientcoreLog, "Failed to start clientcoreThread");
-        usleep(500000);
-        clientcoreRunning = false;
-    }
-    clientcoreRunning = true;
+    // Initialize thread variables
+    clientcoreRunning = false;
+    threadStarted = false;
 }
 
 /**
@@ -129,42 +112,15 @@ ClientCore::~ClientCore()
     clientcoreRunning = false;
     pthread_mutex_unlock(&clientcoreMutex);
 
-    // Wait until clientcore thread stops
-    LOG4CXX_INFO(clientcoreLog, "Waiting for clientcoreThread to join");
-    pthread_join(clientcoreThread, NULL);
-}
+    if (threadStarted)
+    {
+        // Wait until clientcore thread stops
+        LOG4CXX_INFO(clientcoreLog, "Waiting for clientcoreThread to join");
+        pthread_join(clientcoreThread, NULL);
+    }
 
-/**
- * Function to be invoked on narrator finished signals, do not invoke manually.
- */
-void ClientCore::narratorFinished()
-{
-    cq2::Command<INTERNAL_COMMAND> c(COMMAND_NARRATORFINISHED);
-    c();
-}
-
-/**
- * Get the status the application
- *
- * @return A boolean indicating if the application is running or not
- */
-bool ClientCore::isRunning()
-{
-    bool running = false;
-    pthread_mutex_lock(&clientcoreMutex);
-    running = clientcoreRunning;
-    pthread_mutex_unlock(&clientcoreMutex);
-    return running;
-}
-
-/**
- * Shut down and exit the application
- */
-void ClientCore::shutdown()
-{
-    pthread_mutex_lock(&clientcoreMutex);
-    clientcoreRunning = false;
-    pthread_mutex_unlock(&clientcoreMutex);
+    LOG4CXX_DEBUG(clientcoreLog, "Deleting settings");
+    Settings::Instance()->DeleteInstance();
 }
 
 /**
@@ -187,6 +143,90 @@ void ClientCore::setSpeedPercent(int percent)
     Player::Instance()->setTempo(tempo);
     Narrator::Instance()->setTempo(tempo);
     Settings::Instance()->write<double>("playbackspeed", tempo);
+}
+
+/**
+ * Function to be invoked on narrator finished signals, do not invoke manually.
+ */
+void ClientCore::narratorFinished()
+{
+    cq2::Command<INTERNAL_COMMAND> c(COMMAND_NARRATORFINISHED);
+    c();
+}
+
+/**
+ * Add a DaisyOnline service
+ *
+ * @param name The name of the service to distinguish it from other services
+ * @param url The service URL
+ * @param username Username for the service
+ * @param password Password for the service
+ * @param rememberPassword Parameter indicating whether to store the password or not
+ * @return The index of the added service, or -1 if the service was not added
+ */
+int ClientCore::addDaisyOnlineService(std::string name, std::string url, std::string username, std::string password, bool rememberPassword)
+{
+    if (name.empty())
+    {
+        LOG4CXX_WARN(clientcoreLog, "cannot add DaisyOnline service without name");
+        return -1;
+    }
+    else if (url.empty())
+    {
+        LOG4CXX_WARN(clientcoreLog, "cannot add DaisyOnline service without url");
+        return -1;
+    }
+
+    std::vector<DaisyOnlineService>::iterator it;
+    for (it = DaisyOnlineServices.begin(); it != DaisyOnlineServices.end(); ++it)
+    {
+        if (name == it->name)
+        {
+            LOG4CXX_WARN(clientcoreLog, "DaisyOnline service with name " << name << " has already been added");
+            return -1;
+        }
+    }
+
+    DaisyOnlineService service(name, url, username, password, rememberPassword);
+    DaisyOnlineServices.push_back(service);
+
+    return DaisyOnlineServices.size()-1;
+}
+
+/**
+ * Add a file system path
+ *
+ * @param name The name of the path to distinguish it from other paths
+ * @param path The path on the file system
+ * @return The index of the added path, or -1 if the path was not added
+ */
+int ClientCore::addFileSystemPath(std::string name, std::string path)
+{
+    if (name.empty())
+    {
+        LOG4CXX_WARN(clientcoreLog, "cannot add file system path without name");
+        return -1;
+    }
+    else if (path.empty())
+    {
+        LOG4CXX_WARN(clientcoreLog, "cannot add file system path without path");
+        return -1;
+    }
+
+    std::vector<FileSystemPath>::iterator it;
+    for (it = FileSystemPaths.begin(); it != FileSystemPaths.end(); ++it)
+    {
+        if (name == it->name)
+        {
+            LOG4CXX_WARN(clientcoreLog, "File system path with name " << name << " has already been added");
+            return -1;
+        }
+    }
+
+    FileSystemPath filepath(name, path);
+    FileSystemPaths.push_back(filepath);
+
+    return FileSystemPaths.size()-1;
 }
 
 /**
@@ -285,7 +325,16 @@ std::string ClientCore::getLanguage()
  */
 void ClientCore::setServiceUrl(const std::string url)
 {
-    mServiceUrl = url;
+    pthread_mutex_lock(&clientcoreMutex);
+    if (DaisyOnlineServices.size() > 0)
+    {
+        DaisyOnlineServices[0].url = url;
+    }
+    else
+    {
+        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot set service url");
+    }
+    pthread_mutex_unlock(&clientcoreMutex);
 }
 
 /**
@@ -295,7 +344,18 @@ void ClientCore::setServiceUrl(const std::string url)
  */
 std::string ClientCore::getServiceUrl()
 {
-    return mServiceUrl;
+    std::string url = "";
+    pthread_mutex_lock(&clientcoreMutex);
+    if (DaisyOnlineServices.size() > 0)
+    {
+        url = DaisyOnlineServices[0].url;
+    }
+    else
+    {
+        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot get service url");
+    }
+    pthread_mutex_unlock(&clientcoreMutex);
+    return url;
 }
 
 /**
@@ -319,10 +379,17 @@ std::string ClientCore::getUserAgent()
 void ClientCore::setUsername(const std::string username)
 {
     pthread_mutex_lock(&clientcoreMutex);
-    mUsername = username;
+    if (DaisyOnlineServices.size() > 0)
+    {
+        DaisyOnlineServices[0].username = username;
+        Settings::Instance()->setDomain(DaisyOnlineServices[0].url);
+        Settings::Instance()->write<std::string>("username", username);
+    }
+    else
+    {
+        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot set service url");
+    }
     pthread_mutex_unlock(&clientcoreMutex);
-    LOG4CXX_DEBUG(clientcoreLog, "Setting username");
-    Settings::Instance()->write<std::string>("username", username);
 }
 
 
@@ -335,16 +402,27 @@ void ClientCore::setUsername(const std::string username)
 void ClientCore::setPassword(const std::string password, bool remember)
 {
     pthread_mutex_lock(&clientcoreMutex);
-    mPassword = password;
-    pthread_mutex_unlock(&clientcoreMutex);
-    Settings::Instance()->write<bool>("rememberpassword", remember);
-    if (remember)
-        Settings::Instance()->write<std::string>("password", password);
+    if (DaisyOnlineServices.size() > 0)
+    {
+        DaisyOnlineServices[0].password = password;
+        DaisyOnlineServices[0].rememberPassword = remember;
+        Settings::Instance()->setDomain(DaisyOnlineServices[0].url);
+        Settings::Instance()->write<bool>("rememberpassword", remember);
+        if (remember)
+        {
+            Settings::Instance()->write<std::string>("password", password);
+        }
+        else
+        {
+            Settings::Instance()->write<std::string>("password", "");
+            Settings::Instance()->write<std::string>("username", "");
+        }
+    }
     else
     {
-        Settings::Instance()->write<std::string>("password", "");
-        Settings::Instance()->write<std::string>("username", "");
+        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot set service passwor");
     }
+    pthread_mutex_unlock(&clientcoreMutex);
 }
 
 /**
@@ -354,8 +432,16 @@ void ClientCore::setPassword(const std::string password, bool remember)
  */
 std::string ClientCore::getUsername()
 {
+    std::string username = "";
     pthread_mutex_lock(&clientcoreMutex);
-    std::string username = mUsername;
+    if (DaisyOnlineServices.size() > 0)
+    {
+        username = DaisyOnlineServices[0].username;
+    }
+    else
+    {
+        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot get service username");
+    }
     pthread_mutex_unlock(&clientcoreMutex);
     return username;
 }
@@ -367,8 +453,16 @@ std::string ClientCore::getUsername()
  */
 std::string ClientCore::getPassword()
 {
+    std::string password = "";
     pthread_mutex_lock(&clientcoreMutex);
-    std::string password = mPassword;
+    if (DaisyOnlineServices.size() > 0)
+    {
+        password = DaisyOnlineServices[0].password;
+    }
+    else
+    {
+        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot get service password");
+    }
     pthread_mutex_unlock(&clientcoreMutex);
     return password;
 }
@@ -493,8 +587,17 @@ SleepTimerStates ClientCore::getSleepTimerState()
  */
 bool ClientCore::getRememberPassword()
 {
-    bool remember;
-    remember = Settings::Instance()->read<bool>("rememberpassword", false);
+    bool remember = false;
+    pthread_mutex_lock(&clientcoreMutex);
+    if (DaisyOnlineServices.size() > 0)
+    {
+        remember = DaisyOnlineServices[0].rememberPassword;
+    }
+    else
+    {
+        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot get service remember password");
+    }
+    pthread_mutex_unlock(&clientcoreMutex);
     return remember;
 }
 
@@ -546,6 +649,47 @@ bool ClientCore::jumpToUri(const std::string uri)
     cq2::Command<JumpCommand<std::string> > jump(uri);
     jump();
     return true;
+}
+
+/**
+ * Get the status the application
+ *
+ * @return A boolean indicating if the application is running or not
+ */
+bool ClientCore::isRunning()
+{
+    bool running = false;
+    pthread_mutex_lock(&clientcoreMutex);
+    running = clientcoreRunning;
+    pthread_mutex_unlock(&clientcoreMutex);
+    return running;
+}
+
+/**
+ * Start the application
+ */
+void ClientCore::start()
+{
+    // Start main thread
+    LOG4CXX_INFO(clientcoreLog, "Setting up clientcoreThread");
+    if (pthread_create(&clientcoreThread, NULL, &ClientCore::clientcore_thread, this))
+    {
+        LOG4CXX_FATAL(clientcoreLog, "Failed to start clientcoreThread");
+        usleep(500000);
+        clientcoreRunning = false;
+    }
+    clientcoreRunning = true;
+    threadStarted = true;
+}
+
+/**
+ * Shut down and exit the application
+ */
+void ClientCore::shutdown()
+{
+    pthread_mutex_lock(&clientcoreMutex);
+    clientcoreRunning = false;
+    pthread_mutex_unlock(&clientcoreMutex);
 }
 
 // struct ClientCoreState (read global variables)
@@ -1068,6 +1212,19 @@ private:
 void *ClientCore::clientcore_thread(void *ctx)
 {
     ClientCore* ctxptr = (ClientCore*) ctx;
+
+    // Abort and exit application if no service has been added
+    pthread_mutex_lock(&ctxptr->clientcoreMutex);
+    int services = ctxptr->DaisyOnlineServices.size();
+    pthread_mutex_unlock(&ctxptr->clientcoreMutex);
+    if (services == 0)
+    {
+        pthread_mutex_lock(&ctxptr->clientcoreMutex);
+        ctxptr->clientcoreRunning = false;
+        pthread_mutex_unlock(&ctxptr->clientcoreMutex);
+        return NULL;
+    }
+
     LOG4CXX_DEBUG(clientcoreLog, "Setting up narrator");
     Narrator *narrator = Narrator::Instance();
     usleep(100000);
@@ -1076,16 +1233,11 @@ void *ClientCore::clientcore_thread(void *ctx)
     Player *player = Player::Instance();
     usleep(100000);
 
-    LOG4CXX_DEBUG(clientcoreLog, "Setting up settings");
-    Settings *settings = Settings::Instance();
-    usleep(100000);
-
-    std::string useragent = ctxptr->mUserAgent;
-    std::string service_url = ctxptr->mServiceUrl;
+    std::string useragent = ctxptr->getUserAgent();
+    std::string service_url = ctxptr->getServiceUrl();
 
     std::string username = "";
     std::string password = "";
-
 
     //wait half a second for user credentials
     for (int i=0; i<6 && username.empty() && password.empty(); i++) {
@@ -1116,15 +1268,7 @@ void *ClientCore::clientcore_thread(void *ctx)
 
     // Initialize a DaisyOnlineNode to use a root node in NaviEngine
     DaisyOnlineNode* doservice = new DaisyOnlineNode(service_url, username, password, ".", useragent);
-    if (!doservice->good())
-    {
-        LOG4CXX_ERROR(clientcoreLog, "DaisyOnlineNode failed to initialize");
-        pthread_mutex_lock(&ctxptr->clientcoreMutex);
-        // If we fail to set up DaisyOnlineNode, (log in fails or network error, set running to false)
-        running = ctxptr->clientcoreRunning = false;
-        pthread_mutex_unlock(&ctxptr->clientcoreMutex);
-    }
-    else
+    if (doservice->good())
     {
         doservice->name_ = ""; // Empty name means it narrates it self.
 
@@ -1144,8 +1288,12 @@ void *ClientCore::clientcore_thread(void *ctx)
         doservice->setLanguage(ctxptr->getLanguage());
         doservice->setSerialNumber(ctxptr->getSerialNumber());
     }
+    else
+    {
+        LOG4CXX_ERROR(clientcoreLog, "DaisyOnlineNode failed to initialize");
+    }
 
-    LOG4CXX_DEBUG(clientcoreLog, "Setting up settings");
+
     Navi *navi = new Navi(ctxptr);
     navi->openMenu(doservice, true);
     if (not navi->good())
@@ -1153,7 +1301,6 @@ void *ClientCore::clientcore_thread(void *ctx)
         // Failed to open the root node.
         LOG4CXX_ERROR(clientcoreLog, "failed to root node");
         pthread_mutex_lock(&ctxptr->clientcoreMutex);
-        // If we fail to set up DaisyOnlineNode, (log in fails or network error, set running to false)
         running = ctxptr->clientcoreRunning = false;
         pthread_mutex_unlock(&ctxptr->clientcoreMutex);
     }
@@ -1312,10 +1459,6 @@ void *ClientCore::clientcore_thread(void *ctx)
     };
     LOG4CXX_DEBUG(clientcoreLog, "Deleting narrator");
     delete narrator;
-    LOG4CXX_DEBUG(clientcoreLog, "Deleting settings");
-
-    settings->DeleteInstance();
-    settings=NULL;
 
     return NULL;
 }

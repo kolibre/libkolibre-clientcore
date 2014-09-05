@@ -25,6 +25,7 @@
 #include <signal.h>
 #include <syslog.h>
 #include <cstring>
+#include <glib.h>
 #include <log4cxx/logger.h>
 #include <log4cxx/basicconfigurator.h>
 #include <log4cxx/propertyconfigurator.h>
@@ -49,47 +50,86 @@ void onSleepTimeout();
 void onInvalidAuth();
 
 
+char* applicationPath;
+void usage()
+{
+    printf("usage: %s [OPTIONS]\n", applicationPath);
+    printf("OPTIONS\n");
+    printf("  -s <url> \t\turl to Daisy Online service\n");
+    printf("  -u <username> \tusername for service, must be specified along with -s option\n");
+    printf("  -p <password> \tpassword for service, must be specified along with -s option\n");
+    printf("  -r \t\t\tremember password for specified service\n");
+    printf("  -m <path> \t\tpath to local media\n");
+    printf("  -l <lang> \t\tlanguage to use, options: sv, fi, en [default: en]\n");
+    printf("  -i <path> \t\tpath to client configuration\n");
+    printf("  -c <path> \t\tpath to log configuration\n");
+    printf("  -d <path> \t\tpath to input device\n");
+    printf("  -a <useragent> \tstring to use as UserAgent\n");
+    printf("  -h \t\t\tshow this message\n");
+    printf("\n");
+    printf("Note! You must specify either a Daisy Online service, a local media path\n");
+    printf("or client configuration path.\n");
+    printf("   e.g. %s -s http://daisyonline.com/service -u username -p password\n", applicationPath);
+    printf("        %s -m /home/user/Media\n", applicationPath);
+    printf("        %s -i /home/user/settings.ini\n", applicationPath);
+}
+
 int main(int argc, char **argv)
 {
-    if (argc < 4)
+    applicationPath = argv[0];
+    if (argc < 2)
     {
-        printf("usage: %s <service_url> <username> <password> <useragent> [OPTIONS]\n", argv[0]);
-        printf(" OPTIONS\n");
-        printf("       -r Remember password\n");
-        printf("       -l language options: fi, se, en [default: en]\n");
-        printf("       -c log configuration file\n");
-        printf("       -i use input device instead of stdin\n");
+        usage();
         return 1;
     }
+
     signal(SIGINT, handleSignal);
     signal(SIGQUIT, handleSignal);
     signal(SIGTERM, handleSignal);
 
-    // store required arguments before parsing optional
-    std::string service_url, username, password, useragent;
-    service_url = argv[1];
-    username = argv[2];
-    password = argv[3];
-    useragent = argv[4];
-
+    // variables for storing user arguments
+    std::string serviceUrl, username, password = "";
     bool rememberPassword = false;
+    std::string mediaPath = "";
+    std::string language = "en"; // default to English
     std::string inputDev = "";
-
-    // Initiate logging
+    std::string useragent = "KolibreSampleClient/0.0.1";
+    char *settingsPath = NULL;
     char *logConf = NULL;
 
-    // Initiate lanuage variable with default swedish
-    std::string language = "en";
-
-    // Handle option flags
+    // parse user arguments
     int opt;
-    while ((opt = getopt(argc, argv, "rl:c:i:")) != -1)
+    while ((opt = getopt(argc, argv, "s:u:p:rm:l:i:c:h")) != -1)
     {
         switch (opt)
         {
+        case 's':
+        {
+            serviceUrl = optarg;
+            mediaPath = "";
+            settingsPath = NULL;
+            break;
+        }
+        case 'u':
+        {
+            username = optarg;
+            break;
+        }
+        case 'p':
+        {
+            password = optarg;
+            break;
+        }
         case 'r':
             rememberPassword = true;
             break;
+        case 'm':
+        {
+            serviceUrl = "";
+            mediaPath = optarg;
+            settingsPath = NULL;
+            break;
+        }
         case 'l':
         {
             if (strcmp(optarg, "en") == 0)
@@ -106,21 +146,57 @@ int main(int argc, char **argv)
             }
             break;
         }
+        case 'i':
+        {
+            serviceUrl = "";
+            mediaPath = "";
+            settingsPath = optarg;
+            break;
+        }
         case 'c':
         {
             logConf = optarg;
             break;
         }
-        case 'i':
+        case 'd':
         {
             inputDev = optarg;
             break;
         }
-
-        default:
-            printf("Unknown option: %c", opt);
+        case 'a':
+        {
+            useragent = optarg;
             break;
         }
+        case 'h':
+        {
+            usage();
+            return 0;
+        }
+        default:
+            printf("Unknown option: %c\n", opt);
+            break;
+        }
+    }
+
+    // check user arguments
+    if (serviceUrl.empty() && mediaPath.empty() && settingsPath == NULL)
+    {
+        usage();
+        return 1;
+    }
+    else if (not serviceUrl.empty())
+    {
+        if (username.empty() || password.empty())
+        {
+            usage();
+            return 1;
+        }
+    }
+    else if (not mediaPath.empty())
+    {
+        printf("error: Support not yet implemented\n");
+        return 1;
     }
 
     // Setup logging
@@ -146,10 +222,124 @@ int main(int argc, char **argv)
     // Set language
     ClientCore::setLanguage(language);
 
-    ClientCore *clientcore = new ClientCore(service_url, useragent);
+    ClientCore *clientcore = new ClientCore(useragent);
 
-    clientcore->setUsername(username);
-    clientcore->setPassword(password, rememberPassword);
+    // add service or path or parse settings file
+    if (not serviceUrl.empty())
+    {
+        clientcore->addDaisyOnlineService("main", serviceUrl, username, password, rememberPassword);
+    }
+    else if (not mediaPath.empty())
+    {
+        clientcore->addFileSystemPath("main", mediaPath);
+    }
+    else if (settingsPath != NULL)
+    {
+        GKeyFile *keyFile;
+        GKeyFileFlags keyFileFlags = G_KEY_FILE_NONE;
+        GError *error;
+
+        // create a new GKeyFile object
+        keyFile = g_key_file_new();
+
+        // load data from file
+        if (not g_key_file_load_from_file(keyFile, settingsPath, keyFileFlags, &error))
+        {
+            LOG4CXX_ERROR(sampleClientMainLog, "error while loading file '" << settingsPath << "':" << error->message);
+            g_key_file_free(keyFile);
+            delete clientcore;
+            return -1;
+        }
+
+        // get all groups in file
+        gchar **groups = NULL;
+        gsize length = NULL;
+        groups = g_key_file_get_groups(keyFile, &length);
+
+        // loop through each group and search for matches
+        for (unsigned long i = 0; i < length; i++)
+        {
+            // if group name contains 'DaisyOnlineService'
+            if (strstr(groups[i], "DaisyOnlineService") != NULL)
+            {
+                LOG4CXX_INFO(sampleClientMainLog, "Found DaisyOnline service group '" << groups[i] << "'");
+                bool missingKey = false;
+                gchar *name, *url, *username, *password = NULL;
+
+                // get key name
+                name = g_key_file_get_string(keyFile, groups[i], "NAME", NULL);
+                if (name == NULL)
+                {
+                    LOG4CXX_WARN(sampleClientMainLog, "Group '" << groups[i] << "' does not have key 'NAME'");
+                    missingKey = true;
+                }
+
+                // get key url
+                url = g_key_file_get_string(keyFile, groups[i], "URL", NULL);
+                if (url == NULL)
+                {
+                    LOG4CXX_WARN(sampleClientMainLog, "Group '" << groups[i] << "' does not have key 'URL'");
+                    missingKey = true;
+                }
+
+                // get key username
+                username = g_key_file_get_string(keyFile, groups[i], "USERNAME", NULL);
+                if (username == NULL)
+                {
+                    LOG4CXX_WARN(sampleClientMainLog, "Group '" << groups[i] << "' does not have key 'USERNAME'");
+                    missingKey = true;
+                }
+
+                // get key password
+                password = g_key_file_get_string(keyFile, groups[i], "PASSWORD", NULL);
+                if (password == NULL)
+                {
+                    LOG4CXX_WARN(sampleClientMainLog, "Group '" << groups[i] << "' does not have key 'PASSWORD'");
+                    missingKey = true;
+                }
+
+                if (not missingKey)
+                {
+                    LOG4CXX_INFO(sampleClientMainLog, "Adding '" << name << "' as a DaisyOnlineService");
+                    clientcore->addDaisyOnlineService(name, url, username, password);
+                }
+
+            }
+            // if group name contains 'FileSystemPath'
+            else if (strstr(groups[i], "FileSystemPath") != NULL)
+            {
+                LOG4CXX_INFO(sampleClientMainLog, "Found file system path group '" << groups[i] << "'");
+                bool missingKey = false;
+                gchar *name, *path = NULL;
+
+                // get key name
+                name = g_key_file_get_string(keyFile, groups[i], "NAME", NULL);
+                if (name == NULL)
+                {
+                    LOG4CXX_WARN(sampleClientMainLog, "Group '" << groups[i] << "' does not have key 'NAME'");
+                    missingKey = true;
+                }
+
+                // get key path
+                path = g_key_file_get_string(keyFile, groups[i], "PATH", NULL);
+                if (path == NULL)
+                {
+                    LOG4CXX_WARN(sampleClientMainLog, "Group '" << groups[i] << "' does not have key 'PATH'");
+                    missingKey = true;
+                }
+
+                if (not missingKey)
+                {
+                    LOG4CXX_INFO(sampleClientMainLog, "Adding '" << name << "' as a FileSystemPath");
+                    clientcore->addFileSystemPath(name, path);
+                }
+            }
+        }
+
+        // free allocated memory
+        g_strfreev(groups);
+        g_key_file_free(keyFile);
+    }
 
     // Connect slots to signals
     clientcore->sleepTimeout_signal.connect(&onSleepTimeout);
@@ -159,6 +349,8 @@ int main(int argc, char **argv)
     if(inputDev.compare("") != 0)
         input->set_input_device(inputDev);
 
+    // start client and wait for it to exit
+    clientcore->start();
     while (clientcore->isRunning())
         usleep(100000);
 
@@ -178,7 +370,7 @@ void onSleepTimeout()
     exitValue = 100;
 }
 
-// Handle the different unix signals we might recieve
+// Handle the different unix signals we might receive
 void handleSignal(int sig)
 {
     if (!exitSignal)

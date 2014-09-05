@@ -91,7 +91,9 @@ int main(int argc, char **argv)
     Handle_NotifyCommands notifyHandler;
     notifyHandler.listen();
 
-    ClientCore clientcore("","");
+    ClientCore clientcore("");
+    clientcore.addDaisyOnlineService("name", "url", "username", "password");
+    clientcore.start();
 
     // sleep timer off by default
     printSleepTimerInfo(clientcore);
