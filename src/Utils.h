@@ -20,8 +20,12 @@
 #ifndef _UTILS_H
 #define _UTILS_H
 
+#include <algorithm>
 #include <string>
 #include <cstdlib>
+#include <vector>
+#include <log4cxx/logger.h>
+#include <boost/filesystem.hpp>
 
 #ifdef WIN32
 #define DEFAULT_DATAPATH "./"
@@ -38,6 +42,7 @@
 class Utils
 {
 public:
+
     static void trim(std::string& s)
     {
         // Remove leading and trailing whitespace
@@ -62,7 +67,124 @@ public:
         return datapath;
     }
 
-private:
+    static bool isDir(boost::filesystem::path path)
+    {
+        // create scoped logger which will become a child to logger kolibre.clientcore
+        log4cxx::LoggerPtr utilsLog(log4cxx::Logger::getLogger("kolibre.clientcore.utils"));
+
+        try
+        {
+            if (boost::filesystem::exists(path))
+            {
+                if (boost::filesystem::is_directory(path))
+                {
+                    return true;
+                }
+                else
+                {
+                    LOG4CXX_WARN(utilsLog, path << " exists, but is not a directory");
+                }
+            }
+            else
+            {
+                LOG4CXX_WARN(utilsLog, path << " does not exist");
+            }
+        }
+        catch (const boost::filesystem::filesystem_error& ex)
+        {
+            LOG4CXX_ERROR(utilsLog, ex.what());
+        }
+        return false;
+    }
+
+    static bool isFile(boost::filesystem::path path)
+    {
+        // create scoped logger which will become a child to logger kolibre.clientcore
+        log4cxx::LoggerPtr utilsLog(log4cxx::Logger::getLogger("kolibre.clientcore.utils"));
+
+        try
+        {
+            if (boost::filesystem::exists(path))
+            {
+                if (boost::filesystem::is_regular_file(path))
+                {
+                    return true;
+                }
+                else
+                {
+                    LOG4CXX_WARN(utilsLog, path << " exists, but is not a regular file");
+                }
+            }
+            else
+            {
+                LOG4CXX_WARN(utilsLog, path << " does not exist");
+            }
+        }
+        catch (const boost::filesystem::filesystem_error& ex)
+        {
+            LOG4CXX_ERROR(utilsLog, ex.what());
+        }
+        return false;
+    }
+
+    static std::vector<std::string> recursiveSearchByFilename(std::string path, std::string pattern)
+    {
+        // create scoped logger which will become a child to logger kolibre.clientcore
+        log4cxx::LoggerPtr utilsLog(log4cxx::Logger::getLogger("kolibre.clientcore.utils"));
+
+        LOG4CXX_INFO(utilsLog, "recursively searching '" << path << "' for files with name '" << pattern << "'");
+
+        std::vector<std::string> matches;
+        if (isDir(path))
+        {
+            for (boost::filesystem::recursive_directory_iterator end, dir(path); dir != end; ++dir)
+            {
+                boost::filesystem::path p(*dir);
+                if (isFile(p))
+                {
+                    if (p.filename() == pattern)
+                        matches.push_back(p.string());
+                }
+            }
+        }
+        return matches;
+    }
+
+    static std::vector<std::string> recursiveSearchByExtension(std::string path, std::string pattern)
+    {
+        // create scoped logger which will become a child to logger kolibre.clientcore
+        log4cxx::LoggerPtr utilsLog(log4cxx::Logger::getLogger("kolibre.clientcore.utils"));
+
+        LOG4CXX_INFO(utilsLog, "recursively searching '" << path << "' for files with extension '" << pattern << "'");
+
+        std::vector<std::string> matches;
+        if (isDir(path))
+        {
+            for (boost::filesystem::recursive_directory_iterator end, dir(path); dir != end; ++dir)
+            {
+                boost::filesystem::path p(*dir);
+                if (isFile(p))
+                {
+                    if (p.extension() == pattern)
+                        matches.push_back(p.string());
+                }
+            }
+        }
+        return matches;
+    }
+
+    static std::string toLower(std::string data)
+    {
+        std::transform(data.begin(), data.end(), data.begin(), ::tolower);
+        return data;
+    }
+
+    static bool contains(std::string haystack, std::string needle)
+    {
+        if (std::string::npos != haystack.find(needle))
+            return true;
+        return false;
+    }
 };
 
 #endif

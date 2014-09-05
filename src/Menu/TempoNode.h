@@ -20,15 +20,15 @@
 #ifndef NAVIENGINE_TEMPONODE
 #define NAVIENGINE_TEMPONODE
 
-#include <Nodes/VirtualMenuNode.h>
+#include "VirtualContextMenuNode.h"
 
 #include <map>
 #include <string>
 
-class TempoNode: public naviengine::VirtualMenuNode
+class TempoNode: public VirtualContextMenuNode
 {
 public:
-    TempoNode();
+    TempoNode(const std::string&, const std::string);
 
     bool up(naviengine::NaviEngine&);
     bool prev(naviengine::NaviEngine&);
@@ -36,6 +36,7 @@ public:
     bool select(naviengine::NaviEngine&);
     bool selectByUri(naviengine::NaviEngine&, std::string);
     bool onOpen(naviengine::NaviEngine&);
+    bool narrateInfo();
     bool onNarrate();
 
 private:

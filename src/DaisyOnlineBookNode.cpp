@@ -22,12 +22,13 @@
 #include "CommandQueue2/CommandQueue.h"
 #include "DaisyNavi.h"
 #include "Defines.h"
+#include "Utils.h"
 
+#include <Narrator.h>
 #include <NaviEngine.h>
 #include <DaisyOnlineHandler.h>
 
 #include <cstring>
-#include <algorithm>
 #include <log4cxx/logger.h>
 
 // create logger which will become a child to logger kolibre.clientcore
@@ -35,66 +36,12 @@ log4cxx::LoggerPtr bookNodeLog(log4cxx::Logger::getLogger("kolibre.clientcore.da
 
 using namespace naviengine;
 
-DaisyOnlineBookNode::DaisyOnlineBookNode(std::string book_id, DaisyOnlineHandler *DOHandler) :
-        book_id_(book_id), pDOHandler(DOHandler), daisyNaviActive(false)
+DaisyOnlineBookNode::DaisyOnlineBookNode(std::string book_id, DaisyOnlineHandler *DOHandler) : DaisyBookNode()
 {
-    LOG4CXX_DEBUG(bookNodeLog, "constructor");
-    play_before_onOpen_ = "";
+    LOG4CXX_TRACE(bookNodeLog, "Constructor");
+    book_id_ = book_id;
+    pDOHandler = DOHandler;
     lastError = (errorType) -1;
-    pDaisyNavi = new DaisyNavi;
-}
-
-DaisyOnlineBookNode::~DaisyOnlineBookNode()
-{
-    LOG4CXX_DEBUG(bookNodeLog, "destructor");
-    delete pDaisyNavi;
-}
-
-bool DaisyOnlineBookNode::up(NaviEngine& navi)
-{
-    if (not pDaisyNavi->up(navi))
-    {
-        // DaisyNavi has moved beyond TOPLEVEL
-        daisyNaviActive = false;
-        if (pDaisyNavi->isOpen())
-        {
-            pDaisyNavi->closeBook();
-        }
-
-        // DaisyNavi fiddled with the state so we reset it.
-        navi.setCurrentNode(this);
-
-        // Move up one more level since the book node doesn't do
-        // anything other than setup daisynavi.
-        return VirtualMenuNode::up(navi);
-    }
-
-    return true;
-}
-
-bool DaisyOnlineBookNode::prev(NaviEngine& navi)
-{
-    return pDaisyNavi->prev(navi);
-}
-
-bool DaisyOnlineBookNode::next(NaviEngine& navi)
-{
-    return pDaisyNavi->next(navi);
-}
-
-bool DaisyOnlineBookNode::select(NaviEngine& navi)
-{
-    return pDaisyNavi->select(navi);
-}
-
-bool DaisyOnlineBookNode::selectByUri(naviengine::NaviEngine& navi, std::string uri)
-{
-    return pDaisyNavi->selectByUri(navi, uri);
-}
-
-bool DaisyOnlineBookNode::menu(NaviEngine& navi)
-{
-    return pDaisyNavi->menu(navi);
 }
 
 bool DaisyOnlineBookNode::onOpen(NaviEngine& navi)
@@ -107,9 +54,7 @@ bool DaisyOnlineBookNode::onOpen(NaviEngine& navi)
     time_t starttime, timenow;
     time(&starttime);
 
-    Narrator::Instance()->play(_N("opening publication"));
-
-    url_ = "";
+    daisyUri_ = "";
     pDaisyNavi->parent_ = this;
 
     // invoke getContentResouces
@@ -169,24 +114,18 @@ bool DaisyOnlineBookNode::onOpen(NaviEngine& navi)
         }
 
         // is this ncc.html file
-        std::string filename(resources[i].getLocalUri());
-        //filename = tolower(filename.c_str());
-        std::transform(filename.begin(), filename.end(), filename.begin(), (int (*)(int))tolower);if
-(        filename == "ncc.html" )
+        std::string filename = Utils::toLower(resources[i].getLocalUri());
+        if (filename == "ncc.html")
         {
-            url_ = std::string(resources[i].getUri());
-        }
-
-        if (url_ != "")
-        {
-            LOG4CXX_INFO(bookNodeLog, "Found url to ncc: " << url_);
+            LOG4CXX_INFO(bookNodeLog, "Found uri to ncc: " << daisyUri_);
+            daisyUri_ = std::string(resources[i].getUri());
             break;
         }
     }
 
     delete contentResources;
 
-    if (url_ == "")
+    if (daisyUri_.empty())
     {
         lastError = NAVIGATION_CONTROL_FILE_ERROR;
         LOG4CXX_ERROR(bookNodeLog, "url to ncc was not found in resources for contentID " << book_id_);
@@ -205,7 +144,7 @@ bool DaisyOnlineBookNode::onOpen(NaviEngine& navi)
         return daisyNaviActive;
     }
 
-    if (pDaisyNavi->open(url_) && pDaisyNavi->onOpen(navi))
+    if (pDaisyNavi->open(daisyUri_) && pDaisyNavi->onOpen(navi))
     {
         LOG4CXX_INFO(bookNodeLog, "opening contentID " << book_id_);
         daisyNaviActive = true;
@@ -228,27 +167,6 @@ bool DaisyOnlineBookNode::onOpen(NaviEngine& navi)
 
     daisyNaviActive = false;
     return daisyNaviActive;
-}
-
-bool DaisyOnlineBookNode::process(NaviEngine& navi, int command, void* data)
-{
-    bool result = pDaisyNavi->process(navi, command, data);
-
-    // If the book is no longer opened then swap node to parent
-    if (daisyNaviActive && !pDaisyNavi->isOpen())
-    {
-        LOG4CXX_INFO(bookNodeLog, "Closing at the end of book");
-        daisyNaviActive = false;
-        return VirtualMenuNode::up(navi);
-    }
-
-    return result;
-}
-
-bool DaisyOnlineBookNode::onNarrate()
-{
-    // Parent node does the narration
-    return true;
 }
 
 DaisyOnlineBookNode::errorType DaisyOnlineBookNode::getLastError()

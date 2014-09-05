@@ -36,7 +36,8 @@ log4cxx::LoggerPtr sleepTimeNodeLog(log4cxx::Logger::getLogger("kolibre.clientco
 
 using namespace naviengine;
 
-SleepTimerNode::SleepTimerNode(ClientCore* clientcore) :
+SleepTimerNode::SleepTimerNode(ClientCore* clientcore, const std::string& name, const std::string& playBeforeOnOpen) :
+        VirtualContextMenuNode(name, playBeforeOnOpen),
         clientcore_(clientcore)
 {
     isOpen = false;
@@ -103,15 +104,22 @@ bool SleepTimerNode::onOpen(NaviEngine&)
     return true;
 }
 
+bool SleepTimerNode::narrateInfo()
+{
+    const bool isSelfNarrated = true;
+    if (isOpen)
+    {
+        Narrator::Instance()->play(info_.c_str());
+        Narrator::Instance()->playShortpause();
+        renderChild();
+    }
+    return isSelfNarrated;
+}
+
 bool SleepTimerNode::onNarrate()
 {
-    if (not isOpen)
-        return false;
-
-    Narrator::Instance()->play(info_.c_str());
-    Narrator::Instance()->playShortpause();
-    renderChild();
-    return true;
+    const bool isSelfNarrated = false;
+    return isSelfNarrated;
 }
 
 void SleepTimerNode::render()

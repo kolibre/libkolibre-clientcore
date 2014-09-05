@@ -35,7 +35,8 @@ log4cxx::LoggerPtr autoPlayNodeLog(log4cxx::Logger::getLogger("kolibre.clientcor
 
 using namespace naviengine;
 
-AutoPlayNode::AutoPlayNode()
+AutoPlayNode::AutoPlayNode(const std::string& name, const std::string playBeforeOnOpen) :
+    VirtualContextMenuNode(name, playBeforeOnOpen)
 {
     isOpen = false;
     currentChild = 0;
@@ -103,15 +104,22 @@ bool AutoPlayNode::onOpen(NaviEngine&)
     return true;
 }
 
+bool AutoPlayNode::narrateInfo()
+{
+    const bool isSelfNarrated = true;
+    if (isOpen)
+    {
+        Narrator::Instance()->play(info_.c_str());
+        Narrator::Instance()->playShortpause();
+        renderChild();
+    }
+    return isSelfNarrated;
+}
+
 bool AutoPlayNode::onNarrate()
 {
-    if (not isOpen)
-        return false;
-
-    Narrator::Instance()->play(info_.c_str());
-    Narrator::Instance()->playShortpause();
-    renderChild();
-    return true;
+    const bool isSelfNarrated = false;
+    return isSelfNarrated;
 }
 
 void AutoPlayNode::render()

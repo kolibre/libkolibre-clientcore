@@ -35,48 +35,28 @@
 class DaisyOnlineNode: public naviengine::MenuNode
 {
 public:
-    DaisyOnlineNode(const std::string uri, const std::string username, const std::string password, const std::string& client_home, std::string useragent = "");
+    DaisyOnlineNode(const std::string name, const std::string uri, const std::string username, const std::string password, std::string useragent = "");
     ~DaisyOnlineNode();
 
-    bool good();
-    std::string getErrorMessage();
-
     // ReadingSystemAttributes values
-    void setManufacturer(const std::string &manufacturer)
-    {
-        manufacturer_ = manufacturer;
-    }
-    ;
-    void setModel(const std::string &model)
-    {
-        model_ = model;
-    }
-    ;
-    void setSerialNumber(const std::string &serialNumber)
-    {
-        serialNumber_ = serialNumber;
-    }
-    ;
-    void setVersion(const std::string &version)
-    {
-        version_ = version;
-    }
-    ;
-    void setLanguage(const std::string &language)
-    {
-        language_ = language;
-    }
-    ;
+    void setManufacturer(const std::string &manufacturer);
+    void setModel(const std::string &model);
+    void setSerialNumber(const std::string &serialNumber);
+    void setVersion(const std::string &version);
+    void setLanguage(const std::string &language);
 
     // MenuNode start
     // virtual methods from naviengine::AnyNode
     bool menu(naviengine::NaviEngine&);
     bool onOpen(naviengine::NaviEngine&);
+    void beforeOnOpen();
     bool process(naviengine::NaviEngine&, int command, void* data = 0);
     bool next(naviengine::NaviEngine&);
     bool prev(naviengine::NaviEngine&);
     bool up(naviengine::NaviEngine&);
     bool abort();
+    bool narrateName();
+    bool narrateInfo();
     bool onNarrate();
     bool onRender();
     void onNarratorDone();
@@ -89,11 +69,14 @@ public:
         USERNAME_PASSWORD_ERROR,
     };
     errorType getLastError();
+    std::string getErrorMessage();
+    bool good();
 
 private:
     bool good_; // if false, call getErrorMessage, resets on every invoke
     DaisyOnlineHandler *pDOHandler;
-    const std::string serverUrl_;
+    std::string serviceName_;
+    std::string serviceUri_;
     std::string username_;
     std::string password_;
     std::string previousUsername_;
@@ -107,6 +90,7 @@ private:
 
     bool openFirstChild_;
     bool loggedIn_;
+    bool serviceUpdated_;
     NaviList navilist;
     AnyNode* currentChild_;
 

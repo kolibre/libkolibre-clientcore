@@ -18,13 +18,14 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-check_PROGRAMS = sleeptimer getset
+check_PROGRAMS = mediasourcemanager sleeptimer getset
 
-TESTS = sleeptimer getset
+TESTS = mediasourcemanager sleeptimer getset
 
+mediasourcemanager_SOURCES = mediasourcemanager.cpp
 sleeptimer_SOURCES = sleeptimer.cpp
 getset_SOURCES = getset.cpp
 
 LDADD = $(top_builddir)/src/libkolibre-clientcore.la
-AM_LDFLAGS = -L$(top_builddir)/src @LOG4CXX_LIBS@ -lboost_regex
+AM_LDFLAGS = -L$(top_builddir)/src @LOG4CXX_LIBS@ -lboost_regex -lboost_filesystem
 AM_CPPFLAGS = -I$(top_srcdir)/src

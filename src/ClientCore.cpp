@@ -18,7 +18,8 @@
  */
 
 #include "ClientCore.h"
-#include "DaisyOnlineNode.h"
+#include "MediaSourceManager.h"
+#include "RootNode.h"
 #include "Defines.h"
 #include "Navi.h"
 #include "Utils.h"
@@ -37,7 +38,6 @@
 #include <unistd.h>
 #include <iostream>
 #include <boost/regex.hpp>
-#include <algorithm>
 #include <libintl.h>
 #include <log4cxx/logger.h>
 
@@ -57,36 +57,38 @@ ClientCore::ClientCore(const std::string useragent)
 {
     LOG4CXX_INFO(clientcoreLog, VERSION_PACKAGE_NAME << " " << VERSION_PACKAGE_VERSION << " built " << __DATE__ << " " << __TIME__);
 
-    // Initialize support classes
-    LOG4CXX_INFO(clientcoreLog, "Setting up settings");
-    Settings *settings = Settings::Instance();
-
-    LOG4CXX_INFO(clientcoreLog, "Setting up player");
-    Player *player = Player::Instance();
-
-    LOG4CXX_INFO(clientcoreLog, "Setting up narrator");
-    Narrator *narrator = Narrator::Instance();
-
-    std::string messagedb = Utils::getDatapath() + "messages.db";
-    narrator->setDatabasePath(messagedb);
-    narrator->connectAudioFinished(boost::bind(&ClientCore::narratorFinished, this));
-
-    mManualOggfile = "";
-
-    // If no versioning info comes from above, use package name and version as useragent
-    // If useragent information info comes from above adhere to that
+    // If no versioning info comes from above, use package name and version as UserAgent
+    // If UserAgent information info comes from above adhere to that
     if (useragent == "")
         mUserAgent = std::string(VERSION_PACKAGE_NAME) + "/" + std::string(VERSION_PACKAGE_VERSION);
     else
         mUserAgent = useragent;
 
+    // Initialize support classes
+    LOG4CXX_INFO(clientcoreLog, "Setting up MediaSourceManager");
+    MediaSourceManager *manager = MediaSourceManager::Instance();
+
+    LOG4CXX_INFO(clientcoreLog, "Setting up DataStreamHandler")
+    DataStreamHandler::Instance()->setUseragent(useragent);
+
+    LOG4CXX_INFO(clientcoreLog, "Setting up Settings");
+    Settings *settings = Settings::Instance();
+
+    LOG4CXX_INFO(clientcoreLog, "Setting up Player");
+    Player *player = Player::Instance();
+    player->setUseragent(useragent);
     if (player->enable(NULL, NULL))
     { //&argc, &argv)) {
         LOG4CXX_ERROR(clientcoreLog, "Failed to enable player");
         return;
     }
-
     player->setTempo(settings->read<double>("playbackspeed", 1.0));
+
+    LOG4CXX_INFO(clientcoreLog, "Setting up Narrator");
+    Narrator *narrator = Narrator::Instance();
+    std::string messagedb = Utils::getDatapath() + "messages.db";
+    narrator->setDatabasePath(messagedb);
+    narrator->connectAudioFinished(boost::bind(&ClientCore::narratorFinished, this));
     narrator->setTempo(settings->read<double>("playbackspeed", 1.0));
     narrator->setLanguage(settings->read<std::string>("language", "sv"));
 
@@ -101,6 +103,11 @@ ClientCore::ClientCore(const std::string useragent)
     // Initialize thread variables
     clientcoreRunning = false;
     threadStarted = false;
+
+    // Initialize class member variables
+    mManualOggfile = "";
+    mAboutOggfile = "";
+    mDownloadFolder = "";
 }
 
 /**
@@ -114,13 +121,16 @@ ClientCore::~ClientCore()
 
     if (threadStarted)
     {
-        // Wait until clientcore thread stops
+        // Wait until ClientCore thread stops
         LOG4CXX_INFO(clientcoreLog, "Waiting for clientcoreThread to join");
         pthread_join(clientcoreThread, NULL);
     }
 
-    LOG4CXX_DEBUG(clientcoreLog, "Deleting settings");
+    LOG4CXX_DEBUG(clientcoreLog, "Deleting Settings");
     Settings::Instance()->DeleteInstance();
+
+    LOG4CXX_DEBUG(clientcoreLog, "Deleting MediaSourceManager")
+    MediaSourceManager::Instance()->DeleteInstance();
 }
 
 /**
@@ -166,31 +176,7 @@ void ClientCore::narratorFinished()
  */
 int ClientCore::addDaisyOnlineService(std::string name, std::string url, std::string username, std::string password, bool rememberPassword)
 {
-    if (name.empty())
-    {
-        LOG4CXX_WARN(clientcoreLog, "cannot add DaisyOnline service without name");
-        return -1;
-    }
-    else if (url.empty())
-    {
-        LOG4CXX_WARN(clientcoreLog, "cannot add DaisyOnline service without url");
-        return -1;
-    }
-
-    std::vector<DaisyOnlineService>::iterator it;
-    for (it = DaisyOnlineServices.begin(); it != DaisyOnlineServices.end(); ++it)
-    {
-        if (name == it->name)
-        {
-            LOG4CXX_WARN(clientcoreLog, "DaisyOnline service with name " << name << " has already been added");
-            return -1;
-        }
-    }
-
-    DaisyOnlineService service(name, url, username, password, rememberPassword);
-    DaisyOnlineServices.push_back(service);
-
-    return DaisyOnlineServices.size()-1;
+    return MediaSourceManager::Instance()->addDaisyOnlineService(name, url, username, password, rememberPassword);
 }
 
 /**
@@ -202,31 +188,7 @@ int ClientCore::addDaisyOnlineService(std::string name, std::string url, std::st
  */
 int ClientCore::addFileSystemPath(std::string name, std::string path)
 {
-    if (name.empty())
-    {
-        LOG4CXX_WARN(clientcoreLog, "cannot add file system path without name");
-        return -1;
-    }
-    else if (path.empty())
-    {
-        LOG4CXX_WARN(clientcoreLog, "cannot add file system path without path");
-        return -1;
-    }
-
-    std::vector<FileSystemPath>::iterator it;
-    for (it = FileSystemPaths.begin(); it != FileSystemPaths.end(); ++it)
-    {
-        if (name == it->name)
-        {
-            LOG4CXX_WARN(clientcoreLog, "File system path with name " << name << " has already been added");
-            return -1;
-        }
-    }
-
-    FileSystemPath filepath(name, path);
-    FileSystemPaths.push_back(filepath);
-
-    return FileSystemPaths.size()-1;
+    return MediaSourceManager::Instance()->addFileSystemPath(name, path);
 }
 
 /**
@@ -295,8 +257,7 @@ void ClientCore::setLanguage(std::string lang)
     if (boost::regex_match(lang.c_str(), m, e))
     {
         // only use the first two letters in lower case
-        std::string langCode = lang.substr(0, 2);
-        std::transform(langCode.begin(), langCode.end(), langCode.begin(), ::tolower);
+        std::string langCode = Utils::toLower(lang.substr(0, 2));
         Settings *settings = Settings::Instance();
         settings->write<std::string>("language", langCode);
         LOG4CXX_DEBUG(clientcoreLog, "Setting language to '" << langCode << "'");
@@ -325,16 +286,8 @@ std::string ClientCore::getLanguage()
  */
 void ClientCore::setServiceUrl(const std::string url)
 {
-    pthread_mutex_lock(&clientcoreMutex);
-    if (DaisyOnlineServices.size() > 0)
-    {
-        DaisyOnlineServices[0].url = url;
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot set service url");
-    }
-    pthread_mutex_unlock(&clientcoreMutex);
+    // Note. This function will become deprecated when support for more services is implemented.
+    MediaSourceManager::Instance()->setDOSurl(0, url);
 }
 
 /**
@@ -344,22 +297,12 @@ void ClientCore::setServiceUrl(const std::string url)
  */
 std::string ClientCore::getServiceUrl()
 {
-    std::string url = "";
-    pthread_mutex_lock(&clientcoreMutex);
-    if (DaisyOnlineServices.size() > 0)
-    {
-        url = DaisyOnlineServices[0].url;
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot get service url");
-    }
-    pthread_mutex_unlock(&clientcoreMutex);
-    return url;
+    // Note. This function will become deprecated when support for more services is implemented.
+    return MediaSourceManager::Instance()->getDOSurl(0);
 }
 
 /**
- * Get the user-agent value useb by this application
+ * Get the user-agent value used by this application
  *
  * @return The user-agent property
  */
@@ -378,18 +321,8 @@ std::string ClientCore::getUserAgent()
  */
 void ClientCore::setUsername(const std::string username)
 {
-    pthread_mutex_lock(&clientcoreMutex);
-    if (DaisyOnlineServices.size() > 0)
-    {
-        DaisyOnlineServices[0].username = username;
-        Settings::Instance()->setDomain(DaisyOnlineServices[0].url);
-        Settings::Instance()->write<std::string>("username", username);
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot set service url");
-    }
-    pthread_mutex_unlock(&clientcoreMutex);
+    // Note. This function will become deprecated when support for more services is implemented.
+    MediaSourceManager::Instance()->setDOSusername(0, username);
 }
 
 
@@ -401,28 +334,9 @@ void ClientCore::setUsername(const std::string username)
  */
 void ClientCore::setPassword(const std::string password, bool remember)
 {
-    pthread_mutex_lock(&clientcoreMutex);
-    if (DaisyOnlineServices.size() > 0)
-    {
-        DaisyOnlineServices[0].password = password;
-        DaisyOnlineServices[0].rememberPassword = remember;
-        Settings::Instance()->setDomain(DaisyOnlineServices[0].url);
-        Settings::Instance()->write<bool>("rememberpassword", remember);
-        if (remember)
-        {
-            Settings::Instance()->write<std::string>("password", password);
-        }
-        else
-        {
-            Settings::Instance()->write<std::string>("password", "");
-            Settings::Instance()->write<std::string>("username", "");
-        }
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot set service password");
-    }
-    pthread_mutex_unlock(&clientcoreMutex);
+    // Note. This function will become deprecated when support for more services is implemented.
+    MediaSourceManager::Instance()->setDOSpassword(0, password);
+    MediaSourceManager::Instance()->setDOSremember(0, remember);
 }
 
 /**
@@ -432,18 +346,8 @@ void ClientCore::setPassword(const std::string password, bool remember)
  */
 std::string ClientCore::getUsername()
 {
-    std::string username = "";
-    pthread_mutex_lock(&clientcoreMutex);
-    if (DaisyOnlineServices.size() > 0)
-    {
-        username = DaisyOnlineServices[0].username;
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot get service username");
-    }
-    pthread_mutex_unlock(&clientcoreMutex);
-    return username;
+    // Note. This function will become deprecated when support for more services is implemented.
+    return MediaSourceManager::Instance()->getDOSusername(0);
 }
 
 /**
@@ -453,18 +357,8 @@ std::string ClientCore::getUsername()
  */
 std::string ClientCore::getPassword()
 {
-    std::string password = "";
-    pthread_mutex_lock(&clientcoreMutex);
-    if (DaisyOnlineServices.size() > 0)
-    {
-        password = DaisyOnlineServices[0].password;
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot get service password");
-    }
-    pthread_mutex_unlock(&clientcoreMutex);
-    return password;
+    // Note. This function will become deprecated when support for more services is implemented.
+    return MediaSourceManager::Instance()->getDOSpassword(0);
 }
 
 /**
@@ -587,18 +481,8 @@ SleepTimerStates ClientCore::getSleepTimerState()
  */
 bool ClientCore::getRememberPassword()
 {
-    bool remember = false;
-    pthread_mutex_lock(&clientcoreMutex);
-    if (DaisyOnlineServices.size() > 0)
-    {
-        remember = DaisyOnlineServices[0].rememberPassword;
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "no services added, cannot get service remember password");
-    }
-    pthread_mutex_unlock(&clientcoreMutex);
-    return remember;
+    // Note. This function will become deprecated when support for more services is implemented.
+    return MediaSourceManager::Instance()->getDOSremember(0);
 }
 
 /**
@@ -1213,89 +1097,27 @@ void *ClientCore::clientcore_thread(void *ctx)
 {
     ClientCore* ctxptr = (ClientCore*) ctx;
 
-    // Abort and exit application if no service has been added
-    pthread_mutex_lock(&ctxptr->clientcoreMutex);
-    int services = ctxptr->DaisyOnlineServices.size();
-    pthread_mutex_unlock(&ctxptr->clientcoreMutex);
-    if (services == 0)
-    {
-        pthread_mutex_lock(&ctxptr->clientcoreMutex);
-        ctxptr->clientcoreRunning = false;
-        pthread_mutex_unlock(&ctxptr->clientcoreMutex);
-        return NULL;
-    }
-
-    LOG4CXX_DEBUG(clientcoreLog, "Setting up narrator");
-    Narrator *narrator = Narrator::Instance();
-    usleep(100000);
-
-    LOG4CXX_DEBUG(clientcoreLog, "Setting up player");
-    Player *player = Player::Instance();
-    usleep(100000);
-
-    std::string useragent = ctxptr->getUserAgent();
-    std::string service_url = ctxptr->getServiceUrl();
-
-    std::string username = "";
-    std::string password = "";
-
-    //wait half a second for user credentials
-    for (int i=0; i<6 && username.empty() && password.empty(); i++) {
-        if (i>0){
-            LOG4CXX_DEBUG(clientcoreLog, "Waiting for user credentials");
-            usleep(100000);
-        }
-        username = ctxptr->getUsername();
-        password = ctxptr->getPassword();
-    }
-
-    if (username.empty() && password.empty())
-        LOG4CXX_WARN(clientcoreLog, "User credentials are empty");
-
-    DataStreamHandler::Instance()->setUseragent(useragent);
-    player->setUseragent(useragent);
-
     // say welcome
     Narrator::Instance()->play(_N("welcome"));
     usleep(500000);
     while (Narrator::Instance()->isSpeaking())
     {
         usleep(20000);
-    };
+    }
 
     // Default to running
     bool running = true;
 
-    // Initialize a DaisyOnlineNode to use a root node in NaviEngine
-    DaisyOnlineNode* doservice = new DaisyOnlineNode(service_url, username, password, ".", useragent);
-    if (doservice->good())
-    {
-        doservice->name_ = ""; // Empty name means it narrates it self.
+    // Get Narrator and Player instances
+    Narrator *narrator = Narrator::Instance();
+    Player *player = Player::Instance();
 
-        // Split useragent into model/version
-        std::string::size_type slashpos = useragent.find('/');
-        if (slashpos != std::string::npos)
-        {
-            std::string model = useragent.substr(0, slashpos);
-            std::string version = useragent.substr(slashpos + 1);
-            if (not model.empty() && not version.empty())
-            {
-                doservice->setModel(model);
-                doservice->setVersion(version);
-            }
-        }
-
-        doservice->setLanguage(ctxptr->getLanguage());
-        doservice->setSerialNumber(ctxptr->getSerialNumber());
-    }
-    else
-    {
-        LOG4CXX_ERROR(clientcoreLog, "DaisyOnlineNode failed to initialize");
-    }
-
+    // Initialize the root node to use in NaviEngine
+    std::string userAgent = ctxptr->getUserAgent();
+    RootNode *rootNode = new RootNode(userAgent);
 
     Navi *navi = new Navi(ctxptr);
-    navi->openMenu(doservice, true);
+    navi->openMenu(rootNode, true);
     if (not navi->good())
     {
         // Failed to open the root node.
@@ -1456,7 +1278,8 @@ void *ClientCore::clientcore_thread(void *ctx)
     while (Narrator::Instance()->isSpeaking())
     {
         usleep(20000);
-    };
+    }
+
     LOG4CXX_DEBUG(clientcoreLog, "Deleting narrator");
     delete narrator;
 

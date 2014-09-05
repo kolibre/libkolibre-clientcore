@@ -23,6 +23,7 @@
 #include "NaviListItem.h"
 #include "NaviList.h"
 #include "NaviListImpl.h"
+#include "Menu/ContextMenuNode.h"
 #include "Menu/TempoNode.h"
 #include "Menu/SleepTimerNode.h"
 #include "Menu/AutoPlayNode.h"
@@ -38,17 +39,87 @@ log4cxx::LoggerPtr naviLog(log4cxx::Logger::getLogger("kolibre.clientcore.navi")
 Navi::Navi(ClientCore* clientcore) :
         NaviEngine(), clientcore_(clientcore)
 {
-    LOG4CXX_DEBUG(naviLog, "constructor");
+    LOG4CXX_TRACE(naviLog, "Constructor");
 }
 
 Navi::~Navi()
 {
-    LOG4CXX_DEBUG(naviLog, "destructor");
+    LOG4CXX_TRACE(naviLog, "Destructor");
 }
 
 bool Navi::process(int command, void* data)
 {
-    LOG4CXX_INFO(naviLog, "Processing command: " << command);
+    std::string commandName;
+    switch(command)
+    {
+    case COMMAND_NONE:
+        commandName = "COMMAND_NONE";
+        break;
+    case COMMAND_HOME:
+        commandName = "COMMAND_HOME";
+        break;
+    case COMMAND_BACK:
+        commandName = "COMMAND_BACK";
+        break;
+    case COMMAND_PAUSE:
+        commandName = "COMMAND_PAUSE";
+        break;
+    case COMMAND_UP:
+        commandName = "COMMAND_UP";
+        break;
+    case COMMAND_DOWN:
+        commandName = "COMMAND_DOWN";
+        break;
+    case COMMAND_LEFT:
+        commandName = "COMMAND_LEFT";
+        break;
+    case COMMAND_RIGHT:
+        commandName = "COMMAND_RIGHT";
+        break;
+    case COMMAND_BOOKMARK:
+        commandName = "COMMAND_BOOKMARK";
+        break;
+    case COMMAND_OPEN_CONTEXTMENU:
+        commandName = "COMMAND_OPEN_CONTEXTMENU";
+        break;
+    case COMMAND_OPEN_BOOKINFO:
+        commandName = "COMMAND_OPEN_BOOKINFO";
+        break;
+    case COMMAND_OPEN_MENU_GOTOTIMENODE:
+        commandName = "COMMAND_OPEN_MENU_GOTOTIMENODE";
+        break;
+    case COMMAND_OPEN_MENU_GOTOPERCENTNODE:
+        commandName = "COMMAND_OPEN_MENU_GOTOPERCENTNODE";
+        break;
+    case COMMAND_OPEN_MENU_GOTOPAGENODE:
+        commandName = "COMMAND_OPEN_MENU_GOTOPAGENODE";
+        break;
+    case COMMAND_NEXT:
+        commandName = "COMMAND_NEXT";
+        break;
+    case COMMAND_LAST:
+        commandName = "COMMAND_LAST";
+        break;
+    case COMMAND_INFO:
+        commandName = "COMMAND_INFO";
+        break;
+    case COMMAND_NARRATORFINISHED:
+        commandName = "COMMAND_NARRATORFINISHED";
+        break;
+    case COMMAND_DO_GETCONTENTLIST:
+        commandName = "COMMAND_DO_GETCONTENTLIST";
+        break;
+    case COMMAND_RETRY_LOGIN:
+        commandName = "COMMAND_RETRY_LOGIN";
+        break;
+    case COMMAND_RETRY_LOGIN_FORCED:
+        commandName = "COMMAND_RETRY_LOGIN_FORCED";
+        break;
+    default:
+        commandName = "UNKOWN";
+        break;
+    }
+    LOG4CXX_INFO(naviLog, "Processing command: " << commandName << " ("<< command <<")");
 
     switch (command)
     {
@@ -70,52 +141,44 @@ bool Navi::process(int command, void* data)
     switch (command)
     {
     case COMMAND_INFO:
-        LOG4CXX_INFO(naviLog, "COMMAND_INFO received");
         if (not NaviEngine::process(command, data))
         {
-            narrateNode();
+            narrateInfoForCurrentNode();
         }
         break;
 
     case COMMAND_HOME:
-        LOG4CXX_INFO(naviLog, "COMMAND_HOME received");
         LOG4CXX_INFO(naviLog, "Returning to top menu");
         top();
         break;
 
     case COMMAND_RIGHT:
-        LOG4CXX_INFO(naviLog, "COMMAND_RIGHT received");
         LOG4CXX_INFO(naviLog, "Going to next item");
         next();
         break;
 
     case COMMAND_LEFT:
-        LOG4CXX_INFO(naviLog, "COMMAND_LEFT received");
         LOG4CXX_INFO(naviLog, "Going to prev item");
         prev();
         break;
 
     case COMMAND_DOWN:
-        LOG4CXX_INFO(naviLog, "COMMAND_DOWN received");
         LOG4CXX_INFO(naviLog, "Selecting item");
         select();
         break;
 
     case COMMAND_UP:
-        LOG4CXX_INFO(naviLog, "COMMAND_UP received");
         LOG4CXX_INFO(naviLog, "Going parent item");
         up();
         break;
 
     case COMMAND_OPEN_CONTEXTMENU:
-        LOG4CXX_INFO(naviLog, "COMMAND_OPEN_CONTEXTMENU received");
         LOG4CXX_INFO(naviLog, "Opening context menu");
         if (!openContextMenu())
             next();
         break;
 
     case COMMAND_PAUSE:
-        LOG4CXX_INFO(naviLog, "COMMAND_PAUSE received");
         if (not NaviEngine::process(command, data))
         {
             select();
@@ -123,7 +186,6 @@ bool Navi::process(int command, void* data)
         break;
 
     case COMMAND_BACK:
-        LOG4CXX_INFO(naviLog, "COMMAND_BACK received");
         LOG4CXX_INFO(naviLog, "Going back");
         if (not NaviEngine::process(command, data))
         {
@@ -142,6 +204,23 @@ bool Navi::process(int command, void* data)
     }
 
     return true;
+}
+
+void Navi::narrateInfoForCurrentNode()
+{
+    if (not getCurrentNode()->narrateInfo())
+    {
+        std::string name = getCurrentNode()->name_;
+        if (not name.empty())
+            narrate(name);
+
+        std::string info = getCurrentNode()->info_;
+        if (not info.empty())
+            narrate(info);
+
+        if (not getCurrentNode()->isVirtual())
+            narrateNode(getCurrentChoice());
+    }
 }
 
 void Navi::narrateChange(const MenuState& before, const MenuState& after)
@@ -186,7 +265,7 @@ void Navi::narrateChange(const MenuState& before, const MenuState& after)
             }
         }
 
-        if (not after.state.currentNode->onNarrate())
+        if (not after.state.currentNode->onNarrate() && not after.state.currentNode->isVirtual())
         {
             string name = after.state.currentNode->name_;
             if (name != "")
@@ -253,34 +332,22 @@ void Navi::narrateSetParam(std::string param, int number)
 naviengine::MenuNode* Navi::buildContextMenu()
 {
     using namespace naviengine;
-    MenuNode* contextMenu = new MenuNode();
-    contextMenu->name_ = _N("menu");
-    contextMenu->play_before_onOpen_ = _N("opening main menu");
-    contextMenu->info_ = _N("choose option using left and right arrows, open using play button");
+    ContextMenuNode* contextMenu = new ContextMenuNode(_N("menu"), _N("opening main menu"));
 
     // We have so few settings that we can add them directly under context
     {
-        VirtualMenuNode* subMenuNode = 0;
+        VirtualContextMenuNode* subMenuNode = 0;
 
         //TEMPO
-        subMenuNode = new TempoNode;
-        subMenuNode->name_ = _N("playback speed");
-        subMenuNode->play_before_onOpen_ = _N("opening playback speed menu");
-        subMenuNode->info_ = _N("choose option using left and right arrows, open using play button");
+        subMenuNode = new TempoNode(_N("playback speed"), _N("opening playback speed menu"));
         contextMenu->addNode(subMenuNode);
 
         //SLEEP
-        subMenuNode = new SleepTimerNode(clientcore_);
-        subMenuNode->name_ = _N("sleep timer");
-        subMenuNode->play_before_onOpen_ = _N("opening sleep timer");
-        subMenuNode->info_ = _N("choose option using left and right arrows, open using play button");
+        subMenuNode = new SleepTimerNode(clientcore_, _N("sleep timer"), _N("opening sleep timer"));
         contextMenu->addNode(subMenuNode);
 
         // AUTOPLAY
-        subMenuNode = new AutoPlayNode();
-        subMenuNode->name_ = _N("auto play");
-        subMenuNode->play_before_onOpen_ = _N("opening auto play");
-        subMenuNode->info_ = _N("choose option using left and right arrows, open using play button");
+        subMenuNode = new AutoPlayNode(_N("auto play"), _N("opening auto play"));
         contextMenu->addNode(subMenuNode);
     }
 

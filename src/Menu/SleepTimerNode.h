@@ -20,17 +20,17 @@
 #ifndef NAVIENGINE_SLEEPTIMERNODE
 #define NAVIENGINE_SLEEPTIMERNODE
 
-#include <Nodes/VirtualMenuNode.h>
+#include "VirtualContextMenuNode.h"
 
 #include <map>
 #include <string>
 
 class ClientCore;
 
-class SleepTimerNode: public naviengine::VirtualMenuNode
+class SleepTimerNode: public VirtualContextMenuNode
 {
 public:
-    SleepTimerNode(ClientCore*);
+    SleepTimerNode(ClientCore*, const std::string&, const std::string&);
 
     bool up(naviengine::NaviEngine&);
     bool prev(naviengine::NaviEngine&);
@@ -38,6 +38,7 @@ public:
     bool select(naviengine::NaviEngine&);
     bool selectByUri(naviengine::NaviEngine&, std::string);
     bool onOpen(naviengine::NaviEngine&);
+    bool narrateInfo();
     bool onNarrate();
 
 private:

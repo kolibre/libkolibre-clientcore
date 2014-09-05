@@ -27,6 +27,8 @@
 #include "Commands/InternalCommands.h"
 #include "CommandQueue2/CommandQueue.h"
 #include "Settings/Settings.h"
+#include "MediaSourceManager.h"
+#include "Utils.h"
 
 #include <DataStreamHandler.h>
 #include <Narrator.h>
@@ -34,7 +36,6 @@
 
 #include <time.h>
 #include <iostream>
-#include <algorithm>
 #include <libintl.h>
 #include <log4cxx/logger.h>
 #include <XmlError.h>
@@ -44,50 +45,14 @@ log4cxx::LoggerPtr onlineNodeLog(log4cxx::Logger::getLogger("kolibre.clientcore.
 
 using namespace naviengine;
 
-bool DaisyOnlineNode::onNarrate()
+DaisyOnlineNode::DaisyOnlineNode(const std::string name, const std::string uri, const std::string username, const std::string password, std::string useragent) :
+        good_(true), currentChild_(0)
 {
-    const bool isSelfNarrated = true;
-
-    // don't narrate anything if we are updating the library
-    if (play_before_onOpen_ == _N("updating library"))
-        return isSelfNarrated;
-
-    Narrator::Instance()->play(_N("choose option using left and right arrows, open using play button"));
-    Narrator::Instance()->playLongpause();
-    announceSelection();
-    return isSelfNarrated;
-}
-
-bool DaisyOnlineNode::onRender()
-{
-    const bool isSelfRendered = true;
-    return isSelfRendered;
-}
-
-DaisyOnlineNode::errorType DaisyOnlineNode::getLastError()
-{
-    return lastError_;
-}
-
-bool DaisyOnlineNode::good()
-{
-    return good_;
-}
-
-std::string DaisyOnlineNode::getErrorMessage()
-{
-    return pDOHandler->getStatusMessage();
-}
-
-DaisyOnlineNode::~DaisyOnlineNode()
-{
-    delete pDOHandler;
-}
-
-DaisyOnlineNode::DaisyOnlineNode(const std::string uri, const std::string username, const std::string password, const std::string& client_home, string useragent) :
-        good_(true), loggedIn_(false), currentChild_(0)
-{
+    LOG4CXX_TRACE(onlineNodeLog, "Constructor");
     openFirstChild_ = true;
+    name_ = "DaisyOnline_" + name;
+    serviceName_ = name;
+    serviceUri_ = uri;
     username_ = username;
     password_ = password;
     previousUsername_ = "";
@@ -95,6 +60,8 @@ DaisyOnlineNode::DaisyOnlineNode(const std::string uri, const std::string userna
     lastUpdate_ = -1;
     lastError_ = (DaisyOnlineNode::errorType)-1;
     lastLogOnAttempt_ = (DaisyOnlineNode::errorType)-1;
+    loggedIn_ = false;
+    serviceUpdated_ = false;
 
     if (useragent.length() == 0)
         useragent = string(VERSION_PACKAGE_NAME) + "/" + VERSION_PACKAGE_VERSION;
@@ -119,11 +86,40 @@ DaisyOnlineNode::DaisyOnlineNode(const std::string uri, const std::string userna
     version_ = string(VERSION_PACKAGE_VERSION);
     serialNumber_ = "";
 
-    play_before_onOpen_ = _N("updating library");
-
     // connect slots to signals
     sessionInit_signal.connect(boost::bind(&DaisyOnlineNode::onSessionInit, this));
     issueContent_signal.connect(boost::bind(&DaisyOnlineNode::onIssueContent, this));
+}
+
+DaisyOnlineNode::~DaisyOnlineNode()
+{
+    LOG4CXX_TRACE(onlineNodeLog, "Destructor");
+    delete pDOHandler;
+}
+
+void DaisyOnlineNode::setManufacturer(const std::string &manufacturer)
+{
+    manufacturer_ = manufacturer;
+}
+
+void DaisyOnlineNode::setModel(const std::string &model)
+{
+    model_ = model;
+}
+
+void DaisyOnlineNode::setSerialNumber(const std::string &serialNumber)
+{
+    serialNumber_ = serialNumber;
+}
+
+void DaisyOnlineNode::setVersion(const std::string &version)
+{
+    version_ = version;
+}
+
+void DaisyOnlineNode::setLanguage(const std::string &language)
+{
+    language_ = language;
 }
 
 // NaviEngine functions
@@ -151,51 +147,80 @@ bool DaisyOnlineNode::menu(NaviEngine& navi)
 
 bool DaisyOnlineNode::up(NaviEngine& navi)
 {
+    loggedIn_ = false;
+    serviceUpdated_ = false;
     bool ret = MenuNode::up(navi);
-
-    if (ret == false)
-    {
-        // Don't update library unless 5 seconds has passed since the last update
-        if (difftime(time(NULL), lastUpdate_) < 5)
-        {
-            LOG4CXX_WARN(onlineNodeLog, "Update aborted since 5 seconds hasn't passed since last update");
-            announceSelection();
-            return true;
-        }
-
-        loggedIn_ = false;
-
-        NaviList navilist;
-        navilist.name_ = _("Updating library");
-        navilist.info_ = _("Updating content list, please wait");
-        cq2::Command<NaviList> naviList(navilist);
-        naviList();
-
-        play_before_onOpen_ = _N("updating library");
-        Narrator::Instance()->play(play_before_onOpen_.c_str());
-        onOpen(navi);
-    }
-
     return ret;
+}
+
+bool DaisyOnlineNode::narrateName()
+{
+    const bool isSelfNarrated = true;
+    Narrator::Instance()->play(_N("online service"));
+    return isSelfNarrated;
+}
+
+bool DaisyOnlineNode::narrateInfo()
+{
+    const bool isSelfNarrated = true;
+    Narrator::Instance()->play(_N("choose option using left and right arrows, open using play button"));
+    Narrator::Instance()->playLongpause();
+    announceSelection();
+    return isSelfNarrated;
+}
+
+bool DaisyOnlineNode::onNarrate()
+{
+    const bool isSelfNarrated = true;
+    return isSelfNarrated;
+}
+
+bool DaisyOnlineNode::onRender()
+{
+    const bool isSelfRendered = true;
+    return isSelfRendered;
+}
+
+DaisyOnlineNode::errorType DaisyOnlineNode::getLastError()
+{
+    return lastError_;
+}
+
+std::string DaisyOnlineNode::getErrorMessage()
+{
+    return pDOHandler->getStatusMessage();
+}
+
+bool DaisyOnlineNode::good()
+{
+    return good_;
 }
 
 void DaisyOnlineNode::onSessionInit()
 {
     LOG4CXX_DEBUG(onlineNodeLog, "sessionInit signal triggered");
 
-    // ... and last logon attempt failed due to incorrect username or password
+    // last logon attempt failed due to incorrect username or password
     if (lastLogOnAttempt_ == USERNAME_PASSWORD_ERROR)
     {
         // Don't try session initialization if username or password hasn't changed ...
-        username_ = Settings::Instance()->read<std::string>("username", "");
-        password_ = Settings::Instance()->read<std::string>("password", "");
+        int index = MediaSourceManager::Instance()->getDaisyOnlineServiceIndex(serviceName_);
+        if (index >= 0)
+        {
+            username_ = MediaSourceManager::Instance()->getDOSusername(0);
+            password_ = MediaSourceManager::Instance()->getDOSpassword(0);
+        }
+        else
+        {
+            username_ = "";
+            password_ = "";
+        }
         if (previousUsername_ == username_ && previousPassword_ == password_)
         {
             LOG4CXX_WARN(onlineNodeLog, "aborting session initialization since nothing has changed since last attempt");
             return;
         }
     }
-
 
     // Notify user that logon failed if username is not set
     if (username_.empty())
@@ -545,6 +570,7 @@ DaisyOnlineNode::errorType DaisyOnlineNode::createBookNodes(kdo::ContentList* co
 
     LOG4CXX_DEBUG(onlineNodeLog, added << " book nodes added");
 
+    serviceUpdated_ = true;
     lastError_ = OK;
     return lastError_;
 }
@@ -590,7 +616,7 @@ DaisyOnlineNode::errorType DaisyOnlineNode::faultHandler(DaisyOnlineHandler::sta
 
 bool DaisyOnlineNode::onOpen(NaviEngine& navi)
 {
-    if (loggedIn_ && navi.good())
+    if (loggedIn_ && serviceUpdated_ && navi.good())
     {
         currentChild_ = navi.getCurrentChoice();
         announce();
@@ -603,6 +629,12 @@ bool DaisyOnlineNode::onOpen(NaviEngine& navi)
 
     good_ = true;
     return true;
+}
+
+void DaisyOnlineNode::beforeOnOpen()
+{
+    if (not serviceUpdated_)
+        Narrator::Instance()->play(_N("updating service"));
 }
 
 bool DaisyOnlineNode::process(NaviEngine& navi, int command, void* data)
@@ -635,7 +667,6 @@ bool DaisyOnlineNode::process(NaviEngine& navi, int command, void* data)
             c();
         }
 
-        play_before_onOpen_ = _N("library");
         lastUpdate_ = time(NULL);
         navi.setCurrentChoice(firstChild());
         currentChild_ = firstChild();
@@ -789,8 +820,7 @@ std::string DaisyOnlineNode::getLangCode(std::string language)
         return "unknown";
     }
 
-    std::string lang_code = lang_str.substr(0, 2);
-    std::transform(lang_code.begin(), lang_code.end(), lang_code.begin(), ::tolower);
+    std::string lang_code = Utils::toLower(lang_str.substr(0, 2));
 
     return lang_code;
 }
@@ -800,25 +830,21 @@ void DaisyOnlineNode::announce()
     cq2::Command<NaviList> naviList(navilist);
     naviList();
 
-    // we do not need to narrate 'library' here because the next
-    // strings to narrate contains the word library
-    //Narrator::Instance()->play(_N("library"));
-
     int numItems = numberOfChildren();
 
     if (numItems == 0)
     {
-        Narrator::Instance()->play(_N("no content found"));
+        Narrator::Instance()->play(_N("service contains no publications"));
     }
     else if (numItems == 1)
     {
         Narrator::Instance()->setParameter("1", numItems);
-        Narrator::Instance()->play(_N("found {1} publication"));
+        Narrator::Instance()->play(_N("service contains {1} publication"));
     }
     else if (numItems > 1)
     {
         Narrator::Instance()->setParameter("2", numItems);
-        Narrator::Instance()->play(_N("found {2} publications"));
+        Narrator::Instance()->play(_N("service contains {2} publications"));
     }
     Narrator::Instance()->playLongpause();
 

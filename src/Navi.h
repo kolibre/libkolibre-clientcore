@@ -48,6 +48,7 @@ public:
     // Build context menu
     naviengine::MenuNode* buildContextMenu();
 private:
+    void narrateInfoForCurrentNode();
     void narrateChange(const MenuState& before, const MenuState& after);
     void narrate(const std::string text);
     void narrate(const int value);

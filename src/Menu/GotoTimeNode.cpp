@@ -95,7 +95,6 @@ GotoTimeNode::GotoTimeNode(int max, DaisyNavi* daisyNavi) :
     iBookTotalTimeSeconds = iMax;
     name_ = _N("jump to time");
     info_ = _N("choose time using left and right arrows, jump to selected time using play button");
-    play_before_onOpen_ = _N("opening jump to time");
 }
 
 /*
@@ -256,13 +255,16 @@ bool GotoTimeNode::onOpen(NaviEngine&)
     return true;
 }
 
-bool GotoTimeNode::onNarrate()
+void GotoTimeNode::beforeOnOpen()
 {
-    bool isSelfNarrated = false;
+    Narrator::Instance()->play(_N("opening jump to time"));
+}
+
+bool GotoTimeNode::narrateInfo()
+{
+    const bool isSelfNarrated = true;
     if (isOpen)
     {
-        isSelfNarrated = true;
-
         Narrator::Instance()->play(info_.c_str());
         Narrator::Instance()->play(mapNarrations[NARRATE_GOTO].c_str());
         Narrator::Instance()->playLongpause();
@@ -271,6 +273,12 @@ bool GotoTimeNode::onNarrate()
         //Narrate max
         narrateValue(iMax, true);
     }
+    return isSelfNarrated;
+}
+
+bool GotoTimeNode::onNarrate()
+{
+    const bool isSelfNarrated = false;
     return isSelfNarrated;
 }
 

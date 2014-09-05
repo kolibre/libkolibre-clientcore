@@ -20,10 +20,13 @@
 #ifndef NAVIENGINE_BOOKINFONODE
 #define NAVIENGINE_BOOKINFONODE
 
-#include <Nodes/MenuNode.h>
+#include "ContextMenuNode.h"
 
-class BookInfoNode: public naviengine::MenuNode
+class BookInfoNode: public ContextMenuNode
 {
+public:
+    BookInfoNode(const std::string&, const std::string&);
+
     bool onOpen(naviengine::NaviEngine&);
     bool select(naviengine::NaviEngine&);
     bool process(naviengine::NaviEngine&, int, void*);

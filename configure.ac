@@ -85,6 +85,8 @@ AX_BOOST_SIGNALS
 AC_CHECK_DECL([HAVE_BOOST_SIGNALS], [], [AC_MSG_ERROR([Library requirement (Boost::Signals) were not met])])
 AX_BOOST_REGEX
 AC_CHECK_DECL([HAVE_BOOST_REGEX], [], [AC_MSG_ERROR([Library requirement (Boost::Regex) were not met])])
+AX_BOOST_FILESYSTEM
+AC_CHECK_DECL([HAVE_BOOST_FILESYSTEM], [], [AC_MSG_ERROR([Library requirement (Boost::Filesystem) were not met])])
 
 dnl -----------------------------------------------
 dnl check for log4cxx

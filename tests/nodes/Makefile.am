@@ -18,16 +18,18 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-check_PROGRAMS = daisyonlinebooknode daisyonlinenode daisynavi
+check_PROGRAMS = rootnode filesystemnode daisyonlinebooknode daisyonlinenode daisynavi
 
-TESTS = daisyonlinebooknode.sh daisyonlinenode.sh daisynavi.sh
+TESTS = rootnode filesystemnode daisyonlinebooknode.sh daisyonlinenode.sh daisynavi.sh
 
+rootnode_SOURCES = rootnode.cpp
+filesystemnode_SOURCES = filesystemnode.cpp
 daisyonlinebooknode_SOURCES = daisyonlinebooknode.cpp
 daisyonlinenode_SOURCES = daisyonlinenode.cpp
 daisynavi_SOURCES = daisynavi.cpp
 daisynavi_CPPFLAGS = -I$(top_srcdir)/src @LIBKOLIBRENARRATOR_CFLAGS@ @LIBKOLIBREPLAYER_CFLAGS@ @LIBKOLIBREXMLREADER_CFLAGS@ @LIBKOLIBREAMIS_CFLAGS@ @LIBKOLIBRENAVIENGINE_CFLAGS@
 
-LDADD = -lkolibre-clientcore -lboost_regex @LIBKOLIBRENAVIENGINE_LIBS@ @LIBKOLIBREDAISYONLINE_LIBS@
+LDADD = -lkolibre-clientcore -lboost_regex -lboost_filesystem @LIBKOLIBRENAVIENGINE_LIBS@ @LIBKOLIBREDAISYONLINE_LIBS@
 AM_LDFLAGS = -L$(top_builddir)/src @LOG4CXX_LIBS@ @LIBKOLIBREPLAYER_LIBS@
 AM_CPPFLAGS = -I$(top_srcdir)/src @LIBKOLIBRENAVIENGINE_CFLAGS@ @LIBKOLIBREDAISYONLINE_CFLAGS@
 

@@ -26,6 +26,11 @@
 
 using namespace naviengine;
 
+BookInfoNode::BookInfoNode(const std::string& name, const std::string& playBeforeOnOpen) :
+        ContextMenuNode(name, playBeforeOnOpen)
+{
+}
+
 bool BookInfoNode::select(NaviEngine&)
 {
     return false;

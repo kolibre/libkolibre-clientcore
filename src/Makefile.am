@@ -22,10 +22,16 @@ SRCS = \
 ClientCore.cpp \
 DaisyNavi.cpp \
 DaisyOnlineNode.cpp \
+DaisyBookNode.cpp \
 DaisyOnlineBookNode.cpp \
+FileSystemNode.cpp \
+MediaSourceManager.cpp \
 Navi.cpp \
 NaviListImpl.cpp \
+RootNode.cpp \
 Menu/AutoPlayNode.cpp \
+Menu/ContextMenuNode.cpp \
+Menu/VirtualContextMenuNode.cpp \
 Menu/BookInfoNode.cpp \
 Menu/TempoNode.cpp \
 Menu/SleepTimerNode.cpp \
@@ -53,13 +59,19 @@ EXTRA_DIST = CommandQueue2/CommandQueue.h \
 			 Commands/JumpCommand.h \
 			 Commands/NotifyCommands.h \
 			 DaisyNavi.h \
+			 DaisyBookNode.h \
 			 DaisyOnlineBookNode.h \
 			 DaisyOnlineNode.h \
 			 Defines.h \
+			 FileSystemNode.h \
+			 MediaSourceManager.h \
 			 Navi.h \
 			 NaviListImpl.h \
 			 Utils.h \
+			 RootNode.h \
 			 Menu/AutoPlayNode.h \
+			 Menu/ContextMenuNode.h \
+			 Menu/VirtualContextMenuNode.h \
 			 Menu/BookInfoNode.h \
 			 Menu/NarratedNode.h \
 			 Menu/GotoPageNode.h \

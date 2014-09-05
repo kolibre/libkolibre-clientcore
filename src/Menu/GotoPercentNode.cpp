@@ -55,9 +55,8 @@ GotoPercentNode::GotoPercentNode(int max, DaisyNavi* daisyNavi) :
 
     name_ = _N("jump to percent");
     info_ = _N("choose percent using left and right arrows, jump to selected percent using play button");
-    play_before_onOpen_ = _N("opening jump to percent");
 
-    // create virtual childs
+    // create virtual children
     for (int i = 0; i <= 100; i++)
     {
         ostringstream oss;
@@ -134,13 +133,16 @@ bool GotoPercentNode::onOpen(NaviEngine&)
     return true;
 }
 
-bool GotoPercentNode::onNarrate()
+void GotoPercentNode::beforeOnOpen()
 {
-    bool isSelfNarrated = false;
+    Narrator::Instance()->play(_N("opening jump to percent"));
+}
+
+bool GotoPercentNode::narrateInfo()
+{
+    const bool isSelfNarrated = true;
     if (isOpen)
     {
-        isSelfNarrated = true;
-
         Narrator::Instance()->play(info_.c_str());
         Narrator::Instance()->play(mapNarrations[NARRATE_GOTO].c_str());
         Narrator::Instance()->playLongpause();
@@ -149,6 +151,12 @@ bool GotoPercentNode::onNarrate()
         //Narrate max
         narrateValue(iMax, true);
     }
+    return isSelfNarrated;
+}
+
+bool GotoPercentNode::onNarrate()
+{
+    const bool isSelfNarrated = false;
     return isSelfNarrated;
 }
 
