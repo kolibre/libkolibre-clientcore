@@ -27,6 +27,7 @@ KolibreSampleClient_CPPFLAGS = @LOG4CXX_CFLAGS@ @GLIB_CFLAGS@ -I$(top_srcdir)/sr
 copy-files:
 	cp $(top_srcdir)/samples/client/run $(top_builddir)/samples/client
 	cp $(top_srcdir)/samples/client/run.sh $(top_builddir)/samples/client
+	cp $(top_srcdir)/samples/client/config.ini $(top_builddir)/samples/client
 	cp $(top_srcdir)/samples/client/log4cxx.conf $(top_builddir)/samples/client
 
 all-local:

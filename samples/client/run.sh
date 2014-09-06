@@ -22,10 +22,6 @@
 # Setup parameters
 #
 
-SERVICE_URL=http://kados.kolibre.org/service.php
-USERNAME=kolibre
-PASSWORD=kolibre
-
 KOLIBRE_PREFIX=$(sh kolibre_prefix.sh)
 
 if [ -x /usr/bin/gdb ]; then
@@ -53,4 +49,4 @@ fi
 # Override default data path /cache with KOLIBRE_DATA_PATH
 #
 
-KOLIBRE_DATA_PATH=${DATA_PATH} ${PREFIX} ./KolibreSampleClient -s $SERVICE_URL -u $USERNAME -p $PASSWORD -c log4cxx.conf
+KOLIBRE_DATA_PATH=${DATA_PATH} ${PREFIX} ./KolibreSampleClient -i config.ini -c log4cxx.conf
