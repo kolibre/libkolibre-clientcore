@@ -177,14 +177,27 @@
 "content contains too many navigation points, gui synchronization disabled";"content contains too many navigation points, gui synchronization disabled"
 
 #
+# ROOT PROMPTS
+#
+
+"home";"hem folder"
+"updating home";"updating home folder"
+"home contains {1} source";"home folder contains one source"
+"home contains {2} sources";"home folder contains {2:number} sources"
+"home contains no sources";"home folder does not contain any sources"
+"source no. {1}";"source {1:number}"
+"opening source";"opening source"
+
+#
 # DAISYONLINE PROMPTS
 #
 
-"library";"library"
-"updating library";"fetching publications"
-"found {1} publication";"one publication available"
-"found {2} publications";"{2:number} publications available"
-"no content found";"no content available"
+"online service";"online service"
+"service";"service"
+"updating service";"updating service"
+"service contains {1} publication";"service contains one publication"
+"service contains {2} publications";"service contains {2:number} publcations"
+"service contains no publications";"service does not contain any publcations"
 "found {1} new publication";"found one new publication"
 "found {2} new publications";"found {2:number} new publications"
 "publication no. {1}";"publication {1:number}"
@@ -195,3 +208,17 @@
 "service error";"service error"
 "username password error";"login failed, user credentials are not valid"
 "retrying shortly";"retrying shortly"
+
+#
+# FILESYSTEM PROMPTS
+#
+
+"usb device";"usb flash drive"
+"sd device";"sd card"
+"cdrom device";"cd disc"
+"local device";"local storage"
+"device";"device"
+"updating device";"updating device"
+"device contains {1} publication";"device contains one publication"
+"device contains {2} publications";"device contains {2:number} publications"
+"device contains no publications";"device does not contain any publications"
