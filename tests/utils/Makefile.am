@@ -29,6 +29,6 @@ isfile_SOURCES = isfile.cpp
 search_SOURCES = search.cpp
 
 AM_CPPFLAGS = -I$(top_srcdir)/src
-AM_LDFLAGS = @LOG4CXX_LIBS@ -L$(top_builddir)/src -lboost_regex -lboost_filesystem
+AM_LDFLAGS = @LOG4CXX_LIBS@ -L$(top_builddir)/src -lboost_regex -lboost_filesystem -lboost_system
 
 EXTRA_DIST = datapath.sh search.sh searchData
