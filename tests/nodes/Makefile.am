@@ -39,7 +39,7 @@ EXTRA_DIST = \
 	daisyonlinenode.sh \
 	daisyOnlineNode \
 	daisynavi.sh \
-	daisyNavi \
+	testdata \
 	run
 
 clean-local: clean-local-check
