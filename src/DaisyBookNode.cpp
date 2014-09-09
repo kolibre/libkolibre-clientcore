@@ -39,6 +39,7 @@ DaisyBookNode::DaisyBookNode()
     daisyNaviActive = false;
     daisyUri_ = "";
     title = "";
+    titleSrc = "";
 }
 
 DaisyBookNode::DaisyBookNode(std::string uri)
@@ -48,6 +49,7 @@ DaisyBookNode::DaisyBookNode(std::string uri)
     daisyNaviActive = false;
     daisyUri_ = uri;
     title = "";
+    titleSrc = "";
     initialize();
 }
 
@@ -147,6 +149,23 @@ bool DaisyBookNode::onNarrate()
 {
     // Parent node does the narration
     return true;
+}
+
+bool DaisyBookNode::narrateName()
+{
+    if (not titleSrc.empty())
+    {
+        return true;
+    }
+    if(not title.empty())
+    {
+        LOG4CXX_DEBUG(daisyBookNodeLog, "spell title: " << title);
+        Narrator::Instance()->playLongpause();
+        Narrator::Instance()->spell(title.c_str());
+        return true;
+    }
+
+    return false;
 }
 
 void DaisyBookNode::initialize()

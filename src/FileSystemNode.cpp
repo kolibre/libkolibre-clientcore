@@ -97,11 +97,12 @@ bool FileSystemNode::onOpen(NaviEngine& navi)
             // create book node
             LOG4CXX_DEBUG(fsNodeLog, "Creating book node: '" <<  uris[i] << "'");
             DaisyBookNode* node = new DaisyBookNode(uris[i]);
+            std::string title = node->getBookTitle();
 
             // invent a name for it
             ostringstream oss;
             oss << (i+1);
-            node->name_ = "title_" + oss.str();
+            node->name_ = "title_" + oss.str() + "_" + title;
 
             // add node
             addNode(node);
@@ -224,7 +225,7 @@ void FileSystemNode::announceSelection()
 
         Narrator::Instance()->setParameter("1", currentChoice + 1);
         Narrator::Instance()->play(_N("publication no. {1}"));
-        //Narrator::Instance()->play(currentChild_->name_.c_str());
+        currentChild_->narrateName();
 
         NaviListItem item = navilist_.items[currentChoice];
         cq2::Command<NaviListItem> naviItem(item);

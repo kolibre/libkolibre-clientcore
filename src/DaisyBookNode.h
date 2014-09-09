@@ -43,6 +43,7 @@ public:
     void beforeOnOpen();
     bool process(naviengine::NaviEngine&, int, void*);
     bool onNarrate();
+    bool narrateName();
     std::string getBookTitle();
 
 protected:
@@ -51,6 +52,7 @@ protected:
     bool daisyNaviActive;
     std::string daisyUri_;
     std::string title;
+    std::string titleSrc;
 };
 
 #endif
