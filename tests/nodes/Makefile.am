@@ -18,12 +18,13 @@
 
 AUTOMAKE_OPTIONS = foreign
 
-check_PROGRAMS = rootnode filesystemnode daisyonlinebooknode daisyonlinenode daisynavi
+check_PROGRAMS = rootnode filesystemnode daisybooknode daisyonlinebooknode daisyonlinenode daisynavi
 
-TESTS = rootnode filesystemnode daisyonlinebooknode.sh daisyonlinenode.sh daisynavi.sh
+TESTS = rootnode filesystemnode daisybooknode.sh daisyonlinebooknode.sh daisyonlinenode.sh daisynavi.sh
 
 rootnode_SOURCES = rootnode.cpp
 filesystemnode_SOURCES = filesystemnode.cpp
+daisybooknode_SOURCES = daisybooknode.cpp
 daisyonlinebooknode_SOURCES = daisyonlinebooknode.cpp
 daisyonlinenode_SOURCES = daisyonlinenode.cpp
 daisynavi_SOURCES = daisynavi.cpp
@@ -34,6 +35,7 @@ AM_LDFLAGS = -L$(top_builddir)/src @LOG4CXX_LIBS@ @LIBKOLIBREPLAYER_LIBS@ @LIBKO
 AM_CPPFLAGS = -I$(top_srcdir)/src @LIBKOLIBRENAVIENGINE_CFLAGS@ @LIBKOLIBREDAISYONLINE_CFLAGS@
 
 EXTRA_DIST = \
+	daisybooknode.sh \
 	daisyonlinebooknode.sh \
 	daisyOnlineBookNode \
 	daisyonlinenode.sh \

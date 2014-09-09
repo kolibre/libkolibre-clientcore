@@ -43,11 +43,14 @@ public:
     void beforeOnOpen();
     bool process(naviengine::NaviEngine&, int, void*);
     bool onNarrate();
+    std::string getBookTitle();
 
 protected:
+    void initialize();
     DaisyNavi *pDaisyNavi;
     bool daisyNaviActive;
     std::string daisyUri_;
+    std::string title;
 };
 
 #endif

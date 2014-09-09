@@ -23,6 +23,7 @@
 
 #include <Narrator.h>
 #include <NaviEngine.h>
+#include <DaisyHandler.h>
 
 #include <log4cxx/logger.h>
 
@@ -37,6 +38,7 @@ DaisyBookNode::DaisyBookNode()
     pDaisyNavi = new DaisyNavi;
     daisyNaviActive = false;
     daisyUri_ = "";
+    title = "";
 }
 
 DaisyBookNode::DaisyBookNode(std::string uri)
@@ -45,6 +47,8 @@ DaisyBookNode::DaisyBookNode(std::string uri)
     pDaisyNavi = new DaisyNavi;
     daisyNaviActive = false;
     daisyUri_ = uri;
+    title = "";
+    initialize();
 }
 
 DaisyBookNode::~DaisyBookNode()
@@ -143,4 +147,32 @@ bool DaisyBookNode::onNarrate()
 {
     // Parent node does the narration
     return true;
+}
+
+void DaisyBookNode::initialize()
+{
+    LOG4CXX_INFO(daisyBookNodeLog, "Initializing book node");
+    amis::DaisyHandler *dh = amis::DaisyHandler::Instance();
+    if (not dh->openBook(daisyUri_))
+    {
+        LOG4CXX_WARN(daisyBookNodeLog, "Failed to open book " << daisyUri_);
+        return;
+    }
+    while (dh->getState() == amis::DaisyHandler::HANDLER_OPENING)
+    {
+        usleep(100000);
+    }
+    if (not dh->setupBook())
+    {
+        LOG4CXX_WARN(daisyBookNodeLog, "Failed to setup book " << daisyUri_);
+        dh->closeBook();
+        return;
+    }
+    title = dh->getBookInfo()->mTitle;
+    dh->closeBook();
+}
+
+std::string DaisyBookNode::getBookTitle()
+{
+    return title;
 }
