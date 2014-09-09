@@ -24,5 +24,5 @@ TESTS = threads_test flush_test
 threads_test_SOURCES = threads_test.cpp
 flush_test_SOURCES = flush_test.cpp
 
-LDADD = -lpthread
+AM_LDFLAGS = -lpthread
 AM_CPPFLAGS = -I$(top_srcdir)/src
