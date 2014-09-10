@@ -248,7 +248,7 @@ int main(int argc, char **argv)
 
         // get all groups in file
         gchar **groups = NULL;
-        gsize length = NULL;
+        gsize length;
         groups = g_key_file_get_groups(keyFile, &length);
 
         // loop through each group and search for matches
