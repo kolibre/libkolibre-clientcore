@@ -193,11 +193,6 @@ int main(int argc, char **argv)
             return 1;
         }
     }
-    else if (not mediaPath.empty())
-    {
-        printf("error: Support not yet implemented\n");
-        return 1;
-    }
 
     // Setup logging
     try
