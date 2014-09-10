@@ -181,7 +181,8 @@ void DaisyBookNode::initialize()
     {
         usleep(100000);
     }
-    if (not dh->setupBook())
+    bool withBookmarks = false;
+    if (not dh->setupBook(withBookmarks))
     {
         LOG4CXX_WARN(daisyBookNodeLog, "Failed to setup book " << daisyUri_);
         dh->closeBook();
