@@ -155,7 +155,17 @@ bool DaisyBookNode::narrateName()
 {
     if (not titleSrc.empty())
     {
-        return true;
+        usleep(100000); while (Narrator::Instance()->isSpeaking()) usleep(100000);
+        std::string extension = getFileExtension(titleSrc);
+        if (extension == "ogg")
+        {
+            Narrator::Instance()->playFile(titleSrc);
+            return true;
+        }
+        else
+        {
+            LOG4CXX_WARN(daisyBookNodeLog, "file extension '" << extension << "' not supported");
+        }
     }
     if(not title.empty())
     {
@@ -201,4 +211,11 @@ std::string DaisyBookNode::getBookTitle()
 std::string DaisyBookNode::getBookTitleSrc()
 {
     return titleSrc;
+}
+
+std::string DaisyBookNode::getFileExtension(std::string& filename)
+{
+    int start = filename.length() - 3;
+    if (start < 0) return "";
+    return filename.substr(start, filename.length());
 }
