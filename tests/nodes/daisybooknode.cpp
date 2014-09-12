@@ -80,5 +80,9 @@ int main(int argc, char **argv)
     std::cout << "Title: " << title << std::endl;
     assert(title == "Fire Safety, by Wendy Blaxland");
 
+    std::string src = node.getBookTitleSrc();
+    std::cout << "Src: " << src << std::endl;
+    assert(src.find("01_Fire_Safety__by_Wendy_Blaxland.mp3") > 0);
+
     return 0;
 }

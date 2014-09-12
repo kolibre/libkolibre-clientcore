@@ -45,6 +45,7 @@ public:
     bool onNarrate();
     bool narrateName();
     std::string getBookTitle();
+    std::string getBookTitleSrc();
 
 protected:
     void initialize();

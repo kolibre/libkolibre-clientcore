@@ -189,10 +189,16 @@ void DaisyBookNode::initialize()
         return;
     }
     title = dh->getBookInfo()->mTitle;
+    titleSrc = dh->getTitleSrc();
     dh->closeBook();
 }
 
 std::string DaisyBookNode::getBookTitle()
 {
     return title;
+}
+
+std::string DaisyBookNode::getBookTitleSrc()
+{
+    return titleSrc;
 }
