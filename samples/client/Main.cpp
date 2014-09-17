@@ -99,7 +99,7 @@ int main(int argc, char **argv)
 
     // parse user arguments
     int opt;
-    while ((opt = getopt(argc, argv, "s:u:p:rm:l:i:c:h")) != -1)
+    while ((opt = getopt(argc, argv, "s:u:p:rm:l:i:c:d:a:h")) != -1)
     {
         switch (opt)
         {
