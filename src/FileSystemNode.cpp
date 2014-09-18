@@ -43,6 +43,7 @@ FileSystemNode::FileSystemNode(const std::string name, const std::string path)
     fsName_ = name;
     fsPath_ = path;
     pathUpdated_ = false;
+    announcementBeforeTitle_ = false;
 }
 
 FileSystemNode::~FileSystemNode()
@@ -168,6 +169,7 @@ bool FileSystemNode::narrateInfo()
     const bool isSelfNarrated = true;
     Narrator::Instance()->play(_N("choose option using left and right arrows, open using play button"));
     Narrator::Instance()->playLongpause();
+    announcementBeforeTitle_ = true;
     announceSelection();
     return isSelfNarrated;
 }
@@ -206,6 +208,7 @@ void FileSystemNode::announce()
         Narrator::Instance()->play(_N("device contains {2} publications"));
     }
     Narrator::Instance()->playLongpause();
+    announcementBeforeTitle_ = true;
 
     announceSelection();
 }
@@ -223,8 +226,22 @@ void FileSystemNode::announceSelection()
             current = current->prev_;
         }
 
+        if (announcementBeforeTitle_)
+        {
+            // This wait stalls the application and makes it unresponsive to key presses
+            // but hopefully users will not notice it
+            usleep(100000); while (Narrator::Instance()->isSpeaking()) usleep(100000);
+            announcementBeforeTitle_ = false;
+        }
+
         Narrator::Instance()->setParameter("1", currentChoice + 1);
         Narrator::Instance()->play(_N("publication no. {1}"));
+
+        // Offline titles may have different sample rate and channel which causes the Narrator
+        // to flush the current queue. A short wait-and-sleep prevents interupted narration.
+        // Do not sleep more then 2 seconds.
+        int counter = 0;
+        usleep(100000); while (Narrator::Instance()->isSpeaking() && ++counter < 20) usleep(100000);
         currentChild_->narrateName();
 
         NaviListItem item = navilist_.items[currentChoice];

@@ -155,7 +155,6 @@ bool DaisyBookNode::narrateName()
 {
     if (not titleSrc.empty())
     {
-        usleep(100000); while (Narrator::Instance()->isSpeaking()) usleep(100000);
         std::string extension = getFileExtension(titleSrc);
         if (extension == "ogg")
         {
