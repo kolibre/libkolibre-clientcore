@@ -161,6 +161,11 @@ bool DaisyBookNode::narrateName()
             Narrator::Instance()->playFile(titleSrc);
             return true;
         }
+        else if (extension == "mp3")
+        {
+            Narrator::Instance()->playFile(titleSrc);
+            return true;
+        }
         else
         {
             LOG4CXX_WARN(daisyBookNodeLog, "file extension '" << extension << "' not supported");
