@@ -217,6 +217,7 @@
 "usb device";"usb muisti"
 "sd device";"sd-kortti"
 "cdrom device";"cd-levy"
+"external device";"ulkoinen muisti"
 "local device";"paikallinen muisti"
 "device";"laite"
 "updating device";"päivitetään laitetta"

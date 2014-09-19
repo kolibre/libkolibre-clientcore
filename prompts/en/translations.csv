@@ -216,6 +216,7 @@
 "usb device";"usb flash drive"
 "sd device";"sd card"
 "cdrom device";"cd disc"
+"external device";"external media"
 "local device";"local storage"
 "device";"device"
 "updating device";"updating device"

@@ -216,6 +216,7 @@
 "usb device";"usb minne"
 "sd device";"sd kort"
 "cdrom device";"cd-skiva"
+"external device";"externt minne"
 "local device";"lokalt minne"
 "device";"enhet"
 "updating device";"uppdaterar enheten"

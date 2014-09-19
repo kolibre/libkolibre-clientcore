@@ -214,6 +214,7 @@
 "usb device"
 "sd device"
 "cdrom device"
+"external device"
 "local device"
 "device"
 "updating device"

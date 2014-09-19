@@ -159,6 +159,8 @@ bool FileSystemNode::narrateName()
         Narrator::Instance()->play(_N("sd device"));
     else if (Utils::contains(lcName, "cdrom"))
         Narrator::Instance()->play(_N("cdrom device"));
+    else if (Utils::contains(lcName ,"external"))
+        Narrator::Instance()->play(_N("external device"));
     else
         Narrator::Instance()->play(_N("local device"));
     return isSelfNarrated;
