@@ -177,7 +177,7 @@ public:
     {
         int start = filename.length() - 3;
         if (start < 0) return "";
-        return filename.substr(start, filename.length());
+        return toLower(filename.substr(start, filename.length()));
     }
 
     static std::string toLower(std::string data)

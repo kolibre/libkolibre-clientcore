@@ -14,6 +14,8 @@ int main(int argc, char *argv[])
     assert(Utils::fileExtension("foo") == "foo");
     assert(Utils::fileExtension("foo.bar") == "bar");
     assert(Utils::fileExtension("foo.foobar") == "bar");
+    assert(Utils::fileExtension("FOO.BAR") == "bar");
+    assert(Utils::fileExtension("Foo.bAr") == "bar");
 
     return 0;
 }
