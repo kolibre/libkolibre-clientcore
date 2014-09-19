@@ -99,7 +99,7 @@ bool RootNode::onOpen(NaviEngine& navi)
         std::string password = MediaSourceManager::Instance()->getDOSpassword(0);
 
         // Create a DaisyOnlineNode
-        DaisyOnlineNode* daisyOnlineNode = new DaisyOnlineNode(name, url, username, password, userAgent_);
+        DaisyOnlineNode* daisyOnlineNode = new DaisyOnlineNode(name, url, username, password, userAgent_, openFirstChild_);
         if (daisyOnlineNode->good())
         {
             // Split userAgent into model/version
@@ -138,7 +138,7 @@ bool RootNode::onOpen(NaviEngine& navi)
         if (Utils::isDir(path))
         {
             LOG4CXX_INFO(rootNodeLog, "Adding FileSystemNode '" << name << "'");
-            FileSystemNode *fileSystemNode = new FileSystemNode(name, path);
+            FileSystemNode *fileSystemNode = new FileSystemNode(name, path, openFirstChild_);
             addNode(fileSystemNode);
 
             // create a NaviListItem and store it in list for the NaviList signal

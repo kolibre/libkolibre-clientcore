@@ -37,7 +37,7 @@ log4cxx::LoggerPtr fsNodeLog(log4cxx::Logger::getLogger("kolibre.clientcore.file
 
 using namespace naviengine;
 
-FileSystemNode::FileSystemNode(const std::string name, const std::string path)
+FileSystemNode::FileSystemNode(const std::string name, const std::string path, bool openFirstChild)
 {
     LOG4CXX_TRACE(fsNodeLog, "Constructor");
     name_ = "FileSystem_" + name;
@@ -45,7 +45,7 @@ FileSystemNode::FileSystemNode(const std::string name, const std::string path)
     fsPath_ = path;
     pathUpdated_ = false;
     announcementBeforeTitle_ = false;
-    openFirstChild_ = true;
+    openFirstChild_ = openFirstChild;
 }
 
 FileSystemNode::~FileSystemNode()

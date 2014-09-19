@@ -35,7 +35,7 @@
 class DaisyOnlineNode: public naviengine::MenuNode
 {
 public:
-    DaisyOnlineNode(const std::string name, const std::string uri, const std::string username, const std::string password, std::string useragent = "");
+    DaisyOnlineNode(const std::string name, const std::string uri, const std::string username, const std::string password, std::string useragent = "", bool openFirstChild = false);
     ~DaisyOnlineNode();
 
     // ReadingSystemAttributes values

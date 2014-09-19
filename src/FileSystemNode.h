@@ -33,7 +33,7 @@
 class FileSystemNode: public naviengine::MenuNode
 {
 public:
-    FileSystemNode(const std::string name, const std::string path);
+    FileSystemNode(const std::string name, const std::string path, bool openFirstChild = false);
     ~FileSystemNode();
 
     // MenuNode start
