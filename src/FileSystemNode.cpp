@@ -24,6 +24,7 @@
 #include "CommandQueue2/CommandQueue.h"
 #include "Commands/InternalCommands.h"
 #include "Utils.h"
+#include "Settings/Settings.h"
 
 #include <Narrator.h>
 #include <NaviEngine.h>
@@ -44,6 +45,7 @@ FileSystemNode::FileSystemNode(const std::string name, const std::string path)
     fsPath_ = path;
     pathUpdated_ = false;
     announcementBeforeTitle_ = false;
+    openFirstChild_ = true;
 }
 
 FileSystemNode::~FileSystemNode()
@@ -126,13 +128,11 @@ bool FileSystemNode::onOpen(NaviEngine& navi)
     currentChild_ = navi.getCurrentChoice();
     announce();
 
-    if (numberOfChildren() == 1)
+    bool autoPlay = Settings::Instance()->read<bool>("autoplay", true);
+    if (autoPlay && openFirstChild_)
     {
-        LOG4CXX_INFO(fsNodeLog, "Opening the only child");
-        // wait for narrator before sending command
-        usleep(500000); while (Narrator::Instance()->isSpeaking()) usleep(100000);
-        cq2::Command<INTERNAL_COMMAND> c(COMMAND_DOWN);
-        c();
+        narratorDoneConnection = Narrator::Instance()->connectAudioFinished(boost::bind(&FileSystemNode::onNarratorDone, this));
+        Narrator::Instance()->setPushCommandFinished(true);
     }
 
     return true;
@@ -186,6 +186,21 @@ bool FileSystemNode::onRender()
 {
     const bool isSelfRendered = true;
     return isSelfRendered;
+}
+
+void FileSystemNode::onNarratorDone()
+{
+    bool autoPlay = Settings::Instance()->read<bool>("autoplay", true);
+    if (autoPlay && openFirstChild_ && numberOfChildren() >= 1)
+    {
+        openFirstChild_ = false;
+        Narrator::Instance()->setPushCommandFinished(false);
+        narratorDoneConnection.disconnect();
+
+        LOG4CXX_INFO(fsNodeLog, "auto open first child");
+        cq2::Command<INTERNAL_COMMAND> c(COMMAND_DOWN);
+        c();
+    }
 }
 
 void FileSystemNode::announce()

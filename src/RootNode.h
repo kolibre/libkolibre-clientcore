@@ -25,6 +25,7 @@
 #include <Nodes/MenuNode.h>
 
 #include <string>
+#include <boost/signals2.hpp>
 
 /**
  * RootNode implements the MenuNode, making available media sources function like a menu.
@@ -46,12 +47,15 @@ public:
     bool narrateInfo();
     bool onNarrate();
     bool onRender();
+    void onNarratorDone();
 
 private:
     NaviList navilist_;
     AnyNode* currentChild_;
 
     std::string userAgent_;
+    bool openFirstChild_;
+    boost::signals2::connection narratorDoneConnection;
 
     void announce();
     void announceSelection();

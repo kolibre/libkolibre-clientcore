@@ -25,6 +25,7 @@
 #include <Nodes/MenuNode.h>
 
 #include <string>
+#include <boost/signals2.hpp>
 
 /**
  * FileSystemNode implements the MenuNode, making available media types function like a menu.
@@ -48,12 +49,15 @@ public:
     bool narrateInfo();
     bool onNarrate();
     bool onRender();
+    void onNarratorDone();
 
 private:
     NaviList navilist_;
     AnyNode* currentChild_;
     bool pathUpdated_;
     bool announcementBeforeTitle_;
+    bool openFirstChild_;
+    boost::signals2::connection narratorDoneConnection;
 
     std::string fsName_;
     std::string fsPath_;

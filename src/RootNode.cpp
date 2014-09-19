@@ -43,6 +43,7 @@ RootNode::RootNode(const std::string useragent)
     LOG4CXX_TRACE(rootNodeLog, "Constructor");
     userAgent_ = useragent;
     name_ = "Root";
+    openFirstChild_ = true;
 }
 
 RootNode::~RootNode()
@@ -155,13 +156,11 @@ bool RootNode::onOpen(NaviEngine& navi)
     currentChild_ = navi.getCurrentChoice();
     announce();
 
-    if (numberOfChildren() == 1)
+    bool autoPlay = Settings::Instance()->read<bool>("autoplay", true);
+    if (autoPlay && openFirstChild_)
     {
-        LOG4CXX_INFO(rootNodeLog, "Opening the only child");
-        // wait for narrator before sending command
-        usleep(500000); while (Narrator::Instance()->isSpeaking()) usleep(100000);
-        cq2::Command<INTERNAL_COMMAND> c(COMMAND_DOWN);
-        c();
+        narratorDoneConnection = Narrator::Instance()->connectAudioFinished(boost::bind(&RootNode::onNarratorDone, this));
+        Narrator::Instance()->setPushCommandFinished(true);
     }
 
     return true;
@@ -190,6 +189,21 @@ bool RootNode::onRender()
 {
     const bool isSelfRendered = true;
     return isSelfRendered;
+}
+
+void RootNode::onNarratorDone()
+{
+    bool autoPlay = Settings::Instance()->read<bool>("autoplay", true);
+    if (autoPlay && openFirstChild_ && numberOfChildren() >= 1)
+    {
+        openFirstChild_ = false;
+        Narrator::Instance()->setPushCommandFinished(false);
+        narratorDoneConnection.disconnect();
+
+        LOG4CXX_INFO(rootNodeLog, "auto open first child");
+        cq2::Command<INTERNAL_COMMAND> c(COMMAND_DOWN);
+        c();
+    }
 }
 
 void RootNode::announce()
