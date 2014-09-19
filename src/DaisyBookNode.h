@@ -54,8 +54,6 @@ protected:
     std::string daisyUri_;
     std::string title;
     std::string titleSrc;
-
-    std::string getFileExtension(std::string&);
 };
 
 #endif

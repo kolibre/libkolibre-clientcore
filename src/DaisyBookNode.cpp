@@ -20,6 +20,7 @@
 #include "DaisyBookNode.h"
 #include "DaisyNavi.h"
 #include "Defines.h"
+#include "Utils.h"
 
 #include <Narrator.h>
 #include <NaviEngine.h>
@@ -155,7 +156,7 @@ bool DaisyBookNode::narrateName()
 {
     if (not titleSrc.empty())
     {
-        std::string extension = getFileExtension(titleSrc);
+        std::string extension = Utils::fileExtension(titleSrc);
         if (extension == "ogg")
         {
             Narrator::Instance()->playFile(titleSrc);
@@ -215,11 +216,4 @@ std::string DaisyBookNode::getBookTitle()
 std::string DaisyBookNode::getBookTitleSrc()
 {
     return titleSrc;
-}
-
-std::string DaisyBookNode::getFileExtension(std::string& filename)
-{
-    int start = filename.length() - 3;
-    if (start < 0) return "";
-    return filename.substr(start, filename.length());
 }

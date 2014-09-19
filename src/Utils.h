@@ -173,6 +173,13 @@ public:
         return matches;
     }
 
+    static std::string fileExtension(std::string filename)
+    {
+        int start = filename.length() - 3;
+        if (start < 0) return "";
+        return filename.substr(start, filename.length());
+    }
+
     static std::string toLower(std::string data)
     {
         std::transform(data.begin(), data.end(), data.begin(), ::tolower);
