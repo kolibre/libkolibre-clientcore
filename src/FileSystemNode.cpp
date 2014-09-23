@@ -188,6 +188,16 @@ bool FileSystemNode::onRender()
     return isSelfRendered;
 }
 
+bool FileSystemNode::abort()
+{
+    if (openFirstChild_)
+    {
+        openFirstChild_ = false;
+        Narrator::Instance()->setPushCommandFinished(false);
+        narratorDoneConnection.disconnect();
+    }
+}
+
 void FileSystemNode::onNarratorDone()
 {
     bool autoPlay = Settings::Instance()->read<bool>("autoplay", true);

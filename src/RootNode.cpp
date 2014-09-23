@@ -191,6 +191,27 @@ bool RootNode::onRender()
     return isSelfRendered;
 }
 
+bool RootNode::abort()
+{
+    if (openFirstChild_)
+    {
+        openFirstChild_ = false;
+        Narrator::Instance()->setPushCommandFinished(false);
+        narratorDoneConnection.disconnect();
+
+        // abort auto open in children
+        if (numberOfChildren() >= 1)
+        {
+            AnyNode* current = firstChild();
+            for (int i=0; i<numberOfChildren(); i++)
+            {
+                current->abort();
+                current = current->next_;
+            }
+        }
+    }
+}
+
 void RootNode::onNarratorDone()
 {
     bool autoPlay = Settings::Instance()->read<bool>("autoplay", true);

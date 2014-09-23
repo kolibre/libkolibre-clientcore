@@ -45,6 +45,7 @@ public:
     bool next(naviengine::NaviEngine&);
     bool prev(naviengine::NaviEngine&);
     bool up(naviengine::NaviEngine&);
+    bool abort();
     bool narrateName();
     bool narrateInfo();
     bool onNarrate();
