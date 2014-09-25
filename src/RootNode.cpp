@@ -117,7 +117,7 @@ bool RootNode::onOpen(NaviEngine& navi)
                 daisyOnlineNode->setVersion(version);
             }
 
-            daisyOnlineNode->setLanguage(Settings::Instance()->read<std::string>("language", "sv"));
+            daisyOnlineNode->setLanguage(Settings::Instance()->read<std::string>("language", "en"));
             LOG4CXX_INFO(rootNodeLog, "Adding DaisyOnlineService '" << name << "'");
             addNode(daisyOnlineNode);
 
