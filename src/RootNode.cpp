@@ -89,6 +89,16 @@ bool RootNode::onOpen(NaviEngine& navi)
     // Create sources defined in MediaSourceManager
     LOG4CXX_INFO(rootNodeLog, "Creating children for root");
 
+    // Split userAgent into model/version
+    std::string model = "";
+    std::string version = "";
+    std::string::size_type slashpos = userAgent_.find('/');
+    if (slashpos != std::string::npos)
+    {
+        model = userAgent_.substr(0, slashpos);
+        version = userAgent_.substr(slashpos + 1);
+    }
+
     int daisyOnlineServices = MediaSourceManager::Instance()->getDaisyOnlineServices();
     for (int i = 0; i < daisyOnlineServices; i++)
     {
@@ -101,17 +111,10 @@ bool RootNode::onOpen(NaviEngine& navi)
         DaisyOnlineNode* daisyOnlineNode = new DaisyOnlineNode(name, url, username, password, userAgent_, openFirstChild_);
         if (daisyOnlineNode->good())
         {
-            // Split userAgent into model/version
-            std::string::size_type slashpos = userAgent_.find('/');
-            if (slashpos != std::string::npos)
+            if (not model.empty() && not version.empty())
             {
-                std::string model = userAgent_.substr(0, slashpos);
-                std::string version = userAgent_.substr(slashpos + 1);
-                if (not model.empty() && not version.empty())
-                {
-                    daisyOnlineNode->setModel(model);
-                    daisyOnlineNode->setVersion(version);
-                }
+                daisyOnlineNode->setModel(model);
+                daisyOnlineNode->setVersion(version);
             }
 
             daisyOnlineNode->setLanguage(Settings::Instance()->read<std::string>("language", "sv"));
