@@ -81,25 +81,25 @@ int main(int argc, char **argv)
     MediaSourceManager::Instance()->addDaisyOnlineService("service1","url1","username","password");
     MediaSourceManager::Instance()->addDaisyOnlineService("service2","url2","username","password");
 
-    // we expect that rootNode only has one child since we only support one DaisyOnlineSource at the moment
+    // we expect that rootNode has two children
     assert(rootNode->onOpen(navi));
-    assert(rootNode->numberOfChildren() == 1);
+    assert(rootNode->numberOfChildren() == 2);
 
     // add two file system paths which does not exist
     MediaSourceManager::Instance()->addFileSystemPath("path1","/tmp/path1");
     MediaSourceManager::Instance()->addFileSystemPath("path2","/tmp/path2");
 
-    // we expect that rootNode only has one child since none of the paths exists
+    // we expect that rootNode only has two children since none of the paths exists
     assert(rootNode->onOpen(navi));
-    assert(rootNode->numberOfChildren() == 1);
+    assert(rootNode->numberOfChildren() == 2);
 
     // add two file system paths which do exist
     MediaSourceManager::Instance()->addFileSystemPath("path3","/tmp");
     MediaSourceManager::Instance()->addFileSystemPath("path4","/tmp");
 
-    // we expect that rootNode has three children
+    // we expect that rootNode has four children
     assert(rootNode->onOpen(navi));
-    assert(rootNode->numberOfChildren() == 3);
+    assert(rootNode->numberOfChildren() == 4);
 
     // loop through each child an verify that all names and uris are unique
     std::set<std::string> names;

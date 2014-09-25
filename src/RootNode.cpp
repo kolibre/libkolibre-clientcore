@@ -90,13 +90,12 @@ bool RootNode::onOpen(NaviEngine& navi)
     LOG4CXX_INFO(rootNodeLog, "Creating children for root");
 
     int daisyOnlineServices = MediaSourceManager::Instance()->getDaisyOnlineServices();
-    if (daisyOnlineServices > 0)
+    for (int i = 0; i < daisyOnlineServices; i++)
     {
-        // We will only support on DaisyOnlineService at the moment
-        std::string name = MediaSourceManager::Instance()->getDOSname(0);
-        std::string url = MediaSourceManager::Instance()->getDOSurl(0);
-        std::string username = MediaSourceManager::Instance()->getDOSusername(0);
-        std::string password = MediaSourceManager::Instance()->getDOSpassword(0);
+        std::string name = MediaSourceManager::Instance()->getDOSname(i);
+        std::string url = MediaSourceManager::Instance()->getDOSurl(i);
+        std::string username = MediaSourceManager::Instance()->getDOSusername(i);
+        std::string password = MediaSourceManager::Instance()->getDOSpassword(i);
 
         // Create a DaisyOnlineNode
         DaisyOnlineNode* daisyOnlineNode = new DaisyOnlineNode(name, url, username, password, userAgent_, openFirstChild_);
