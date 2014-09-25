@@ -694,6 +694,8 @@ bool DaisyOnlineNode::abort(){
         Narrator::Instance()->setPushCommandFinished(false);
         narratorDoneConnection.disconnect();
     }
+
+    return true;
 }
 
 void DaisyOnlineNode::onNarratorDone(){

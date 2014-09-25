@@ -196,6 +196,8 @@ bool FileSystemNode::abort()
         Narrator::Instance()->setPushCommandFinished(false);
         narratorDoneConnection.disconnect();
     }
+
+    return true;
 }
 
 void FileSystemNode::onNarratorDone()

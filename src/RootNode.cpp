@@ -210,6 +210,8 @@ bool RootNode::abort()
             }
         }
     }
+
+    return true;
 }
 
 void RootNode::onNarratorDone()
