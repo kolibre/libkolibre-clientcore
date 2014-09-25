@@ -157,6 +157,15 @@ bool DaisyOnlineNode::narrateName()
 {
     const bool isSelfNarrated = true;
     Narrator::Instance()->play(_N("online service"));
+    if (Narrator::Instance()->hasOggAudio(name_.c_str()) || Narrator::Instance()->hasMp3Audio(name_.c_str()))
+    {
+        Narrator::Instance()->play(name_.c_str());
+    }
+    else
+    {
+        Narrator::Instance()->spell(serviceName_.c_str());
+    }
+
     return isSelfNarrated;
 }
 
