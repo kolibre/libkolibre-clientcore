@@ -328,6 +328,7 @@ DaisyOnlineNode::errorType DaisyOnlineNode::sessionInit()
         lastError_ = SERVICE_ERROR;
         return lastError_;
     }
+    insertServiceLabel(serviceAttributes);
 
     // build readingSystemAttributes object
     kdo::ReadingSystemAttributes readingSystemAttributes;
@@ -563,7 +564,7 @@ DaisyOnlineNode::errorType DaisyOnlineNode::createBookNodes(kdo::ContentList* co
         added++;
 
         // insert label audio in database
-        insertLabelInMessageDb(contentItems[i]);
+        insertContentLabel(contentItems[i]);
 
         // create a NaviListItem and store it in list for the NaviList signal
         NaviListItem item(uri_from_anything.str(), contentItems[i].getLabel().getText());
@@ -720,32 +721,21 @@ void DaisyOnlineNode::onNarratorDone(){
         c();
     }
 }
-bool DaisyOnlineNode::insertLabelInMessageDb(kdo::ContentItem content)
+bool DaisyOnlineNode::insertLabelInMessageDb(std::string identifier, kdo::Label label)
 {
-    LOG4CXX_INFO(onlineNodeLog, "Download and insert audio label for content '" << content.getLabel().getText() << "' with id " << content.getId());
-
-    if (not content.getLabel().hasAudio())
-    {
-        LOG4CXX_WARN(onlineNodeLog, "Title audio is missing for this content");
-        return false;
-    }
-
-    // make an identifier for the content
-    std::string identifier = content.getId() + "_" + content.getLabel().getText();
-
-    /*
-     * additional data we have access to
-     *
-     * content.getLabel().getAudio().getSize()
-     * getLangCode( content.getLabel().getLang()
-     */
-
     // check if audio for this content already have been added
     if (!Narrator::Instance()->hasOggAudio(identifier.c_str()))
     {
+        /*
+         * additional data we have access to
+         *
+         * label.getAudio().getSize()
+         * label.getLang()
+         */
+
         // download and add audio to database
         char *audio_data = NULL;
-        int audio_size = downloadData(content.getLabel().getAudio().getUri(), &audio_data);
+        int audio_size = downloadData(label.getAudio().getUri(), &audio_data);
         if (audio_size > 0)
         {
             bool result = Narrator::Instance()->addOggAudio(identifier.c_str(), audio_data, audio_size);
@@ -765,6 +755,43 @@ bool DaisyOnlineNode::insertLabelInMessageDb(kdo::ContentItem content)
     }
 
     return true;
+}
+
+bool DaisyOnlineNode::insertServiceLabel(kdo::ServiceAttributes* serviceAttributes)
+{
+    std::string service = serviceAttributes->getServiceId();
+    if (service.empty()) return true;
+    LOG4CXX_INFO(onlineNodeLog, "Download and insert audio label for service '" << service << "'");
+
+    if (not serviceAttributes->hasService())
+    {
+        LOG4CXX_WARN(onlineNodeLog, "service label is missing for this service");
+        return false;
+    }
+
+    if (not serviceAttributes->getService().hasAudio())
+    {
+        LOG4CXX_WARN(onlineNodeLog, "service audio is missing for this service");
+        return false;
+    }
+
+    return insertLabelInMessageDb(name_, serviceAttributes->getService());
+}
+
+bool DaisyOnlineNode::insertContentLabel(kdo::ContentItem contentItem)
+{
+    LOG4CXX_INFO(onlineNodeLog, "Download and insert audio label for content '" << contentItem.getLabel().getText() << "' with id " << contentItem.getId());
+
+    if (not contentItem.getLabel().hasAudio())
+    {
+        LOG4CXX_WARN(onlineNodeLog, "Title audio is missing for this content item");
+        return false;
+    }
+
+    // make an identifier for the content
+    std::string identifier = contentItem.getId() + "_" + contentItem.getLabel().getText();
+
+    return insertLabelInMessageDb(identifier, contentItem.getLabel());
 }
 
 size_t DaisyOnlineNode::downloadData(string uri, char **destinationbuffer)

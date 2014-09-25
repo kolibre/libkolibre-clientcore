@@ -115,7 +115,9 @@ private:
     DaisyOnlineNode::errorType faultHandler(DaisyOnlineHandler::status status);
 
     // functions for inserting label audio into messages.db
-    bool insertLabelInMessageDb(kdo::ContentItem);
+    bool insertLabelInMessageDb(std::string, kdo::Label);
+    bool insertServiceLabel(kdo::ServiceAttributes*);
+    bool insertContentLabel(kdo::ContentItem);
     size_t downloadData(std::string uri, char **destinationbuffer);
 
     std::string getLangCode(std::string language);
