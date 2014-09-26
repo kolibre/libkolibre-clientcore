@@ -723,8 +723,18 @@ void DaisyOnlineNode::onNarratorDone(){
 }
 bool DaisyOnlineNode::insertLabelInMessageDb(std::string identifier, kdo::Label label)
 {
+    // if we get here, the label object contains audio
+
+    // download only supported file types
+    std::string extension = Utils::fileExtension(label.getAudio().getUri());
+    if (not(extension == "ogg" || extension == "mp3"))
+    {
+        LOG4CXX_WARN(onlineNodeLog, "file extension '" << extension << "' not supported");
+        return false;
+    }
+
     // check if audio for this content already have been added
-    if (!Narrator::Instance()->hasOggAudio(identifier.c_str()))
+    if (extension == "ogg" && !Narrator::Instance()->hasOggAudio(identifier.c_str()))
     {
         /*
          * additional data we have access to
@@ -739,6 +749,28 @@ bool DaisyOnlineNode::insertLabelInMessageDb(std::string identifier, kdo::Label 
         if (audio_size > 0)
         {
             bool result = Narrator::Instance()->addOggAudio(identifier.c_str(), audio_data, audio_size);
+            free(audio_data);
+
+            if (!result)
+            {
+                LOG4CXX_ERROR(onlineNodeLog, "Inserting audio data failed");
+                return false;
+            }
+        }
+        else
+        {
+            LOG4CXX_ERROR(onlineNodeLog, "Downloading audio data failed");
+            return false;;
+        }
+    }
+    else if (extension == "mp3" && !Narrator::Instance()->hasMp3Audio(identifier.c_str()))
+    {
+        // download and add audio to database
+        char *audio_data = NULL;
+        int audio_size = downloadData(label.getAudio().getUri(), &audio_data);
+        if (audio_size > 0)
+        {
+            bool result = Narrator::Instance()->addMp3Audio(identifier.c_str(), audio_data, audio_size);
             free(audio_data);
 
             if (!result)
