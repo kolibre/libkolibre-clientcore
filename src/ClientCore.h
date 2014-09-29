@@ -194,14 +194,7 @@ public:
     std::string getManualSound();
     void setAboutSound(const char *);
     std::string getAboutSound();
-    void setServiceUrl(const std::string url);
-    std::string getServiceUrl();
     std::string getUserAgent();
-    void setUsername(const std::string username);
-    std::string getUsername();
-    void setPassword(const std::string password, bool remember);
-    std::string getPassword();
-    bool getRememberPassword();
     void setSerialNumber(const std::string serialNumber);
     std::string getSerialNumber();
     static void setLanguage(std::string lang);

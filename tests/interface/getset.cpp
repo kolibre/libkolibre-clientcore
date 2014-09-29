@@ -57,9 +57,6 @@ int main(int argc, char **argv)
     index = clientcore.addFileSystemPath("some other name", "some path");
     assert(index == 1);
 
-    // getServiceUrl
-    assert(clientcore.getServiceUrl() == "some url");
-
     // getUserAgent
     assert(clientcore.getUserAgent() == "useragent");
 
@@ -70,22 +67,6 @@ int main(int argc, char **argv)
     // setAboutSound
     clientcore.setAboutSound("about");
     assert(clientcore.getAboutSound() == "about");
-
-    // setServiceUrl
-    clientcore.setServiceUrl("url");
-    assert(clientcore.getServiceUrl() == "url");
-
-    // setUsername
-    clientcore.setUsername("username");
-    assert(clientcore.getUsername() == "username");
-
-    // setPassword and getRememberPassword
-    clientcore.setPassword("password", false);
-    assert(clientcore.getPassword() == "password");
-    assert(clientcore.getRememberPassword() == false);
-    clientcore.setPassword("drowssap", true);
-    assert(clientcore.getPassword() == "drowssap");
-    assert(clientcore.getRememberPassword() == true);
 
     // setSerialNumber
     clientcore.setSerialNumber("serial");

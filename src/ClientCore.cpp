@@ -280,28 +280,6 @@ std::string ClientCore::getLanguage()
 }
 
 /**
- * Set the url to a service which this application shall connect to
- *
- * @param url A Daisy Online service url
- */
-void ClientCore::setServiceUrl(const std::string url)
-{
-    // Note. This function will become deprecated when support for more services is implemented.
-    MediaSourceManager::Instance()->setDOSurl(0, url);
-}
-
-/**
- * Get the service which this application shall connect to
- *
- * @return A url to a Daisy Online service
- */
-std::string ClientCore::getServiceUrl()
-{
-    // Note. This function will become deprecated when support for more services is implemented.
-    return MediaSourceManager::Instance()->getDOSurl(0);
-}
-
-/**
  * Get the user-agent value used by this application
  *
  * @return The user-agent property
@@ -312,53 +290,6 @@ std::string ClientCore::getUserAgent()
     std::string useragent = mUserAgent;
     pthread_mutex_unlock(&clientcoreMutex);
     return useragent;
-}
-
-/**
- * Set the username for the service to connect to
- *
- * @param username The username for the service
- */
-void ClientCore::setUsername(const std::string username)
-{
-    // Note. This function will become deprecated when support for more services is implemented.
-    MediaSourceManager::Instance()->setDOSusername(0, username);
-}
-
-
-/**
- * Set the password for the service to connect to
- *
- * @param password The password for the service
- * @param remember Inform whether the password shall be remembered or not
- */
-void ClientCore::setPassword(const std::string password, bool remember)
-{
-    // Note. This function will become deprecated when support for more services is implemented.
-    MediaSourceManager::Instance()->setDOSpassword(0, password);
-    MediaSourceManager::Instance()->setDOSremember(0, remember);
-}
-
-/**
- * Get the username for the service to connect to
- *
- * @return The username
- */
-std::string ClientCore::getUsername()
-{
-    // Note. This function will become deprecated when support for more services is implemented.
-    return MediaSourceManager::Instance()->getDOSusername(0);
-}
-
-/**
- * Get the password for the service to connect to
- *
- * @return The password password
- */
-std::string ClientCore::getPassword()
-{
-    // Note. This function will become deprecated when support for more services is implemented.
-    return MediaSourceManager::Instance()->getDOSpassword(0);
 }
 
 /**
@@ -472,17 +403,6 @@ void ClientCore::setSleepTimerState(SleepTimerStates state)
 SleepTimerStates ClientCore::getSleepTimerState()
 {
     return (SleepTimerStates) sleepTimerState;
-}
-
-/**
- * Get the status whether to remember password or not
- *
- * @return A boolean indicating whether the password is remembered or not
- */
-bool ClientCore::getRememberPassword()
-{
-    // Note. This function will become deprecated when support for more services is implemented.
-    return MediaSourceManager::Instance()->getDOSremember(0);
 }
 
 /**
