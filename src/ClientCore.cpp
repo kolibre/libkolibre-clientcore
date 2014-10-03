@@ -103,6 +103,8 @@ ClientCore::ClientCore(const std::string useragent)
     // Initialize thread variables
     clientcoreRunning = false;
     clientcoreThreadStarted = false;
+    dbusmonitorRunning = false;
+    dbusmonitorThreadStarted = false;
 
     // Initialize class member variables
     mManualOggfile = "";
@@ -117,6 +119,7 @@ ClientCore::~ClientCore()
 {
     pthread_mutex_lock(&clientcoreMutex);
     clientcoreRunning = false;
+    dbusmonitorRunning = false;
     pthread_mutex_unlock(&clientcoreMutex);
 
     if (clientcoreThreadStarted)
@@ -124,6 +127,13 @@ ClientCore::~ClientCore()
         // Wait until ClientCore thread stops
         LOG4CXX_INFO(clientcoreLog, "Waiting for clientcoreThread to join");
         pthread_join(clientcoreThread, NULL);
+    }
+
+    if (dbusmonitorThreadStarted)
+    {
+        // Wait until DBusMonitor thread stops
+        LOG4CXX_INFO(clientcoreLog, "Waiting for dbusmonitorThread to join");
+        pthread_join(dbusmonitorThread, NULL);
     }
 
     LOG4CXX_DEBUG(clientcoreLog, "Deleting Settings");
@@ -474,6 +484,17 @@ bool ClientCore::isRunning()
  */
 void ClientCore::start()
 {
+    // Start dbus monitor thread
+    LOG4CXX_INFO(clientcoreLog, "Setting up dbusmonitorThread");
+    dbusmonitorRunning = true;
+    dbusmonitorThreadStarted = true;
+    if (pthread_create(&dbusmonitorThread, NULL, &ClientCore::dbusmonitor_thread, this))
+    {
+        LOG4CXX_WARN(clientcoreLog, "Failed to start dbusmonitorThread");
+        dbusmonitorRunning = false;
+        dbusmonitorThreadStarted = false;
+    }
+
     // Start main thread
     LOG4CXX_INFO(clientcoreLog, "Setting up clientcoreThread");
     if (pthread_create(&clientcoreThread, NULL, &ClientCore::clientcore_thread, this))
@@ -1204,4 +1225,22 @@ void *ClientCore::clientcore_thread(void *ctx)
     delete narrator;
 
     return NULL;
+}
+
+void *ClientCore::dbusmonitor_thread(void *ctx)
+{
+    ClientCore* ctxptr = (ClientCore*) ctx;
+
+    // Default to running
+    bool running = true;
+
+    while (running)
+    {
+        pthread_mutex_lock(&ctxptr->clientcoreMutex);
+        running = ctxptr->dbusmonitorRunning;
+        pthread_mutex_unlock(&ctxptr->clientcoreMutex);
+
+        if (!running)
+            break;
+    }
 }

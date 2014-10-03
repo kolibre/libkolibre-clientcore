@@ -345,11 +345,15 @@ public:
 
 private:
     static void *clientcore_thread(void *ctx);
+    static void *dbusmonitor_thread(void *ctx);
 
     pthread_mutex_t clientcoreMutex;
     pthread_t clientcoreThread;
+    pthread_t dbusmonitorThread;
     bool clientcoreRunning;
+    bool dbusmonitorRunning;
     bool clientcoreThreadStarted;
+    bool dbusmonitorThreadStarted;
     time_t sleepTimerStart;
     time_t sleepTimerEnd;
     int sleepTimerSetting;
