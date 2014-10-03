@@ -36,6 +36,8 @@
 #include <DataStreamHandler.h>
 
 #include <dbus/dbus.h>
+#include <dbus/dbus-glib.h>
+#include <dbus/dbus-glib-lowlevel.h>
 #include <unistd.h>
 #include <iostream>
 #include <boost/regex.hpp>
@@ -107,6 +109,7 @@ ClientCore::ClientCore(const std::string useragent)
     clientcoreThreadStarted = false;
     dbusmonitorRunning = false;
     dbusmonitorThreadStarted = false;
+    gMainLoop = g_main_loop_new(NULL, FALSE);
 
     // Initialize class member variables
     mManualOggfile = "";
@@ -133,6 +136,9 @@ ClientCore::~ClientCore()
 
     if (dbusmonitorThreadStarted)
     {
+        // quit glib loop
+        g_main_loop_quit(gMainLoop);
+
         // Wait until DBusMonitor thread stops
         LOG4CXX_INFO(clientcoreLog, "Waiting for dbusmonitorThread to join");
         pthread_join(dbusmonitorThread, NULL);
@@ -1233,9 +1239,6 @@ void *ClientCore::dbusmonitor_thread(void *ctx)
 {
     ClientCore* ctxptr = (ClientCore*) ctx;
 
-    // Default to running
-    bool running = true;
-
     // Setup dbus connection
     DBusConnection *dbusConnection;
     DBusError dbusError;
@@ -1245,22 +1248,15 @@ void *ClientCore::dbusmonitor_thread(void *ctx)
     {
         LOG4CXX_WARN(clientcoreLog, "Failed to connect to dbus " << std::string(dbusError.message));
         dbus_error_free(&dbusError);
-        running = false;
     }
 
     // Add filter
     dbus_bus_add_match(dbusConnection, "type='signal',interface='org.freedesktop.DBus'", NULL);
     dbus_connection_add_filter(dbusConnection, dbusFilter, ctx, NULL);
 
-    while (dbus_connection_read_write_dispatch(dbusConnection, -1) && running)
-    {
-        pthread_mutex_lock(&ctxptr->clientcoreMutex);
-        running = ctxptr->dbusmonitorRunning;
-        pthread_mutex_unlock(&ctxptr->clientcoreMutex);
-
-        if (!running)
-            break;
-    }
+    // Connect with glib and start loop
+    dbus_connection_setup_with_g_main(dbusConnection, NULL);
+    g_main_loop_run(ctxptr->gMainLoop);
 }
 
 static DBusHandlerResult dbusFilter(DBusConnection *connection, DBusMessage *message, void *user_data)

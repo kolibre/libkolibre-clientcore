@@ -28,6 +28,7 @@
 #include <string>
 #include <vector>
 #include <boost/signals2.hpp>
+#include <glib.h>
 
 #ifdef WIN32
 #ifdef KOLIBRE_DLL
@@ -354,6 +355,7 @@ private:
     bool dbusmonitorRunning;
     bool clientcoreThreadStarted;
     bool dbusmonitorThreadStarted;
+    GMainLoop *gMainLoop;
     time_t sleepTimerStart;
     time_t sleepTimerEnd;
     int sleepTimerSetting;
