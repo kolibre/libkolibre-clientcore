@@ -102,7 +102,7 @@ ClientCore::ClientCore(const std::string useragent)
 
     // Initialize thread variables
     clientcoreRunning = false;
-    threadStarted = false;
+    clientcoreThreadStarted = false;
 
     // Initialize class member variables
     mManualOggfile = "";
@@ -119,7 +119,7 @@ ClientCore::~ClientCore()
     clientcoreRunning = false;
     pthread_mutex_unlock(&clientcoreMutex);
 
-    if (threadStarted)
+    if (clientcoreThreadStarted)
     {
         // Wait until ClientCore thread stops
         LOG4CXX_INFO(clientcoreLog, "Waiting for clientcoreThread to join");
@@ -483,7 +483,7 @@ void ClientCore::start()
         clientcoreRunning = false;
     }
     clientcoreRunning = true;
-    threadStarted = true;
+    clientcoreThreadStarted = true;
 }
 
 /**

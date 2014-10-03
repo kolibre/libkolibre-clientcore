@@ -349,7 +349,7 @@ private:
     pthread_mutex_t clientcoreMutex;
     pthread_t clientcoreThread;
     bool clientcoreRunning;
-    bool threadStarted;
+    bool clientcoreThreadStarted;
     time_t sleepTimerStart;
     time_t sleepTimerEnd;
     int sleepTimerSetting;
