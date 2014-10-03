@@ -151,6 +151,15 @@ PKG_CHECK_MODULES(LIBKOLIBREAMIS, libkolibre-amis >= 0.0.1)
 AC_SUBST(LIBKOLIBREAMIS_CFLAGS)
 AC_SUBST(LIBKOLIBREAMIS_LIBS)
 
+dnl -----------------------------------------------
+dnl Checks for dbus
+dnl -----------------------------------------------
+
+PKG_CHECK_MODULES(DBUS, dbus-1 >= 1.6.8)
+
+AC_SUBST(DBUS_CFLAGS)
+AC_SUBST(DBUS_LIBS)
+
 # Create kolibre prfix
 KOLIBRE_PREFIX=${prefix}
 AC_SUBST(KOLIBRE_PREFIX)
