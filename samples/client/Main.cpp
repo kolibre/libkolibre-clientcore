@@ -48,6 +48,7 @@ bool exitSignal = false;
 void handleSignal(int sig);
 void onSleepTimeout();
 void onInvalidAuth();
+void exitApplication();
 
 
 char* applicationPath;
@@ -389,21 +390,25 @@ void handleSignal(int sig)
                 break;
         }
         LOG4CXX_INFO(sampleClientMainLog, "Caught signal '" << signal << "' (" << sig << "), exiting application");
-        Input *input = Input::Instance();
-        input->keyPressed_signal(ClientCore::EXIT);
-        sleep(1);
+        exitApplication();
     }
 }
 
-void onInvalidAuth() {
+void onInvalidAuth()
+{
     if (!exitSignal)
     {
         exitSignal = true;
         exitValue = 101;
 
         LOG4CXX_INFO(sampleClientMainLog, "Login failed, exiting application");
-        Input *input = Input::Instance();
-        input->keyPressed_signal(ClientCore::EXIT);
+        exitApplication();
     }
 }
 
+void exitApplication()
+{
+    Input *input = Input::Instance();
+    input->keyPressed_signal(ClientCore::EXIT);
+    sleep(1);
+}
