@@ -35,6 +35,7 @@
 #include <Player.h>
 #include <DataStreamHandler.h>
 
+#include <dbus/dbus.h>
 #include <unistd.h>
 #include <iostream>
 #include <boost/regex.hpp>
@@ -47,6 +48,7 @@ log4cxx::LoggerPtr clientcoreLog(log4cxx::Logger::getLogger("kolibre.clientcore.
 using namespace std;
 
 #define INFO_TIMEOUT 10;
+static DBusHandlerResult dbusFilter(DBusConnection*, DBusMessage*, void*);
 
 /**
  * Constructor
@@ -1234,7 +1236,23 @@ void *ClientCore::dbusmonitor_thread(void *ctx)
     // Default to running
     bool running = true;
 
-    while (running)
+    // Setup dbus connection
+    DBusConnection *dbusConnection;
+    DBusError dbusError;
+    dbus_error_init(&dbusError);
+    dbusConnection = dbus_bus_get(DBUS_BUS_SYSTEM, &dbusError);
+    if (dbus_error_is_set(&dbusError))
+    {
+        LOG4CXX_WARN(clientcoreLog, "Failed to connect to dbus " << std::string(dbusError.message));
+        dbus_error_free(&dbusError);
+        running = false;
+    }
+
+    // Add filter
+    dbus_bus_add_match(dbusConnection, "type='signal',interface='org.freedesktop.DBus'", NULL);
+    dbus_connection_add_filter(dbusConnection, dbusFilter, ctx, NULL);
+
+    while (dbus_connection_read_write_dispatch(dbusConnection, -1) && running)
     {
         pthread_mutex_lock(&ctxptr->clientcoreMutex);
         running = ctxptr->dbusmonitorRunning;
@@ -1243,4 +1261,12 @@ void *ClientCore::dbusmonitor_thread(void *ctx)
         if (!running)
             break;
     }
+}
+
+static DBusHandlerResult dbusFilter(DBusConnection *connection, DBusMessage *message, void *user_data)
+{
+    // create scoped logger which will become a child to logger kolibre.clientcore
+    log4cxx::LoggerPtr dbusFilterLog(log4cxx::Logger::getLogger("kolibre.clientcore.dbusfilter"));
+    LOG4CXX_INFO(dbusFilterLog, "Handle DBUS Signal");
+    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
