@@ -1251,7 +1251,7 @@ void *ClientCore::dbusmonitor_thread(void *ctx)
     }
 
     // Add filter
-    dbus_bus_add_match(dbusConnection, "type='signal',interface='org.freedesktop.DBus'", NULL);
+    dbus_bus_add_match(dbusConnection, "type='signal',interface='org.freedesktop.DBus.Properties'", NULL);
     dbus_connection_add_filter(dbusConnection, dbusFilter, ctx, NULL);
 
     // Connect with glib and start loop
@@ -1263,6 +1263,113 @@ static DBusHandlerResult dbusFilter(DBusConnection *connection, DBusMessage *mes
 {
     // create scoped logger which will become a child to logger kolibre.clientcore
     log4cxx::LoggerPtr dbusFilterLog(log4cxx::Logger::getLogger("kolibre.clientcore.dbusfilter"));
-    LOG4CXX_INFO(dbusFilterLog, "Handle DBUS Signal");
+    LOG4CXX_DEBUG(dbusFilterLog, "Handle DBUS message");
+
+    if (dbus_message_is_signal(message, "org.freedesktop.DBus.Properties", "PropertiesChanged"))
+    {
+        LOG4CXX_INFO(dbusFilterLog, "Message from Udisks2 recieved");
+
+        DBusMessageIter messageIter;
+        dbus_message_iter_init(message, &messageIter);
+        int messageType = dbus_message_iter_get_arg_type(&messageIter);
+        char *value = NULL;
+
+        // parse string
+        if (messageType == DBUS_TYPE_INVALID)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort message parsing, expected valid type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        if (messageType != DBUS_TYPE_STRING)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort message parsing, expected STRING type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        dbus_message_iter_get_basic(&messageIter, &value);
+        LOG4CXX_DEBUG(dbusFilterLog, "got string value " << value);
+        if (strcmp(value, "org.freedesktop.UDisks2.Filesystem") != 0)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort message parsing, expected value org.freedesktop.UDisks2.Filesystem");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+
+        dbus_message_iter_next(&messageIter);
+
+        // parse array
+        messageType = dbus_message_iter_get_arg_type(&messageIter);
+        if (messageType == DBUS_TYPE_INVALID)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort message parsing, expected valid type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        if (messageType != DBUS_TYPE_ARRAY)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort message parsing, expected ARRAY type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+
+        // parse dict in array
+        DBusMessageIter arrayIter;
+        dbus_message_iter_recurse(&messageIter, &arrayIter);
+        int arrayType = dbus_message_iter_get_arg_type(&arrayIter);
+        if (arrayType == DBUS_TYPE_INVALID)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort array parsing, expected valid type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        if (arrayType != DBUS_TYPE_DICT_ENTRY)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort array parsing, expected DICT ENTRY type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+
+        // parse string in dict
+        DBusMessageIter dictIter;
+        dbus_message_iter_recurse(&arrayIter, &dictIter);
+        int dictType = dbus_message_iter_get_arg_type(&dictIter);
+        if (dictType == DBUS_TYPE_INVALID)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort dict entry parsing, expected valid type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        if (dictType != DBUS_TYPE_STRING)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort dict entry parsing, expected STRING type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        value = NULL;
+        dbus_message_iter_get_basic(&dictIter, &value);
+        LOG4CXX_DEBUG(dbusFilterLog, "got string value " << value);
+        if (strcmp(value, "MountPoints") != 0)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort message parsing, expected value MountPoints");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+
+        dbus_message_iter_next(&dictIter);
+
+        // parse string in dict
+        dictType = dbus_message_iter_get_arg_type(&dictIter);
+        if (dictType == DBUS_TYPE_INVALID)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort dict entry parsing, expected valid type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        if (dictType != DBUS_TYPE_STRING)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort dict entry parsing, expected STRING type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        value = NULL;
+        dbus_message_iter_get_basic(&dictIter, &value);
+        LOG4CXX_DEBUG(dbusFilterLog, "got string value " << value);
+
+        LOG4CXX_INFO(dbusFilterLog, "adding " << value << " as new file system path");
+        ClientCore* cli = (ClientCore*) user_data;
+        cli->addFileSystemPath("external", value);
+
+        return DBUS_HANDLER_RESULT_HANDLED;
+    }
+
     return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
 }
