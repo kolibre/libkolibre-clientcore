@@ -40,6 +40,7 @@
 #include <dbus/dbus-glib-lowlevel.h>
 #include <unistd.h>
 #include <iostream>
+#include <sstream>
 #include <boost/regex.hpp>
 #include <libintl.h>
 #include <log4cxx/logger.h>
@@ -1364,9 +1365,29 @@ static DBusHandlerResult dbusFilter(DBusConnection *connection, DBusMessage *mes
         dbus_message_iter_get_basic(&dictIter, &value);
         LOG4CXX_DEBUG(dbusFilterLog, "got string value " << value);
 
-        LOG4CXX_INFO(dbusFilterLog, "adding " << value << " as new file system path");
-        ClientCore* cli = (ClientCore*) user_data;
-        cli->addFileSystemPath("external", value);
+        // check if path already added
+        std::string fsPath = std::string(value);
+        for (int i=0; i<MediaSourceManager::Instance()->getFileSystemPaths(); i++)
+        {
+            if (MediaSourceManager::Instance()->getFSPpath(i) == fsPath)
+            {
+                LOG4CXX_INFO(dbusFilterLog, "path " << fsPath << " already added");
+                return DBUS_HANDLER_RESULT_HANDLED;
+            }
+        }
+
+        // add new path
+        int i = 1;
+        std::stringstream fsName;
+        fsName << "external " << i;
+        while (MediaSourceManager::Instance()->getFileSystemPathIndex(fsName.str()) != -1)
+        {
+            i++;
+            fsName.str("");
+            fsName << "external " << i;
+        }
+        LOG4CXX_INFO(dbusFilterLog, "adding " << fsPath << " (" << fsName.str() << ") as new file system path");
+        MediaSourceManager::Instance()->addFileSystemPath(fsName.str(), fsPath);
 
         return DBUS_HANDLER_RESULT_HANDLED;
     }
