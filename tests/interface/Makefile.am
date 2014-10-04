@@ -28,4 +28,4 @@ getset_SOURCES = getset.cpp
 
 LDADD = $(top_builddir)/src/libkolibre-clientcore.la
 AM_LDFLAGS = -L$(top_builddir)/src @LOG4CXX_LIBS@ -lboost_regex -lboost_filesystem -lboost_system
-AM_CPPFLAGS = -I$(top_srcdir)/src
+AM_CPPFLAGS = -I$(top_srcdir)/src @DBUSGLIB_CFLAGS@
