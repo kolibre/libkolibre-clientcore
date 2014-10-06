@@ -1349,24 +1349,73 @@ static DBusHandlerResult dbusFilter(DBusConnection *connection, DBusMessage *mes
 
         dbus_message_iter_next(&dictIter);
 
-        // parse string in dict
+        // parse variant in dict
         dictType = dbus_message_iter_get_arg_type(&dictIter);
         if (dictType == DBUS_TYPE_INVALID)
         {
             LOG4CXX_WARN(dbusFilterLog, "Abort dict entry parsing, expected valid type");
             return DBUS_HANDLER_RESULT_HANDLED;
         }
-        if (dictType != DBUS_TYPE_STRING)
+        if (dictType != DBUS_TYPE_VARIANT)
         {
-            LOG4CXX_WARN(dbusFilterLog, "Abort dict entry parsing, expected STRING type");
+            LOG4CXX_WARN(dbusFilterLog, "Abort dict entry parsing, expected VARIANT type");
             return DBUS_HANDLER_RESULT_HANDLED;
         }
-        value = NULL;
-        dbus_message_iter_get_basic(&dictIter, &value);
-        LOG4CXX_DEBUG(dbusFilterLog, "got string value " << value);
+
+        // parse array in variant
+        DBusMessageIter variantIter;
+        dbus_message_iter_recurse(&dictIter, &variantIter);
+        int variantType = dbus_message_iter_get_arg_type(&variantIter);
+        if (variantType == DBUS_TYPE_INVALID)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort variant parsing, expected valid type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        if (variantType != DBUS_TYPE_ARRAY)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort variant parsing, expected ARRAY type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+
+        // parse array of bytes in variant array
+        DBusMessageIter variArrIter;
+        dbus_message_iter_recurse(&variantIter, &variArrIter);
+        int variArrType = dbus_message_iter_get_arg_type(&variArrIter);
+        if (variArrType == DBUS_TYPE_INVALID)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort array parsing, expected valid type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        if (variArrType != DBUS_TYPE_ARRAY)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort array parsing, expected ARRAY type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+
+        // parse bytes in array
+        DBusMessageIter bytesIter;
+        dbus_message_iter_recurse(&variArrIter, &bytesIter);
+        int bytesType = dbus_message_iter_get_arg_type(&bytesIter);
+        if (bytesType == DBUS_TYPE_INVALID)
+        {
+            LOG4CXX_WARN(dbusFilterLog, "Abort byte parsing, expected valid type");
+            return DBUS_HANDLER_RESULT_HANDLED;
+        }
+        std::stringstream mountPoint;
+        while (bytesType == DBUS_TYPE_BYTE)
+        {
+            char byte;
+            dbus_message_iter_get_basic(&bytesIter, &byte);
+            if (byte == '\0') break;
+            mountPoint << byte;
+
+            dbus_message_iter_next(&bytesIter);
+            bytesType = dbus_message_iter_get_arg_type(&bytesIter);
+        }
+        LOG4CXX_DEBUG(dbusFilterLog, "got array of bytes value " << mountPoint.str());
 
         // check if path already added
-        std::string fsPath = std::string(value);
+        std::string fsPath = mountPoint.str();
         for (int i=0; i<MediaSourceManager::Instance()->getFileSystemPaths(); i++)
         {
             if (MediaSourceManager::Instance()->getFSPpath(i) == fsPath)
