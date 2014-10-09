@@ -41,6 +41,8 @@ Major dependencies for libkolibre-clientcore:
 
 * libboost-signals
 * libboost-regex
+* libboost-filesystem
+* libdbus-glib
 * liblog4cxx
 * libkolibre-naviengine
 * libkolibre-daisyonline
