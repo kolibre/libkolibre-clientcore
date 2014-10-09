@@ -101,7 +101,7 @@ dnl -----------------------------------------------
 dnl Checks for kolibre naviengine
 dnl -----------------------------------------------
 
-PKG_CHECK_MODULES(LIBKOLIBRENAVIENGINE, libkolibre-naviengine >= 0.0.1)
+PKG_CHECK_MODULES(LIBKOLIBRENAVIENGINE, libkolibre-naviengine >= 1.0.0)
 
 AC_SUBST(LIBKOLIBRENAVIENGINE_CFLAGS)
 AC_SUBST(LIBKOLIBRENAVIENGINE_LIBS)
@@ -110,7 +110,7 @@ dnl -----------------------------------------------
 dnl Checks for kolibre player
 dnl -----------------------------------------------
 
-PKG_CHECK_MODULES(LIBKOLIBREPLAYER, libkolibre-player >= 0.0.1)
+PKG_CHECK_MODULES(LIBKOLIBREPLAYER, libkolibre-player >= 1.0.0)
 
 AC_SUBST(LIBKOLIBREPLAYER_CFLAGS)
 AC_SUBST(LIBKOLIBREPLAYER_LIBS)
@@ -119,7 +119,7 @@ dnl -----------------------------------------------
 dnl Checks for kolibre narrator
 dnl -----------------------------------------------
 
-PKG_CHECK_MODULES(LIBKOLIBRENARRATOR, libkolibre-narrator >= 0.0.1)
+PKG_CHECK_MODULES(LIBKOLIBRENARRATOR, libkolibre-narrator >= 1.0.0)
 
 AC_SUBST(LIBKOLIBRENARRATOR_CFLAGS)
 AC_SUBST(LIBKOLIBRENARRATOR_LIBS)
@@ -128,7 +128,7 @@ dnl -----------------------------------------------
 dnl Checks for kolibre daisyonline
 dnl -----------------------------------------------
 
-PKG_CHECK_MODULES(LIBKOLIBREDAISYONLINE, libkolibre-daisyonline >= 0.0.1)
+PKG_CHECK_MODULES(LIBKOLIBREDAISYONLINE, libkolibre-daisyonline >= 1.0.0)
 
 AC_SUBST(LIBKOLIBREDAISYONLINE_CFLAGS)
 AC_SUBST(LIBKOLIBREDAISYONLINE_LIBS)
@@ -137,7 +137,7 @@ dnl -----------------------------------------------
 dnl Checks for kolibre xmlreader
 dnl -----------------------------------------------
 
-PKG_CHECK_MODULES(LIBKOLIBREXMLREADER, libkolibre-xmlreader >= 0.0.1)
+PKG_CHECK_MODULES(LIBKOLIBREXMLREADER, libkolibre-xmlreader >= 1.0.0)
 
 AC_SUBST(LIBKOLIBREXMLREADER_CFLAGS)
 AC_SUBST(LIBKOLIBREXMLREADER_LIBS)
@@ -146,7 +146,7 @@ dnl -----------------------------------------------
 dnl Checks for kolibre amis
 dnl -----------------------------------------------
 
-PKG_CHECK_MODULES(LIBKOLIBREAMIS, libkolibre-amis >= 0.0.1)
+PKG_CHECK_MODULES(LIBKOLIBREAMIS, libkolibre-amis >= 1.0.0)
 
 AC_SUBST(LIBKOLIBREAMIS_CFLAGS)
 AC_SUBST(LIBKOLIBREAMIS_LIBS)
