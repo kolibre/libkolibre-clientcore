@@ -255,11 +255,6 @@ void FileSystemNode::announceSelection()
         Narrator::Instance()->setParameter("1", currentChoice + 1);
         Narrator::Instance()->play(_N("publication no. {1}"));
 
-        // Offline titles may have different sample rate and channel which causes the Narrator
-        // to flush the current queue. A short wait-and-sleep prevents interupted narration.
-        // Do not sleep more then 2 seconds.
-        int counter = 0;
-        usleep(100000); while (Narrator::Instance()->isSpeaking() && ++counter < 20) usleep(100000);
         currentChild_->narrateName();
 
         NaviListItem item = navilist_.items[currentChoice];
