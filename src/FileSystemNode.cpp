@@ -44,7 +44,6 @@ FileSystemNode::FileSystemNode(const std::string name, const std::string path, b
     fsName_ = name;
     fsPath_ = path;
     pathUpdated_ = false;
-    announcementBeforeTitle_ = false;
     openFirstChild_ = openFirstChild;
 }
 
@@ -171,7 +170,6 @@ bool FileSystemNode::narrateInfo()
     const bool isSelfNarrated = true;
     Narrator::Instance()->play(_N("choose option using left and right arrows, open using play button"));
     Narrator::Instance()->playLongpause();
-    announcementBeforeTitle_ = true;
     announceSelection();
     return isSelfNarrated;
 }
@@ -237,7 +235,6 @@ void FileSystemNode::announce()
         Narrator::Instance()->play(_N("device contains {2} publications"));
     }
     Narrator::Instance()->playLongpause();
-    announcementBeforeTitle_ = true;
 
     announceSelection();
 }
@@ -253,14 +250,6 @@ void FileSystemNode::announceSelection()
         {
             currentChoice++;
             current = current->prev_;
-        }
-
-        if (announcementBeforeTitle_)
-        {
-            // This wait stalls the application and makes it unresponsive to key presses
-            // but hopefully users will not notice it
-            usleep(100000); while (Narrator::Instance()->isSpeaking()) usleep(100000);
-            announcementBeforeTitle_ = false;
         }
 
         Narrator::Instance()->setParameter("1", currentChoice + 1);

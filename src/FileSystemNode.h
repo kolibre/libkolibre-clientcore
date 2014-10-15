@@ -56,7 +56,6 @@ private:
     NaviList navilist_;
     AnyNode* currentChild_;
     bool pathUpdated_;
-    bool announcementBeforeTitle_;
     bool openFirstChild_;
     boost::signals2::connection narratorDoneConnection;
 
