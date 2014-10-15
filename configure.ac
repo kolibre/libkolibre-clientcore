@@ -119,7 +119,7 @@ dnl -----------------------------------------------
 dnl Checks for kolibre narrator
 dnl -----------------------------------------------
 
-PKG_CHECK_MODULES(LIBKOLIBRENARRATOR, libkolibre-narrator >= 1.0.0)
+PKG_CHECK_MODULES(LIBKOLIBRENARRATOR, libkolibre-narrator >= 1.0.1)
 
 AC_SUBST(LIBKOLIBRENARRATOR_CFLAGS)
 AC_SUBST(LIBKOLIBRENARRATOR_LIBS)
