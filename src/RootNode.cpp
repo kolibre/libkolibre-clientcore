@@ -20,6 +20,7 @@
 #include "RootNode.h"
 #include "DaisyOnlineNode.h"
 #include "FileSystemNode.h"
+#include "MP3Node.h"
 #include "Defines.h"
 #include "config.h"
 #include "CommandQueue2/CommandQueue.h"
@@ -148,6 +149,28 @@ bool RootNode::onOpen(NaviEngine& navi)
             navilist_.items.push_back(item);
         }
     }
+
+//------------------------------------------------------------------------------------------------------------------------------
+    // Add mp3 path
+    int mp3Paths = MediaSourceManager::Instance()->getMP3Paths();
+    for (int i = 0; i < mp3Paths; i++)
+    {
+        std::string name = MediaSourceManager::Instance()->getMP3Pname(i);
+        std::string path = MediaSourceManager::Instance()->getMP3Ppath(i);
+
+        if (Utils::isDir(path))
+        {
+            LOG4CXX_INFO(rootNodeLog, "Adding MP3Node '" << name << "'");
+            MP3Node *mp3Node = new MP3Node(name, path, openFirstChild_);
+            addNode(mp3Node);
+
+            // create a NaviListItem and store it in list for the NaviList signal
+            NaviListItem item(mp3Node->uri_, name);
+            navilist_.items.push_back(item);
+        }
+    }
+    // End adding mp3
+//------------------------------------------------------------------------------------------------------------------------------
 
     if (navi.getCurrentChoice() == NULL && numberOfChildren() > 0)
     {

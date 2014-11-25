@@ -202,6 +202,7 @@
 "found {2} new publications";"Hittade {2:number} nya publikationer"
 "publication no. {1}";"titel {1:number}"
 "opening publication";"öppnar publikationen"
+"track no. {1}";"track no. {1:number}"
 
 # errors
 "error loading data";"Data kunde inte hämtas från nätverket"
@@ -218,8 +219,10 @@
 "cdrom device";"cd-skiva"
 "external device";"externt minne"
 "local device";"lokalt minne"
+"mp3 path";"mp3 path"
 "device";"enhet"
 "updating device";"uppdaterar enheten"
 "device contains {1} publication";"enheten innehåller en publikation"
 "device contains {2} publications";"enheten innehåller {2:number} publikationer"
 "device contains no publications";"enheten innehåller inga publikationer"
+"directory contains {1} track";"directory contains {1:number} track"

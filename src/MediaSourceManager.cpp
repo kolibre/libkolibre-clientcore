@@ -528,6 +528,195 @@ std::string MediaSourceManager::getFSPpath(int index)
     return path;
 }
 
+int MediaSourceManager::addMP3Path(const std::string name, const std::string path)
+{
+    if (name.empty())
+    {
+        LOG4CXX_WARN(mediaSourceManLog, "Cannot add MP3Path without name");
+        return -1;
+    }
+    else if (path.empty())
+    {
+        LOG4CXX_WARN(mediaSourceManLog, "Cannot add MP3Path without path");
+        return -1;
+    }
+
+    pthread_mutex_lock(&manager_mutex);
+    std::vector<MP3Path>::iterator it;
+    for (it = MP3Paths.begin(); it != MP3Paths.end(); ++it)
+    {
+        if (name == it->name)
+        {
+            LOG4CXX_WARN(mediaSourceManLog, "File system path with name '" << name << "' has already been added");
+            pthread_mutex_unlock(&manager_mutex);
+            return -1;
+        }
+    }
+
+    MP3Path mp3path(name, path);
+    MP3Paths.push_back(mp3path);
+    int index = MP3Paths.size()-1;
+    pthread_mutex_unlock(&manager_mutex);
+
+    return index;
+}
+
+int MediaSourceManager::getMP3Paths()
+{
+    return MP3Paths.size();
+}
+
+int MediaSourceManager::getMP3PathIndex(const std::string name)
+{
+    int index = -1;
+    pthread_mutex_lock(&manager_mutex);
+    std::vector<MP3Path>::iterator it;
+    for (it = MP3Paths.begin(); it != MP3Paths.end(); ++it)
+    {
+        if (name == it->name)
+        {
+            index = it - MP3Paths.begin();
+            LOG4CXX_DEBUG(mediaSourceManLog, "MP3 path with name '" <<  name << "' was found at index " << index);
+            break;
+        }
+    }
+    pthread_mutex_unlock(&manager_mutex);
+
+    if (index == -1)
+    {
+        LOG4CXX_WARN(mediaSourceManLog, "MP3 path with name '" <<  name << "' not found");
+    }
+
+    return index;
+}
+
+bool MediaSourceManager::removeMP3Path(const std::string name)
+{
+    bool removed = false;
+    pthread_mutex_lock(&manager_mutex);
+    std::vector<MP3Path>::iterator it;
+    for (it = MP3Paths.begin(); it != MP3Paths.end(); ++it)
+    {
+        if (name == it->name)
+        {
+            int index = it - MP3Paths.begin();
+            LOG4CXX_DEBUG(mediaSourceManLog, "Removing MP3Path with name '" << name << "'at index " << index);
+            MP3Paths.erase(MP3Paths.begin() + index);
+            removed = true;
+            break;
+        }
+    }
+    pthread_mutex_unlock(&manager_mutex);
+    return removed;
+}
+
+bool MediaSourceManager::removeMP3Path(int index)
+{
+    bool removed = false;
+    pthread_mutex_lock(&manager_mutex);
+    if (MP3PindexOutOfRange(index))
+    {
+        LOG4CXX_WARN(mediaSourceManLog, "Cannot remove MP3Path, index out of range");
+    }
+    else
+    {
+        LOG4CXX_DEBUG(mediaSourceManLog, "Removing MP3Path at index " << index);
+        MP3Paths.erase(MP3Paths.begin() + index);
+        removed = true;
+    }
+    pthread_mutex_unlock(&manager_mutex);
+    return removed;
+}
+
+bool MediaSourceManager::clearMP3Paths()
+{
+    LOG4CXX_DEBUG(mediaSourceManLog, "Deleting all added MP3Paths");
+    MP3Paths.clear();
+    return MP3Paths.size() == 0 ? true : false;
+}
+
+bool MediaSourceManager::setMP3Pname(int index, const std::string name)
+{
+    if (name.empty())
+    {
+        LOG4CXX_WARN(mediaSourceManLog, "Cannot set empty name for MP3Path");
+        return false;
+    }
+    else if (MP3PindexOutOfRange(index))
+    {
+        LOG4CXX_WARN(mediaSourceManLog, "Cannot set name for MP3Path, index out of range");
+        return false;
+    }
+
+    pthread_mutex_lock(&manager_mutex);
+    std::vector<MP3Path>::iterator it;
+    for (it = MP3Paths.begin(); it != MP3Paths.end(); ++it)
+    {
+        if (name == it->name)
+        {
+            LOG4CXX_WARN(mediaSourceManLog, "Cannot set name for MP3Path, name already exist");
+            pthread_mutex_unlock(&manager_mutex);
+            return false;
+        }
+    }
+    LOG4CXX_DEBUG(mediaSourceManLog, "Changing name for MP3Path to '" << name << "' at index " << index);
+    MP3Paths[index].name = name;
+    pthread_mutex_unlock(&manager_mutex);
+    return true;
+}
+
+std::string MediaSourceManager::getMP3Pname(int index)
+{
+    std::string name = "";
+    pthread_mutex_lock(&manager_mutex);
+    if (MP3PindexOutOfRange(index))
+    {
+        LOG4CXX_WARN(mediaSourceManLog, "Cannot get name for MP3Path, index out of range");
+    }
+    else
+    {
+        name = MP3Paths[index].name;
+    }
+    pthread_mutex_unlock(&manager_mutex);
+    return name;
+}
+
+bool MediaSourceManager::setMP3Ppath(int index, const std::string path)
+{
+    if (path.empty())
+    {
+        LOG4CXX_WARN(mediaSourceManLog, "Cannot set empty path for MP3Path");
+        return false;
+    }
+    else if (MP3PindexOutOfRange(index))
+    {
+        LOG4CXX_WARN(mediaSourceManLog, "Cannot set path for MP3Path, index out of range");
+        return false;
+    }
+
+    pthread_mutex_lock(&manager_mutex);
+    LOG4CXX_DEBUG(mediaSourceManLog, "Changing path for MP3Path to '" << path << "' at index " << index);
+    MP3Paths[index].path = path;
+    pthread_mutex_unlock(&manager_mutex);
+    return true;
+}
+
+std::string MediaSourceManager::getMP3Ppath(int index)
+{
+    std::string path = "";
+    pthread_mutex_lock(&manager_mutex);
+    if (MP3PindexOutOfRange(index))
+    {
+        LOG4CXX_WARN(mediaSourceManLog, "Cannot get path for MP3Path, index out of range");
+    }
+    else
+    {
+        path = MP3Paths[index].path;
+    }
+    pthread_mutex_unlock(&manager_mutex);
+    return path;
+}
+
 MediaSourceManager::MediaSourceManager()
 {
     LOG4CXX_TRACE(mediaSourceManLog, "Constructor");
@@ -561,6 +750,19 @@ bool MediaSourceManager::FSPindexOutOfRange(int index)
         return true;
     }
     else if (index < 0 || index > FileSystemPaths.size()-1)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool MediaSourceManager::MP3PindexOutOfRange(int index)
+{
+    if (MP3Paths.size() == 0)
+    {
+        return true;
+    }
+    else if (index < 0 || index > MP3Paths.size()-1)
     {
         return true;
     }

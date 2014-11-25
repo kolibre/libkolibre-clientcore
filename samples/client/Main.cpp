@@ -61,7 +61,7 @@ void usage()
     printf("  -p <password> \tpassword for service, must be specified along with -s option\n");
     printf("  -r \t\t\tremember password for specified service\n");
     printf("  -m <path> \t\tpath to local media\n");
-    printf("  -l <lang> \t\tlanguage to use, options: sv, fi, en [default: en]\n");
+    printf("  -l <lang> \t\tlanguage to use, options: sv, fi, en, ru [default: en]\n");
     printf("  -i <path> \t\tpath to client configuration\n");
     printf("  -c <path> \t\tpath to log configuration\n");
     printf("  -d <path> \t\tpath to input device\n");
@@ -145,6 +145,169 @@ int main(int argc, char **argv)
             {
                 language = optarg;
             }
+            else if (strcmp(optarg, "ru") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "sq") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "ar") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "hy") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "af") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "bs") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "cy") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "hu") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "vi") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "el") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "da") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "id") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "is") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "es") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "it") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "ca") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "zh") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "ko") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "ht") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "la") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "lv") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "mk") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "de") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "nl") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "no") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "pl") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "pt") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "ro") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "sr") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "sk") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "sw") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "th") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "ta") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "tr") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "fr") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "hi") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "hr") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "cs") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "eo") == 0)
+            {
+                language = optarg;
+            }
+            else if (strcmp(optarg, "ja") == 0)
+            {
+                language = optarg;
+            }
+
+//            language = "en";
+
             break;
         }
         case 'i':
@@ -328,6 +491,35 @@ int main(int argc, char **argv)
                 {
                     LOG4CXX_INFO(sampleClientMainLog, "Adding '" << name << "' as a FileSystemPath");
                     clientcore->addFileSystemPath(name, path);
+                }
+            }
+            // if group name contains 'MP3Path'
+            else if (strstr(groups[i], "MP3Path") != NULL)
+            {
+                LOG4CXX_INFO(sampleClientMainLog, "Found mp3 path group '" << groups[i] << "'");
+                bool missingKey = false;
+                gchar *name, *path = NULL;
+
+                // get key name
+                name = g_key_file_get_string(keyFile, groups[i], "NAME", NULL);
+                if (name == NULL)
+                {
+                    LOG4CXX_WARN(sampleClientMainLog, "Group '" << groups[i] << "' does not have key 'NAME'");
+                    missingKey = true;
+                }
+
+                // get key path
+                path = g_key_file_get_string(keyFile, groups[i], "PATH", NULL);
+                if (path == NULL)
+                {
+                    LOG4CXX_WARN(sampleClientMainLog, "Group '" << groups[i] << "' does not have key 'PATH'");
+                    missingKey = true;
+                }
+
+                if (not missingKey)
+                {
+                    LOG4CXX_INFO(sampleClientMainLog, "Adding '" << name << "' as a FileSystemPath");
+                    clientcore->addMP3Path(name, path);
                 }
             }
         }
