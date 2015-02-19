@@ -338,6 +338,7 @@ DaisyOnlineNode::errorType DaisyOnlineNode::sessionInit()
     readingSystemAttributes.setVersion(version_);
     readingSystemAttributes.setPreferredUILanguage(language_);
     readingSystemAttributes.addContentFormat("Daisy 2.02");
+    readingSystemAttributes.addContentFormat("ANSI/NISO Z39.86-2005");
     readingSystemAttributes.addMimeType("audio/ogg");
 
     // setReadingsystemAttributes
