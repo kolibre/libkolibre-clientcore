@@ -226,3 +226,5 @@
 "device contains no publications";"enheten innehåller inga publikationer"
 "track no. {1}";"spår {1:number}"
 "directory contains {1} track";"mappen innehåller ett spår"
+"directory contains {2} tracks";"mappen innehåller {2:number} spår"
+"directory contains no tracks";"mappen innehåller inga spår"

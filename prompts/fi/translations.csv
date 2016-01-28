@@ -227,3 +227,5 @@
 "device contains no publications";"laitteesta ei löytynyt julkaisua"
 "track no. {1}";"kappale {1:number}"
 "directory contains {1} track";"kansiosta löytyy yksi kappale"
+"directory contains {2} tracks";"kansiosta löytyy {2:number} kappaletta"
+"directory contains no tracks";"kansiosta ei löytynyt kappaleita"

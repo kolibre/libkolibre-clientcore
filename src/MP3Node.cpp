@@ -212,7 +212,7 @@ void MP3Node::announce()
 
     if (numItems == 0)
     {
-        Narrator::Instance()->play(_N("device contains no publications"));
+        Narrator::Instance()->play(_N("directory contains no tracks"));
     }
     else if (numItems == 1)
     {
@@ -222,7 +222,7 @@ void MP3Node::announce()
     else if (numItems > 1)
     {
         Narrator::Instance()->setParameter("2", numItems);
-        Narrator::Instance()->play(_N("directory contains {1} track"));
+        Narrator::Instance()->play(_N("directory contains {2} tracks"));
     }
     Narrator::Instance()->playLongpause();
 

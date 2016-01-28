@@ -226,3 +226,5 @@
 "device contains no publications";"device does not contain any publications"
 "track no. {1}";"track {1:number}"
 "directory contains {1} track";"directory contains one track"
+"directory contains {2} tracks";"directory contains {2:number} tracks"
+"directory contains no tracks";"directory contains no tracks"

@@ -224,6 +224,8 @@
 "device contains no publications"
 "track no. {1}"
 "directory contains {1} track"
+"directory contains {2} tracks"
+"directory contains no tracks"
 
 #@TODO
 # remove these prompts from source and use Narrator API instead
