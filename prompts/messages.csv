@@ -201,7 +201,6 @@ prompt;"found {1} new publication"
 prompt;"found {2} new publications"
 prompt;"publication no. {1}"
 prompt;"opening publication"
-prompt;"track no. {1}"
 
 # errors
 prompt;"error loading data"
@@ -224,4 +223,5 @@ prompt;"updating device"
 prompt;"device contains {1} publication"
 prompt;"device contains {2} publications"
 prompt;"device contains no publications"
+prompt;"track no. {1}"
 prompt;"directory contains {1} track"

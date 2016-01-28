@@ -202,7 +202,6 @@
 "found {2} new publications";"found {2:number} new publications"
 "publication no. {1}";"publication {1:number}"
 "opening publication";"loading publication"
-"track no. {1}";"track no. {1:number}"
 
 # errors
 "error loading data";"error loading data"
@@ -219,10 +218,11 @@
 "cdrom device";"cd disc"
 "external device";"external media"
 "local device";"local storage"
-"mp3 path";"mp3 path"
+"mp3 path";"audio folder"
 "device";"device"
 "updating device";"updating device"
 "device contains {1} publication";"device contains one publication"
 "device contains {2} publications";"device contains {2:number} publications"
 "device contains no publications";"device does not contain any publications"
-"directory contains {1} track";"directory contains {1:number} track"
+"track no. {1}";"track {1:number}"
+"directory contains {1} track";"directory contains one track"
