@@ -61,6 +61,7 @@ void usage()
     printf("  -p <password> \tpassword for service, must be specified along with -s option\n");
     printf("  -r \t\t\tremember password for specified service\n");
     printf("  -m <path> \t\tpath to local media\n");
+    printf("  -f <path> \t\tpath to audio files\n");
     printf("  -l <lang> \t\tlanguage to use, options: sv, fi, en [default: en]\n");
     printf("  -i <path> \t\tpath to client configuration\n");
     printf("  -c <path> \t\tpath to log configuration\n");
@@ -72,6 +73,7 @@ void usage()
     printf("or client configuration path.\n");
     printf("   e.g. %s -s http://daisyonline.com/service -u username -p password\n", applicationPath);
     printf("        %s -m /home/user/Media\n", applicationPath);
+    printf("        %s -f /home/user/Music\n", applicationPath);
     printf("        %s -i /home/user/settings.ini\n", applicationPath);
 }
 
@@ -92,6 +94,7 @@ int main(int argc, char **argv)
     std::string serviceUrl, username, password = "";
     bool rememberPassword = false;
     std::string mediaPath = "";
+    std::string audioPath = "";
     std::string language = "en"; // default to English
     std::string inputDev = "";
     std::string useragent = "KolibreSampleClient/0.0.1";
@@ -100,7 +103,7 @@ int main(int argc, char **argv)
 
     // parse user arguments
     int opt;
-    while ((opt = getopt(argc, argv, "s:u:p:rm:l:i:c:d:a:h")) != -1)
+    while ((opt = getopt(argc, argv, "s:u:p:rm:f:l:i:c:d:a:h")) != -1)
     {
         switch (opt)
         {
@@ -108,6 +111,7 @@ int main(int argc, char **argv)
         {
             serviceUrl = optarg;
             mediaPath = "";
+            audioPath = "";
             settingsPath = NULL;
             break;
         }
@@ -128,6 +132,15 @@ int main(int argc, char **argv)
         {
             serviceUrl = "";
             mediaPath = optarg;
+            audioPath = "";
+            settingsPath = NULL;
+            break;
+        }
+        case 'f':
+        {
+            serviceUrl = "";
+            mediaPath = "";
+            audioPath = optarg;
             settingsPath = NULL;
             break;
         }
@@ -181,7 +194,7 @@ int main(int argc, char **argv)
     }
 
     // check user arguments
-    if (serviceUrl.empty() && mediaPath.empty() && settingsPath == NULL)
+    if (serviceUrl.empty() && mediaPath.empty() && audioPath.empty() && settingsPath == NULL)
     {
         usage();
         return 1;
@@ -228,6 +241,10 @@ int main(int argc, char **argv)
     else if (not mediaPath.empty())
     {
         clientcore->addFileSystemPath("main", mediaPath);
+    }
+    else if (not audioPath.empty())
+    {
+        clientcore->addMP3Path("main", audioPath);
     }
     else if (settingsPath != NULL)
     {
