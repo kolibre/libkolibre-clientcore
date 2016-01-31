@@ -17,8 +17,8 @@
  * along with kolibre-clientcore. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _FILESYSTEMNODE_H
-#define _FILESYSTEM_H
+#ifndef _MP3NODE_H
+#define _MP3NODE_H
 
 #include "NaviList.h"
 

@@ -17,14 +17,12 @@
  * along with kolibre-clientcore. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _DAISYBOOKNODE_H
-#define _DAISYBOOKNODE_H
+#ifndef _MP3FILENODE_H
+#define _MP3FILENODE_H
 
 #include <Nodes/VirtualMenuNode.h>
 
 #include <string>
-
-//class DaisyNavi;
 
 class MP3FileNode: public naviengine::VirtualMenuNode
 {
@@ -40,20 +38,11 @@ public:
     bool selectByUri(naviengine::NaviEngine&, std::string);
     bool menu(naviengine::NaviEngine&);
     bool onOpen(naviengine::NaviEngine&);
-    void beforeOnOpen();
-    bool process(naviengine::NaviEngine&, int, void*);
     bool onNarrate();
     bool narrateName();
-    std::string getBookTitle();
-    std::string getBookTitleSrc();
 
 protected:
-    void initialize();
-    //DaisyNavi *pDaisyNavi;
-    bool daisyNaviActive;
-    std::string daisyUri_;
-    std::string title;
-    std::string titleSrc;
+    std::string mp3File;
 };
 
 #endif
