@@ -91,6 +91,8 @@ bool MP3FileNode::onNarrate()
 
 bool MP3FileNode::narrateName()
 {
+    // wait for narrator to finnish before playing mp3
+    while (Narrator::Instance()->isSpeaking()) usleep(100000);
     LOG4CXX_TRACE(mp3FileNodeLog, "Playing mp3 " << mp3File);
 
     Narrator::Instance()->playFile(mp3File);
