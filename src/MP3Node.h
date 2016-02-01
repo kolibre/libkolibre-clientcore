@@ -22,15 +22,16 @@
 
 #include "NaviList.h"
 
-#include <Nodes/MenuNode.h>
+#include <Nodes/VirtualMenuNode.h>
 
+#include <map>
 #include <string>
 #include <boost/signals2.hpp>
 
 /**
- * MP3Node implements the MenuNode, making available media types function like a menu.
+ * MP3Node implements the VirtualMenuNode, making audio files traversable
  */
-class MP3Node: public naviengine::MenuNode
+class MP3Node: public naviengine::VirtualMenuNode
 {
 public:
     MP3Node(const std::string name, const std::string path, bool openFirstChild = false);
@@ -45,6 +46,8 @@ public:
     bool next(naviengine::NaviEngine&);
     bool prev(naviengine::NaviEngine&);
     bool up(naviengine::NaviEngine&);
+    bool select(naviengine::NaviEngine&);
+    bool selectByUri(naviengine::NaviEngine&, std::string);
     bool abort();
     bool narrateName();
     bool narrateInfo();
@@ -53,14 +56,14 @@ public:
     void onNarratorDone();
 
 private:
-    NaviList navilist_;
-    AnyNode* currentChild_;
     bool pathUpdated_;
     bool openFirstChild_;
     boost::signals2::connection narratorDoneConnection;
 
     std::string fsName_;
     std::string fsPath_;
+
+    std::map<int, std::string> files;
 
     void announce();
     void announceSelection();

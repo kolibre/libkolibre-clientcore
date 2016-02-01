@@ -18,7 +18,6 @@
  */
 
 #include "MP3Node.h"
-#include "MP3FileNode.h"
 #include "Defines.h"
 #include "config.h"
 #include "CommandQueue2/CommandQueue.h"
@@ -29,6 +28,8 @@
 #include <Narrator.h>
 #include <NaviEngine.h>
 
+#include <algorithm>
+#include <vector>
 #include <sstream>
 #include <log4cxx/logger.h>
 
@@ -56,18 +57,18 @@ MP3Node::~MP3Node()
 
 bool MP3Node::next(NaviEngine& navi)
 {
-    bool ret = MenuNode::next(navi);
-    currentChild_ = navi.getCurrentChoice();
+    VirtualMenuNode::next(navi);
+    //renderChild();
     announceSelection();
-    return ret;
+    return true;
 }
 
 bool MP3Node::prev(NaviEngine& navi)
 {
-    bool ret = MenuNode::prev(navi);
-    currentChild_ = navi.getCurrentChoice();
+    VirtualMenuNode::prev(navi);
+    //renderChild();
     announceSelection();
-    return ret;
+    return true;
 }
 
 bool MP3Node::menu(NaviEngine& navi)
@@ -78,53 +79,50 @@ bool MP3Node::menu(NaviEngine& navi)
 bool MP3Node::up(NaviEngine& navi)
 {
     pathUpdated_ = false;
-    bool ret = MenuNode::up(navi);
-    return ret;
+    return VirtualMenuNode::up(navi);
+}
+
+bool MP3Node::select(naviengine::NaviEngine&)
+{
+    return true;
+}
+
+bool MP3Node::selectByUri(naviengine::NaviEngine&, std::string)
+{
+    return true;
 }
 
 bool MP3Node::onOpen(NaviEngine& navi)
 {
     if (not pathUpdated_)
     {
-        navi.setCurrentChoice(NULL);
-        clearNodes();
-        navilist_.items.clear();
-
         // Create sources defined in MediaSourceManager
         LOG4CXX_INFO(mp3NodeLog, "Searching for supported content in path '" << fsPath_ << "'");
 
         std::vector<std::string> uris = Utils::recursiveSearchByExtension(fsPath_, ".mp3");
+        std::sort(uris.begin(), uris.end());
         for (int i = 0; i < uris.size(); i++)
         {
-            // create book node
-            LOG4CXX_DEBUG(mp3NodeLog, "Creating mp3 node: '" <<  uris[i] << "'");
-            MP3FileNode* node = new MP3FileNode(uris[i]);
-            std::string title = "mp3";
+            // create virtual childs
+            LOG4CXX_DEBUG(mp3NodeLog, "Creating mp3 track: '" <<  uris[i] << "'");
 
             // invent a name for it
+            std::string title = "mp3";
+            // a better title would be the name of the file (uris - filepath)
             ostringstream oss;
+            oss << "track_";
             oss << (i+1);
-            node->name_ = "title_" + oss.str() + "_" + title;
+            oss << "_";
+            oss << title;
 
-            // add node
-            addNode(node);
-
-            // create a NaviListItem and store it in list for the NaviList signal
-            NaviListItem item(node->uri_, node->name_);
-            navilist_.items.push_back(item);
-
+            children.push_back(VirtualNode(oss.str()));
+            files[i] = uris[i];
         }
 
-        if (navi.getCurrentChoice() == NULL && numberOfChildren() > 0)
-        {
-            navi.setCurrentChoice(firstChild());
-            currentChild_ = firstChild();
-        }
-
+        currentChild = 0;
         pathUpdated_ = true;
     }
 
-    currentChild_ = navi.getCurrentChoice();
     announce();
 
     bool autoPlay = Settings::Instance()->read<bool>("autoplay", true);
@@ -198,16 +196,12 @@ void MP3Node::onNarratorDone()
         narratorDoneConnection.disconnect();
 
         LOG4CXX_INFO(mp3NodeLog, "auto open first child");
-        cq2::Command<INTERNAL_COMMAND> c(COMMAND_DOWN);
-        c();
+        Narrator::Instance()->playFile(files[currentChild]);
     }
 }
 
 void MP3Node::announce()
 {
-    cq2::Command<NaviList> naviList(navilist_);
-    naviList();
-
     int numItems = numberOfChildren();
 
     if (numItems == 0)
@@ -231,24 +225,10 @@ void MP3Node::announce()
 
 void MP3Node::announceSelection()
 {
-    int currentChoice = 0;
-    AnyNode* current = currentChild_;
+    Narrator::Instance()->setParameter("1", currentChild + 1);
+    Narrator::Instance()->play(_N("track no. {1}"));
 
-    if ((firstChild() != NULL) && (current != NULL))
-    {
-        while (firstChild() != current)
-        {
-            currentChoice++;
-            current = current->prev_;
-        }
-
-        Narrator::Instance()->setParameter("1", currentChoice + 1);
-        Narrator::Instance()->play(_N("track no. {1}"));
-
-        currentChild_->narrateName();
-
-        NaviListItem item = navilist_.items[currentChoice];
-        cq2::Command<NaviListItem> naviItem(item);
-        naviItem();
-    }
+    // wait for narrator to finnish before playing mp3
+    while (Narrator::Instance()->isSpeaking()) usleep(100000);
+    Narrator::Instance()->playFile(files[currentChild]);
 }
