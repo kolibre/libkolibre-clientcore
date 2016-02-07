@@ -94,7 +94,7 @@ int main(int argc, char **argv)
     std::string mediaPath = "";
     std::string language = "en"; // default to English
     std::string inputDev = "";
-    std::string useragent = "KolibreSampleClient/0.0.1";
+    std::string useragent = "KolibreSampleClient/1.0.1";
     char *settingsPath = NULL;
     char *logConf = NULL;
 

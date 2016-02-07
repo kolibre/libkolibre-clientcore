@@ -93,7 +93,33 @@ bool FileSystemNode::onOpen(NaviEngine& navi)
         // Create sources defined in MediaSourceManager
         LOG4CXX_INFO(fsNodeLog, "Searching for supported content in path '" << fsPath_ << "'");
 
+        // Recursively search for Daisy2.02 publications
         std::vector<std::string> uris = Utils::recursiveSearchByFilename(fsPath_, "ncc.html");
+        LOG4CXX_INFO(fsNodeLog, "Found " << uris.size() << " matches by file name");
+        for (int i = 0; i < uris.size(); i++)
+        {
+            // create book node
+            LOG4CXX_DEBUG(fsNodeLog, "Creating book node: '" <<  uris[i] << "'");
+            DaisyBookNode* node = new DaisyBookNode(uris[i]);
+            std::string title = node->getBookTitle();
+
+            // invent a name for it
+            ostringstream oss;
+            oss << (i+1);
+            node->name_ = "title_" + oss.str() + "_" + title;
+
+            // add node
+            addNode(node);
+
+            // create a NaviListItem and store it in list for the NaviList signal
+            NaviListItem item(node->uri_, node->name_);
+            navilist_.items.push_back(item);
+
+        }
+
+        // Recursively search for Daisy3 publications
+        uris = Utils::recursiveSearchByExtension(fsPath_, ".opf");
+        LOG4CXX_INFO(fsNodeLog, "Found " << uris.size() << " matches by file extension");
         for (int i = 0; i < uris.size(); i++)
         {
             // create book node

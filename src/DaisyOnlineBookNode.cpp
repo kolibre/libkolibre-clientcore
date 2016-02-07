@@ -121,6 +121,12 @@ bool DaisyOnlineBookNode::onOpen(NaviEngine& navi)
             daisyUri_ = std::string(resources[i].getUri());
             break;
         }
+        else if (Utils::fileExtension(filename) == "opf")
+        {
+            LOG4CXX_INFO(bookNodeLog, "Found uri to opf: " << daisyUri_);
+            daisyUri_ = std::string(resources[i].getUri());
+            break;
+        }
     }
 
     delete contentResources;
