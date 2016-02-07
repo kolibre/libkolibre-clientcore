@@ -26,7 +26,7 @@ settings_SOURCES = main.cpp
 threads_SOURCES = threads.cpp
 
 LDADD = $(top_builddir)/src/Settings/libsettings.la
-AM_LDFLAGS = @LOG4CXX_LIBS@ -lsqlite3 -lboost_filesystem -lboost_system
+AM_LDFLAGS = @LOG4CXX_LIBS@ -lsqlite3
 AM_CPPFLAGS = -I$(top_srcdir)/src -I$(top_srcdir)/src/Settings
 
 clean-local: clean-local-check
