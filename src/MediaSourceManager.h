@@ -60,6 +60,18 @@ public:
     bool setFSPpath(int index, const std::string path);
     std::string getFSPpath(int index);
 
+    // functions for manipulating mp3 paths
+    int addMP3Path(const std::string name, const std::string path);
+    int getMP3Paths();
+    int getMP3PathIndex(const std::string);
+    bool removeMP3Path(const std::string name);
+    bool removeMP3Path(int index);
+    bool clearMP3Paths();
+    bool setMP3Pname(int index, const std::string name);
+    std::string getMP3Pname(int index);
+    bool setMP3Ppath(int index, const std::string path);
+    std::string getMP3Ppath(int index);
+
 protected:
     MediaSourceManager();
 
@@ -69,6 +81,7 @@ private:
     ~MediaSourceManager();
     bool DOSindexOutOfRange(int index);
     bool FSPindexOutOfRange(int index);
+    bool MP3PindexOutOfRange(int index);
 
     /**
      * A data type to hold information about a DaisyOnline service
@@ -127,8 +140,30 @@ private:
         std::string path;
     };
 
+    /**
+     * A data type to hold information about a mp3 path
+     */
+    struct MP3Path
+    {
+        MP3Path(const std::string name, const std::string path) :
+            name(name), path(path)
+        {
+        }
+
+        /**
+         * The name of the path to distinguish it from other paths
+         */
+        std::string name;
+
+        /**
+         * The path on the file system
+         */
+        std::string path;
+    };
+
     std::vector<DaisyOnlineService> DaisyOnlineServices;
     std::vector<FileSystemPath> FileSystemPaths;
+    std::vector<MP3Path> MP3Paths;
 };
 
 #endif // _MEDIASOURCEMANAGER_H

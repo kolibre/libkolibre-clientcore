@@ -203,6 +203,7 @@
 "found {2} new publications";"{2:number} uutta julkaisua löytyi"
 "publication no. {1}";"Julkaisu {1:number}"
 "opening publication";"avataan julkaisua"
+"track no. {1}";"track no. {1:number}"
 
 # errors
 "error loading data";"Tiedonsiirto epäonnistui"
@@ -219,8 +220,10 @@
 "cdrom device";"cd-levy"
 "external device";"ulkoinen muisti"
 "local device";"paikallinen muisti"
+"mp3 path";"mp3 path"
 "device";"laite"
 "updating device";"päivitetään laitetta"
 "device contains {1} publication";"laitteesta löytyy yksi julkaisu"
 "device contains {2} publications";"laitteesta löytyy {2:number} julkaisua"
 "device contains no publications";"laitteesta ei löytynyt julkaisua"
+"directory contains {1} track";"directory contains {1:number} track"

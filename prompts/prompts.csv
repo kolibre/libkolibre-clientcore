@@ -200,6 +200,7 @@
 "found {2} new publications"
 "publication no. {1}"
 "opening publication"
+"track no. {1}"
 
 # errors
 "error loading data"
@@ -216,11 +217,13 @@
 "cdrom device"
 "external device"
 "local device"
+"mp3 path"
 "device"
 "updating device"
 "device contains {1} publication"
 "device contains {2} publications"
 "device contains no publications"
+"directory contains {1} track"
 
 #@TODO
 # remove these prompts from source and use Narrator API instead

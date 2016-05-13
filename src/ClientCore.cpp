@@ -95,7 +95,7 @@ ClientCore::ClientCore(const std::string useragent)
     narrator->setDatabasePath(messagedb);
     narrator->connectAudioFinished(boost::bind(&ClientCore::narratorFinished, this));
     narrator->setTempo(settings->read<double>("playbackspeed", 1.0));
-    narrator->setLanguage(settings->read<std::string>("language", "sv"));
+    narrator->setLanguage(settings->read<std::string>("language", "en"));
 
     bindtextdomain(PACKAGE, "locale");
 
@@ -208,6 +208,18 @@ int ClientCore::addDaisyOnlineService(std::string name, std::string url, std::st
 int ClientCore::addFileSystemPath(std::string name, std::string path)
 {
     return MediaSourceManager::Instance()->addFileSystemPath(name, path);
+}
+
+/**
+ * Add a mp3 path
+ *
+ * @param name The name of the path to distinguish it from other paths
+ * @param path The path on the file system
+ * @return The index of the added path, or -1 if the path was not added
+ */
+int ClientCore::addMP3Path(std::string name, std::string path)
+{
+    return MediaSourceManager::Instance()->addMP3Path(name, path);
 }
 
 /**
